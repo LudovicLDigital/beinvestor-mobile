@@ -6,6 +6,7 @@ import {
     View
 } from 'react-native';
 import styles from '../shared/styles/global';
+import AuthService from '../shared/services/auth';
 const LOGIN = 'login';
 const PASS = 'password';
 export default class LoginScreen extends Component {
@@ -29,20 +30,26 @@ export default class LoginScreen extends Component {
     }
     textEnterred(textInputChanged, text) {
         if (textInputChanged === LOGIN) {
-            console.log('----LOGIN----');
             this.setState({
                 login: text
             });
         } else {
-            console.log('-----PASS----');
             this.setState({
                 password: text
             });
         }
-        console.log(text);
     }
-    submitCredentials() {
+    async submitCredentials() {
         console.log(`CREDENTIALS ARE ${this.state.login} -- ${this.state.password}`);
-        this.props.navigation.navigate('Home');
+        try {
+            const isLoggedValidate = await AuthService.login(this.state.login, this.state.password);
+            if (isLoggedValidate) {
+                this.props.navigation.navigate('Home');
+            } else {
+                alert('FAILED')
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
 }
