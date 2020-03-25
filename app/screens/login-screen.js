@@ -15,15 +15,15 @@ export default class LoginScreen extends Component {
         super(props);
         this.state = {
             login: '',
-            password: '',
+            password: ''
         }
     }
     render() {
         return (
             <View style={styles.fullScreenFlexCenter}>
                 <Text>Connexion</Text>
-                <TextInput placeholder='Identifiant' onChangeText={text => this.textEnterred(LOGIN, text)}/>
-                <TextInput placeholder='Mot de passe' onChangeText={text => this.textEnterred(PASS, text)}/>
+                <TextInput placeholder='Identifiant' autoCapitalize='none' onChangeText={text => this.textEnterred(LOGIN, text)}/>
+                <TextInput placeholder='Mot de passe' textContentType='password' autoCapitalize='none'  onChangeText={text => this.textEnterred(PASS, text)}/>
                 <Button title='Se connecter' onPress={() => this.submitCredentials()}/>
             </View>
         )
@@ -40,16 +40,15 @@ export default class LoginScreen extends Component {
         }
     }
     async submitCredentials() {
-        console.log(`CREDENTIALS ARE ${this.state.login} -- ${this.state.password}`);
-        try {
-            const isLoggedValidate = await AuthService.login(this.state.login, this.state.password);
-            if (isLoggedValidate) {
+        AuthService.login(this.state.login, this.state.password).then((value) => {
+            if (value) {
                 this.props.navigation.navigate('Home');
             } else {
-                alert('FAILED')
+                alert('Login ou mot de passe incorrect');
             }
-        } catch (error) {
-            console.log(error);
-        }
+        }).catch((error) => {
+            console.error(error);
+            alert(`Une erreur est survenue : ${error.message}`);
+        });
     }
 }
