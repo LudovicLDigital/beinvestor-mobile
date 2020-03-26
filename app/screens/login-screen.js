@@ -46,9 +46,6 @@ export default class LoginScreen extends Component {
             } else {
                 alert('Login ou mot de passe incorrect');
             }
-        }).catch((error) => {
-            console.error(error);
-            alert(`Une erreur est survenue : ${error.message}`);
-        });
+        }).catch((error) => alert(`Une erreur est survenue : ${error.message}`));
     }
 }
