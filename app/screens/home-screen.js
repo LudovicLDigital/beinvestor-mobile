@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Text, Button, TextInput, View } from 'react-native';
-import styles from '../shared/styles/global';
+import {styles, appColors} from "../shared/styles/global";
+import DeviceStorage from '../shared/util/device-storage'
 export default class HomeScreen extends Component {
     constructor(props) {
         super(props);
@@ -17,6 +18,11 @@ export default class HomeScreen extends Component {
         );
     }
 
-    recover() {
+    async recover() {
+        const token = await DeviceStorage.getCurrentUserToken();
+        console.log(token)
+        this.setState({
+            recoverredValue: token
+        })
     }
 }

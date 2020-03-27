@@ -12,7 +12,7 @@ const deviceStorage = {
      */
     async storeNewKeyValue(key, value) {
         try {
-            return await AsyncStorage.setItem(key, value);
+            return await AsyncStorage.setItem(key.toString(), value.toString());
         } catch (e) {
             logStorageError(e, 'storeNewKeyValue');
         }
@@ -25,7 +25,7 @@ const deviceStorage = {
      */
     async getKeyValue(key) {
         try {
-            return await AsyncStorage.getItem(key);
+            return await AsyncStorage.getItem(key.toString());
         } catch (e) {
             logStorageError(e, 'getKeyValue');
         }
@@ -35,7 +35,7 @@ const deviceStorage = {
      * Recover the current logged user token
      */
     async getCurrentUserToken() {
-        return this.getKeyValue(Constants.USER_TOKEN_KEY);
+        return this.getKeyValue(Constants.USER_TOKEN_KEY.toString());
     },
 
     /**
@@ -43,7 +43,7 @@ const deviceStorage = {
      * @param token the access token
      */
     async setCurrentUserToken(token) {
-        return this.storeNewKeyValue(Constants.USER_TOKEN_KEY, token);
+        return this.storeNewKeyValue(Constants.USER_TOKEN_KEY.toString(), token.toString());
     }
 };
 module.exports = deviceStorage;
