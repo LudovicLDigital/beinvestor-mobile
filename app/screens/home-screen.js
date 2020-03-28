@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Text, Button, TextInput, View } from 'react-native';
 import {styles, appColors} from "../shared/styles/global";
 import GroupService from '../shared/services/entities/groups-service';
+import GroupList from '../component/group/group-list';
 export default class HomeScreen extends Component {
     constructor(props) {
         super(props);
@@ -10,19 +11,21 @@ export default class HomeScreen extends Component {
             groups: []
         }
     }
+
+    componentDidMount(): void {
+        this.recover();
+    }
+
     render() {
         return (
-            <View>
-                <Text>{this.state.groups.name}</Text>
-                <Button title='all group' onPress={() => this.recover()}/>
+            <View style={styles.fullScreen}>
+                <GroupList groups={this.state.groups}/>
             </View>
         );
     }
 
     async recover() {
         this.groupService.getAllGroups().then((groups) => {
-            console.log(`=======SHOWING groups`);
-            console.log(groups);
             this.setState({
                 groups: groups
             })

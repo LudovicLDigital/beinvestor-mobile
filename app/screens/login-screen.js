@@ -27,7 +27,7 @@ export default class LoginScreen extends Component {
 
     render() {
         return (
-            <View style={styles.fullScreenFlexCenter}>
+            <View style={[styles.fullScreen, styles.flexCenter]}>
                 <Text>Connexion</Text>
                 <TextInput placeholder="Identifiant"
                            autoCapitalize="none"

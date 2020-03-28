@@ -12,8 +12,6 @@ export default class BaseService {
     }
     async fetchMethod(options) {
         return fetch(`${this.resourceURL}`, options).then(async(response) => {
-            console.log(`=======SHOWING response`);
-            console.log(response);
             return response.json();
         }).catch((error) => {
             console.error(error);
@@ -35,8 +33,6 @@ export default class BaseService {
      */
     async basicGetQuery() {
         const options = await HttpHeaderSetter.setDefaultHeader('GET');
-        console.log(`=======SHOWING options`);
-        console.log(options);
         return this.fetchMethod(options);
     }
 

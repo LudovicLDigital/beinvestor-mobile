@@ -6,7 +6,6 @@ export default class GroupService extends BaseService {
         this.resourceURL = this.resourceURL + '/groups';
     }
     async getAllGroups() {
-        console.log(`=======SHOWING this.resourceURL : ${this.resourceURL}`);
         return await this.basicGetQuery();
     }
 }

@@ -13,8 +13,10 @@ const appColors = {
 };
 //*** End app colors *** //
 const styles = StyleSheet.create({
-    fullScreenFlexCenter: {
+    fullScreen: {
         flex: 1,
+    },
+    flexCenter: {
         alignItems: 'center',
         justifyContent: 'center',
         color: Colors.primary
