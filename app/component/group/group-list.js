@@ -1,13 +1,21 @@
 import React, {Component} from "react";
 import {styles, appColors} from "../../shared/styles/global";
-import {FlatList, Text, View} from 'react-native';
-import { Card } from 'react-native-elements';
+import {FlatList, View} from 'react-native';
+import {
+    Button,
+    Card,
+    CardHeader,
+    Text,
+} from '@ui-kitten/components';
 function GroupItem({group}) {
     if (group) {
         return (
             <View style={styles.fullScreen}>
-                <Card title={group.name}>
-                    <Text>Favoris, nombre de membre, ville etc...</Text>
+                <Card header={() => (
+                    <CardHeader
+                        title={group.name}
+                    />)}>
+                <Text>Favoris, nombre de membre, ville etc...</Text>
                 </Card>
             </View>
         )

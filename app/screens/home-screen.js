@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Text, Button, TextInput, View } from 'react-native';
 import {styles, appColors} from "../shared/styles/global";
 import GroupService from '../shared/services/entities/groups-service';
 import GroupList from '../component/group/group-list';
+import { SafeAreaView } from 'react-native';
+import { Button, Divider, Layout, TopNavigation } from '@ui-kitten/components';
 export default class HomeScreen extends Component {
     constructor(props) {
         super(props);
@@ -18,9 +19,13 @@ export default class HomeScreen extends Component {
 
     render() {
         return (
-            <View style={styles.fullScreen}>
-                <GroupList groups={this.state.groups}/>
-            </View>
+            <SafeAreaView style={{ flex: 1 }}>
+                <TopNavigation title='BeInvestor' alignment='center'/>
+                <Divider/>
+                <Layout style={styles.fullScreen}>
+                    <GroupList groups={this.state.groups}/>
+                </Layout>
+            </SafeAreaView>
         );
     }
 
