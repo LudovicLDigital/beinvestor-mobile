@@ -18,7 +18,7 @@ export default class Loader extends Component {
     render() {
         if (this.props.isDisplayed) {
             return (
-                <View style={[styles.fullScreenFlexCenter, styles.overlayElement]}>
+                <View style={[{flex:1}, styles.flexCenter, styles.overlayElement]}>
                     <Text style={styles.boldedTitle}>{this.props.loadTitle}</Text>
                     <ActivityIndicator size={100} color={appColors.primaryDark}/>
                 </View>

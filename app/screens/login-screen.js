@@ -20,9 +20,6 @@ export const GoogleIcon = (style) => (
 );
 export default class LoginScreen extends Component {
     passwordTextInput;
-    EyeIcon = (style) => (
-        <Icon {...style} name={this.state.securizedText ? 'eye-off' : 'eye'}/>
-    );
     constructor(props) {
         super(props);
         this.state = {
@@ -34,20 +31,15 @@ export default class LoginScreen extends Component {
     }
 
     componentDidMount(): void {
-        // this.autoConnect();
+        this.autoConnect();
     }
-    onPasswordIconPress() {
-        this.setState({
-            securizedText: !this.state.securizedText
-        });
-    }
+
     render() {
         return (
             <SafeAreaView style={{ flex: 1 }}>
                 <Layout style={[styles.fullScreen, styles.flexColumnBetween]}>
-                    <View style={[{flex:2, justifyContent: 'space-between', marginBottom: 20}]}>
+                    <KeyboardAvoidingView style={[{flex:2, justifyContent: 'space-between', marginBottom: 20}]} behavior="position">
                         <Image style={[{alignSelf: 'center'}, styles.appIconLarge]} source={require('../assets/icon.png')}/>
-                        <KeyboardAvoidingView behavior="position">
                         <Input label="Login"
                                labelStyle={styles.inputLabelPrimary}
                                autoCapitalize="none"
@@ -60,35 +52,46 @@ export default class LoginScreen extends Component {
                                style={{borderColor: appColors.primary}}
                                secureTextEntry={this.state.securizedText}
                                autoCapitalize="none"
-                               icon={this.EyeIcon}
-                               onIconPress={this.onPasswordIconPress}
+                               icon={(style) => {
+                                   const eyeOff = this.state.securizedText;
+                                   return (<Icon {...style} name={eyeOff ? 'eye-off':'eye'}/>)
+                               }}
+                               onIconPress={() => this.setState({securizedText: !this.state.securizedText})}
                                ref={(input) => this.passwordTextInput = input}
                                onSubmitEditing={() => this.submitCredentials()}
                                blurOnSubmit={false}
                                onChangeText={text => this.textEnterred(PASS, text)}/>
-                        </KeyboardAvoidingView>
                         <Button style={[{zIndex: 0}, styles.backgroundPrimary]}
                                 disabled={this.state.waitingForConnect}
                                 onPress={() => this.submitCredentials()}>
                             CONNEXION
                         </Button>
-                    </View>
+                        <Loader loadTitle={'Ravi de vous revoir !'} isDisplayed={this.state.waitingForConnect}/>
+                    </KeyboardAvoidingView>
                     <View style={[{flex: 1}, styles.flexColumnBetween]}>
                         <View >
                             <Text style={[styles.inputLabelSecondary, {alignSelf: 'center', marginBottom: 20}]}>Se connecter avec :</Text>
                             <View style={[{flex: 1},styles.flexRowBetween]}>
-                                <Button icon={FacebookIcon} style={{backgroundColor: '#365899'}}>Facebook</Button>
-                                <Button icon={GoogleIcon} appearance='ghost' status='danger'>Google</Button>
+                                <Button
+                                    disabled={this.state.waitingForConnect}
+                                    icon={FacebookIcon}
+                                    onPress={() => alert('Facebook non disponible')}
+                                    style={{backgroundColor: '#365899'}}>Facebook</Button>
+                                <Button
+                                    disabled={this.state.waitingForConnect}
+                                    icon={GoogleIcon}
+                                    appearance='ghost'
+                                    onPress={() => alert('Google non disponible')}
+                                    status='danger'>Google</Button>
                             </View>
                         </View>
                         <Button title="S'INSCRIRE"
                                 style={[{zIndex: 0}, styles.backgroundSecondary]}
                                 disabled={this.state.waitingForConnect}
-                                onPress={() => this.submitCredentials()}>
+                                onPress={() => alert('Inscription non disponible')}>
                             S'INSCRIRE
                         </Button>
                     </View>
-                    <Loader loadTitle={'Ravi de vous revoir !'} isDisplayed={this.state.waitingForConnect}/>
                 </Layout>
             </SafeAreaView>
         )
