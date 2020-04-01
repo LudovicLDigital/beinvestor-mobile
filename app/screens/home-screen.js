@@ -4,6 +4,7 @@ import GroupService from '../shared/services/entities/groups-service';
 import GroupList from '../component/group/group-list';
 import { SafeAreaView } from 'react-native';
 import { Button, Divider, Layout, TopNavigation } from '@ui-kitten/components';
+import HeaderBar from '../component/subcomponent/header-bar';
 export default class HomeScreen extends Component {
     constructor(props) {
         super(props);
@@ -20,8 +21,7 @@ export default class HomeScreen extends Component {
     render() {
         return (
             <SafeAreaView style={{ flex: 1 }}>
-                <TopNavigation title='BeInvestor' alignment='center'/>
-                <Divider/>
+                <HeaderBar/>
                 <Layout style={styles.fullScreen}>
                     <GroupList groups={this.state.groups}/>
                 </Layout>
