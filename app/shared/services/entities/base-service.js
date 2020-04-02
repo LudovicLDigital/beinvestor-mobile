@@ -1,4 +1,4 @@
-import Constant from '../../util/constants';
+import {API_URL} from '../../util/constants';
 import HttpHeaderSetter from '../../util/http-header-setter';
 
 /**
@@ -8,7 +8,7 @@ import HttpHeaderSetter from '../../util/http-header-setter';
  */
 export default class BaseService {
     constructor() {
-        this.resourceURL = Constant.API_URL;
+        this.resourceURL = API_URL;
     }
     async fetchMethod(options) {
         return fetch(`${this.resourceURL}`, options).then(async(response) => {

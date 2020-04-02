@@ -5,6 +5,16 @@ import { appColors} from '../../shared/styles/global';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
+import {
+    ROUTE_USER_PROFIL_INVEST,
+    ROUTE_FAV_GRP,
+    ROUTE_HOME,
+    ROUTE_INFO,
+    ROUTE_LOGIN,
+    ROUTE_SETTING,
+    ROUTE_SIMULATOR,
+    ROUTE_USER_PROFIL
+} from './constants'
 // screens
 import HomeScreen from "../../screens/home-screen";
 import LoginScreen from "../../screens/login-screen";
@@ -20,16 +30,16 @@ import UserProfilInvestorScreen from "../../screens/user-profil-investor-screen"
 const ProfilEditStack = createStackNavigator();
 function ProfilStackNavigator() {
     return (
-        <ProfilEditStack.Navigator initialRouteName="UserProfil">
+        <ProfilEditStack.Navigator initialRouteName={ROUTE_USER_PROFIL}>
             <ProfilEditStack.Screen
-                name="UserProfil"
+                name={ROUTE_USER_PROFIL}
                 component={UserProfilScreen}
                 options={{
                     headerShown: false
                 }}
             />
             <ProfilEditStack.Screen
-                name="UserProfilInvestor"
+                name={ROUTE_USER_PROFIL_INVEST}
                 component={UserProfilInvestorScreen}
                 options={{
                     headerShown: false
@@ -41,44 +51,44 @@ function ProfilStackNavigator() {
 const HomeDrawer = createDrawerNavigator();
 function HomeDrawerNavigator() {
     return (
-        <HomeDrawer.Navigator initialRouteName="Home" drawerContent={props => <CustomDrawerContent {...props}/>} >
+        <HomeDrawer.Navigator initialRouteName={ROUTE_HOME} drawerContent={props => <CustomDrawerContent {...props}/>} >
             <HomeDrawer.Screen
-            name="Home"
+            name={ROUTE_HOME}
             component={HomeScreen}
             options={{
                 headerShown: false
             }}
             />
             <HomeDrawer.Screen
-            name="Simulator"
+            name={ROUTE_SIMULATOR}
             component={SimulatorScreen}
             options={{
                 headerShown: false
             }}
             />
             <HomeDrawer.Screen
-            name="UserProfil"
+            name={ROUTE_USER_PROFIL}
             component={ProfilStackNavigator}
             options={{
                 headerShown: false
             }}
             />
             <HomeDrawer.Screen
-            name="FavoritesGroups"
+            name={ROUTE_FAV_GRP}
             component={SearchGroupScreen}
             options={{
                 headerShown: false
             }}
             />
             <HomeDrawer.Screen
-            name="Settings"
+            name={ROUTE_SETTING}
             component={SettingsScreen}
             options={{
                 headerShown: false
             }}
             />
             <HomeDrawer.Screen
-            name="AppInfo"
+            name={ROUTE_INFO}
             component={AppInfoScreen}
             options={{
                 headerShown: false
@@ -90,9 +100,9 @@ function HomeDrawerNavigator() {
 const MainStack = createStackNavigator();
 export const AppNavigator = () => (
     <NavigationContainer >
-        <MainStack.Navigator initialRouteName="Login">
+        <MainStack.Navigator initialRouteName={ROUTE_LOGIN}>
             <MainStack.Screen
-                name="Login"
+                name={ROUTE_LOGIN}
                 component={LoginScreen}
                 options={{
                     title: 'Bienvenue sur BeInvestor !',
@@ -102,7 +112,7 @@ export const AppNavigator = () => (
                 }}
             />
             <MainStack.Screen
-                name="Home"
+                name={ROUTE_HOME}
                 component={HomeDrawerNavigator}
                 options={{
                     headerShown: false

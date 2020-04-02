@@ -14,7 +14,7 @@ export default class SimulatorScreen extends Component {
     render() {
         return (
             <SafeAreaView style={{ flex: 1 }}>
-                <HeaderBar {...this.props} showAriane={true} navigation={this.props.navigation}/>
+                <HeaderBar {...this.props} navigation={this.props.navigation}/>
                 <Layout style={styles.fullScreen}>
                     <Text>SIMULATOR</Text>
                 </Layout>

@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-community/async-storage';
-import Constants from './constants';
+import {REFRESH_TOKEN_KEY, USER_TOKEN_KEY} from './constants';
 function logStorageError(e, method) {
     console.error(`ERROR WHEN USE STORAGE, TRIED TO ${method} : ${e}`);
 }
@@ -30,12 +30,34 @@ const deviceStorage = {
             logStorageError(e, 'getKeyValue');
         }
     },
-
+    /**
+     * Remove the passed value for the passed key
+     * @param key the key you want to remove
+     * @returns {Promise<void>}
+     */
+    async removeKeyValue(key) {
+        try {
+            return await AsyncStorage.removeItem(key.toString());
+        } catch (e) {
+            logStorageError(e, 'removeKeyValue');
+        }
+    },
+    /**
+     * remove the current user token saved in storage
+     * @returns {Promise<void>}
+     */
+    async removeCurrentUserToken() {
+        try {
+            return await AsyncStorage.removeItem(USER_TOKEN_KEY.toString());
+        } catch (e) {
+            logStorageError(e, 'removeCurrentUserToken');
+        }
+    },
     /**
      * Recover the current logged user token
      */
     async getCurrentUserToken() {
-        return this.getKeyValue(Constants.USER_TOKEN_KEY.toString());
+        return this.getKeyValue(USER_TOKEN_KEY.toString());
     },
 
     /**
@@ -43,7 +65,7 @@ const deviceStorage = {
      * @param token the access token
      */
     async setCurrentUserToken(token) {
-        return this.storeNewKeyValue(Constants.USER_TOKEN_KEY.toString(), token.toString());
+        return this.storeNewKeyValue(USER_TOKEN_KEY.toString(), token.toString());
     }
 };
 module.exports = deviceStorage;

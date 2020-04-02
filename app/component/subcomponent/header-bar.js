@@ -5,18 +5,18 @@ import {appColors, styles} from "../../shared/styles/global";
 import {Colors} from "react-native/Libraries/NewAppScreen/index";
 
 import {BackAction, MenuAction, SimulatorAction} from "./basic-top-action";
+import {convertRouteNameToLisible} from "../../shared/util/converter-for-route-name";
 
 /**
  * PROPS :
- * - showAriane : display the "fil d'ariane" which show the actual position of the user
+ * - hideAriane : hide the "fil d'ariane" which show the actual position of the user
  * - navigation: pass the actual navigation system
  */
 export default class HeaderBar extends Component {
     constructor(props) {
         super(props);
         this.navigationSytem = this.props.navigation;
-        this.actualRoute = this.props.route.name;
-        console.log(this.actualRoute)
+        this.actualRoute = convertRouteNameToLisible(this.props.route.name);
     }
     componentDidMount(): void {
     }
@@ -32,10 +32,10 @@ export default class HeaderBar extends Component {
             <View >
                 <TopNavigation alignment='center' rightControls={this.renderRightControls(this.navigationSytem)}/>
                 <Divider/>
-                {this.props.showAriane ?
+                {!this.props.hideAriane ?
                         <View style={{backgroundColor: Colors.white, flexDirection: 'row', alignItems: 'center'}}>
                             <BackAction onPress={() => this.backPressed()}/>
-                            <Text>{this.actualRoute}</Text>
+                            <Text style={{fontWeight: 'bold'}}>{this.actualRoute}</Text>
                         </View>
                     : null}
             </View>
