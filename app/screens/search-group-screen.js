@@ -3,9 +3,9 @@ import {styles, appColors} from "../shared/styles/global";
 import GroupService from '../shared/services/entities/groups-service';
 import GroupList from '../component/group/group-list';
 import { SafeAreaView } from 'react-native';
-import { Button, Divider, Layout, TopNavigation } from '@ui-kitten/components';
+import { Layout } from '@ui-kitten/components';
 import HeaderBar from '../component/subcomponent/header-bar';
-export default class HomeScreen extends Component {
+export default class SearchGroupScreen extends Component {
     constructor(props) {
         super(props);
         this.groupService = new GroupService();
