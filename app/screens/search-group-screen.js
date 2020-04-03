@@ -21,7 +21,7 @@ export default class SearchGroupScreen extends Component {
     render() {
         return (
             <SafeAreaView style={{ flex: 1 }}>
-                <HeaderBar {...this.props} navigation={this.props.navigation}/>
+                <HeaderBar route={this.props.route.name} navigation={this.props.navigation}/>
                 <Layout style={styles.fullScreen}>
                     <GroupList groups={this.state.groups}/>
                 </Layout>

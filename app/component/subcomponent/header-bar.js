@@ -16,7 +16,7 @@ export default class HeaderBar extends Component {
     constructor(props) {
         super(props);
         this.navigationSytem = this.props.navigation;
-        this.actualRoute = convertRouteNameToLisible(this.props.route.name);
+        this.actualRoute = convertRouteNameToLisible(this.props.route);
     }
     componentDidMount(): void {
     }

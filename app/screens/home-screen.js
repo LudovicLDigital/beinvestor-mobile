@@ -1,29 +1,30 @@
 import React, { Component } from 'react';
 import {styles, appColors} from "../shared/styles/global";
 import GroupService from '../shared/services/entities/groups-service';
-import GroupList from '../component/group/group-list';
-import { SafeAreaView } from 'react-native';
+import {SafeAreaView, View, Text} from 'react-native';
 import { Layout } from '@ui-kitten/components';
 import HeaderBar from '../component/subcomponent/header-bar';
 export default class HomeScreen extends Component {
+    isMainScreen: boolean;
     constructor(props) {
         super(props);
         this.groupService = new GroupService();
         this.state = {
             groups: []
-        }
+        };
+        this.isMainScreen = true;
     }
-
     componentDidMount(): void {
         this.recover();
     }
-
     render() {
         return (
             <SafeAreaView style={{ flex: 1 }}>
-                <HeaderBar {...this.props} hideAriane={true} navigation={this.props.navigation}/>
+                <HeaderBar route={this.props.route.name} hideAriane={true} navigation={this.props.navigation}/>
                 <Layout style={styles.fullScreen}>
-                    <GroupList groups={this.state.groups}/>
+                    <View style={[{flex:1}, styles.backgroundPrimary]}>
+                        <Text>MAP</Text>
+                    </View>
                 </Layout>
             </SafeAreaView>
         );

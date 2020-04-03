@@ -14,7 +14,7 @@ export default class AppInfoScreen extends Component {
     render() {
         return (
             <SafeAreaView style={{ flex: 1 }}>
-                <HeaderBar {...this.props} navigation={this.props.navigation}/>
+                <HeaderBar route={this.props.route.name} navigation={this.props.navigation}/>
                 <Layout style={styles.fullScreen}>
                     <Text>A PROPOS</Text>
                 </Layout>

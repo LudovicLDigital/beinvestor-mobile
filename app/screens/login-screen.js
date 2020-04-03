@@ -3,6 +3,7 @@ import {
     View,
     Image,
     Text,
+    BackHandler, Alert,
     KeyboardAvoidingView,
     SafeAreaView
 } from "react-native";
@@ -10,6 +11,7 @@ import { Button, Icon, Layout, Input } from '@ui-kitten/components';
 import Loader from "../component/subcomponent/loader";
 import {styles, appColors} from "../shared/styles/global";
 import AuthService from "../shared/services/auth";
+import {ROUTE_HOME, ROUTE_LOGIN} from "../shared/util/constants";
 const LOGIN = "login";
 const PASS = "password";
 export const FacebookIcon = (style) => (
@@ -29,11 +31,27 @@ export default class LoginScreen extends Component {
             securizedText: true
         };
     }
-
+    backAction() {
+        Alert.alert(
+            "Attention LOGIN! ",
+            "Voulez vous quitter l'application ?",
+            [
+                {
+                    text: "Non",
+                    onPress: () => null,
+                    style: "cancel"
+                },
+                {text: "Oui", onPress: () => BackHandler.exitApp()}
+            ]);
+        return true;
+    };
     componentDidMount(): void {
         this.autoConnect();
+        BackHandler.addEventListener("hardwareBackPress", () => this.backAction());
     }
-
+    componentWillUnmount() {
+        BackHandler.removeEventListener("hardwareBackPress", () => this.backAction());
+    }
     render() {
         return (
             <SafeAreaView style={{ flex: 1 }}>

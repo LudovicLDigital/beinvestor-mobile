@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import {Colors} from "react-native/Libraries/NewAppScreen/index";
 import { Drawer as UIKittenDrawer,DrawerHeaderFooter,Button } from '@ui-kitten/components';
 import {FavIcon, GlobeIcon, InfoIcon, LogoutIcon, PersonIcon, SettingsIcon, SimulatorIcon} from "../basic-icons";
@@ -12,7 +12,7 @@ import {
     ROUTE_USER_PROFIL
 } from "../../../shared/util/constants";
 import AuthService from "../../../shared/services/auth";
-import { Alert } from "react-native";
+import {Alert, BackHandler} from "react-native";
 
 const drawerMenuItems = [
     {
@@ -72,7 +72,30 @@ const Footer = (navigation) => (
     <DrawerHeaderFooter onPress={() => logout(navigation)} accessory={LogoutButton} description='Se déconnecter'/>
 );
 export const CustomDrawerContent = ({ navigation, state }) => {
+    useEffect(() => {
+        const backAction = () =>
+        {
+            if (state.routeNames[state.index] === ROUTE_HOME) {
+                Alert.alert(
+                    "Attention ! ",
+                    "Voulez vous quitter l'application ?",
+                    [
+                        {
+                            text: "Non",
+                            onPress: () => null
+                        },
+                        {text: "Oui", onPress: () => BackHandler.exitApp()}
+                    ]);
+                return true;
+            } else {
+                return false;
+            }
+        };
 
+        const backHandler = BackHandler.addEventListener("hardwareBackPress",backAction);
+
+        return () => backHandler.remove();
+    });
     const onSelect = (index) => {
         navigation.navigate(state.routeNames[index]);
     };
