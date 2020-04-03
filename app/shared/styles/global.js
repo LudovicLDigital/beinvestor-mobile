@@ -1,42 +1,73 @@
 import {StyleSheet} from "react-native";
 import {Colors} from "react-native/Libraries/NewAppScreen/index";
 
+const appColors = {
+//***App colors ***//
+    primary: '#03a9f4',
+    primaryLight: '#67daff',
+    primaryDark: '#007ac1',
+
+    secondary: '#6e398d',
+    secondaryLight: '#9d65bd',
+    secondaryDark: '#3f0a5e',
+};
+//*** End app colors *** //
 const styles = StyleSheet.create({
-    scrollView: {
-        backgroundColor: Colors.lighter,
+    appIconSmall: {
+        width: 25,
+        height: 25
     },
-    engine: {
+    appIconMedium: {
+        width: 50,
+        height: 50
+    },
+    appIconLarge: {
+        width: 100,
+        height: 100
+    },
+    boldedTitle: {
+        fontWeight: '900',
+        color: Colors.dark
+    },
+    backgroundPrimary: {
+        backgroundColor: appColors.primary,
+        borderColor: appColors.primary,
+        color: Colors.white
+    },
+    backgroundSecondary: {
+        backgroundColor: appColors.secondary,
+        borderColor: appColors.secondary,
+        color: Colors.white
+    },
+    fullScreen: {
+        flex: 1,
+        padding: 15
+    },
+    flexCenter: {
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    flexRowBetween: {
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    flexColumnBetween: {
+        flexDirection: 'column',
+        justifyContent: 'space-between'
+    },
+    inputLabelPrimary: {
+        color: appColors.primary,
+        fontWeight: 'bold'
+    },
+    inputLabelSecondary: {
+        color: appColors.secondary,
+        fontWeight: 'bold'
+    },
+    overlayElement: {
+        width: '100%',
+        height: '100%',
         position: 'absolute',
-        right: 0,
-    },
-    body: {
         backgroundColor: Colors.white,
     },
-    sectionContainer: {
-        marginTop: 32,
-        paddingHorizontal: 24,
-    },
-    sectionTitle: {
-        fontSize: 24,
-        fontWeight: '600',
-        color: Colors.black,
-    },
-    sectionDescription: {
-        marginTop: 8,
-        fontSize: 18,
-        fontWeight: '400',
-        color: Colors.dark,
-    },
-    highlight: {
-        fontWeight: '700',
-    },
-    footer: {
-        color: Colors.dark,
-        fontSize: 12,
-        fontWeight: '600',
-        padding: 4,
-        paddingRight: 12,
-        textAlign: 'right',
-    },
 });
-module.exports = styles;
+module.exports = {styles: styles, appColors: appColors};

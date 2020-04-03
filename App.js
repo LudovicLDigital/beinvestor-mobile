@@ -5,23 +5,20 @@
  * @format
  * @flow
  */
-
 import * as React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {
-    SafeAreaView,
-    StatusBar,
-} from 'react-native';
-
-
+import { ApplicationProvider, IconRegistry} from '@ui-kitten/components';
+import { EvaIconsPack } from '@ui-kitten/eva-icons';
+import {AppNavigator} from "./app/shared/util/navigation";
+import * as eva from '@eva-design/eva';
 const App: () => React$Node = () => {
     return (
-        <NavigationContainer >
-            <StatusBar barStyle="dark-content" />
-            <SafeAreaView>
-            </SafeAreaView>
-        </NavigationContainer>
-    );
+        <React.Fragment>
+            <IconRegistry icons={EvaIconsPack} />
+            <ApplicationProvider {...eva} theme={eva.light}>
+                <AppNavigator/>
+            </ApplicationProvider>
+        </React.Fragment>
+    )
 };
 
 export default App;
