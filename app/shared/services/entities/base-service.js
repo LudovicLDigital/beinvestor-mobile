@@ -10,9 +10,9 @@ export default class BaseService {
     constructor() {
         this.resourceURL = API_URL;
     }
-    async fetchMethod(options) {
-        return fetch(`${this.resourceURL}`, options).then(async(response) => {
-            return response.json();
+    async fetchMethod(options, urlCompletion) {
+        return fetch(`${this.resourceURL}${urlCompletion && urlCompletion !== null ? urlCompletion : ''}`, options).then(async(response) => {
+            return response.status === 200 ? response.json() : null;
         }).catch((error) => {
             console.error(error);
             throw error;
@@ -20,7 +20,7 @@ export default class BaseService {
     }
     async fetchMethodWithId(id, options) {
         return fetch(`${this.resourceURL}/${id}`, options).then((response) => {
-            return response.json();
+            return response.status === 200 ? response.json() : null;
         }).catch((error) => {
             console.error(error);
             throw error;
@@ -29,11 +29,12 @@ export default class BaseService {
 
     /**
      * Request API with a basic GET method, no body
+     * @param urlCompletion : is the precise url, can be null
      * @returns {Promise<void>}
      */
-    async basicGetQuery() {
+    async basicGetQuery(urlCompletion) {
         const options = await HttpHeaderSetter.setDefaultHeader('GET');
-        return this.fetchMethod(options);
+        return this.fetchMethod(options, urlCompletion);
     }
 
     /**

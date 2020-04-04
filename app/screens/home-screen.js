@@ -17,7 +17,7 @@ export default class HomeScreen extends Component {
         this.isMainScreen = true;
     }
     componentDidMount(): void {
-        this.recover();
+        // this.recover();
     }
     render() {
         return (

@@ -8,4 +8,10 @@ export default class GroupService extends BaseService {
     async getAllGroups() {
         return await this.basicGetQuery();
     }
+    async searchGroupByCityName(term) {
+        return await this.basicGetQuery('/city/search/' + term)
+    }
+    async searchGroupByTerm(term) {
+        return await this.basicGetQuery('/terms/' + term)
+    }
 }
