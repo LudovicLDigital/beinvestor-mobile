@@ -5,6 +5,7 @@ import {
     ROUTE_LOGIN,
     ROUTE_SETTING,
     ROUTE_SIMULATOR,
+    ROUTE_SEARCH_GRP,
     ROUTE_USER_PROFIL, ROUTE_USER_PROFIL_INVEST
 } from "./constants";
 
@@ -13,6 +14,7 @@ export function convertRouteNameToLisible(routeName) {
         case ROUTE_HOME : return 'Carte';
         case ROUTE_SIMULATOR : return 'Simulateur immobilier';
         case ROUTE_USER_PROFIL : return 'Mon profil';
+        case ROUTE_SEARCH_GRP : return 'Recherche de groupe';
         case ROUTE_FAV_GRP : return 'Mes groupes favoris';
         case ROUTE_SETTING : return 'Paramètres';
         case ROUTE_INFO : return 'A propos de BeInvestor';

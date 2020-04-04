@@ -4,13 +4,15 @@ import GroupService from '../shared/services/entities/groups-service';
 import {SafeAreaView, View, Text} from 'react-native';
 import { Layout } from '@ui-kitten/components';
 import HeaderBar from '../component/subcomponent/header-bar';
+import SearchBar from "../component/subcomponent/search-bar";
+import {DismissKeyboard} from "../shared/util/ui-helpers";
 export default class HomeScreen extends Component {
     isMainScreen: boolean;
     constructor(props) {
         super(props);
         this.groupService = new GroupService();
         this.state = {
-            groups: []
+            groups: [],
         };
         this.isMainScreen = true;
     }
@@ -21,11 +23,14 @@ export default class HomeScreen extends Component {
         return (
             <SafeAreaView style={{ flex: 1 }}>
                 <HeaderBar route={this.props.route.name} hideAriane={true} navigation={this.props.navigation}/>
-                <Layout style={styles.fullScreen}>
-                    <View style={[{flex:1}, styles.backgroundPrimary]}>
-                        <Text>MAP</Text>
-                    </View>
-                </Layout>
+                <DismissKeyboard>
+                    <Layout style={styles.fullScreen}>
+                        <View style={[{flex:1}, styles.backgroundPrimary]}>
+                            <SearchBar style={styles.absoluteTop} placeholder={'Rechercher une ville'}/>
+                            <Text>MAP</Text>
+                        </View>
+                    </Layout>
+                </DismissKeyboard>
             </SafeAreaView>
         );
     }

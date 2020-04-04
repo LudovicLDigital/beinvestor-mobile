@@ -2,17 +2,27 @@
 import React, { useEffect } from 'react';
 import {Colors} from "react-native/Libraries/NewAppScreen/index";
 import { Drawer as UIKittenDrawer,DrawerHeaderFooter,Button } from '@ui-kitten/components';
-import {FavIcon, GlobeIcon, InfoIcon, LogoutIcon, PersonIcon, SettingsIcon, SimulatorIcon} from "../basic-icons";
+import {
+    FavIcon,
+    GlobeIcon,
+    InfoIcon,
+    LogoutIcon,
+    PersonIcon,
+    SearchIcon,
+    SettingsIcon,
+    SimulatorIcon
+} from "../basic-icons";
 import {convertRouteNameToLisible} from "../../../shared/util/converter-for-route-name";
 import {
     ROUTE_FAV_GRP,
-    ROUTE_HOME, ROUTE_INFO, ROUTE_LOGIN,
+    ROUTE_HOME, ROUTE_INFO, ROUTE_LOGIN, ROUTE_SEARCH_GRP,
     ROUTE_SETTING,
     ROUTE_SIMULATOR,
     ROUTE_USER_PROFIL
 } from "../../../shared/util/constants";
 import AuthService from "../../../shared/services/auth";
 import {Alert, BackHandler} from "react-native";
+import {appColors} from "../../../shared/styles/global";
 
 const drawerMenuItems = [
     {
@@ -26,6 +36,10 @@ const drawerMenuItems = [
     {
         title: convertRouteNameToLisible(ROUTE_USER_PROFIL),
         icon: PersonIcon
+    },
+    {
+        title: convertRouteNameToLisible(ROUTE_SEARCH_GRP),
+        icon: SearchIcon
     },
     {
         title: convertRouteNameToLisible(ROUTE_FAV_GRP),
@@ -97,7 +111,11 @@ export const CustomDrawerContent = ({ navigation, state }) => {
         return () => backHandler.remove();
     });
     const onSelect = (index) => {
-        navigation.navigate(state.routeNames[index]);
+        if (state.routeNames[index] === ROUTE_FAV_GRP) {
+            navigation.navigate(state.routeNames[index], {isFavRoute: true});
+        } else {
+            navigation.navigate(state.routeNames[index]);
+        }
     };
 
     return (

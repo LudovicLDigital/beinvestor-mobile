@@ -13,6 +13,38 @@ const appColors = {
 };
 //*** End app colors *** //
 const styles = StyleSheet.create({
+    absoluteTop: {
+        position: "absolute",
+        top: 10,
+        left: 10,
+        right: 10
+    },
+    absoluteTopLeft: {
+        position: "absolute",
+        top: 10,
+        left: 10,
+    },
+    absoluteTopRight: {
+        position: "absolute",
+        top: 10,
+        right: 10,
+    },
+    absoluteBottomRight: {
+        position: "absolute",
+        bottom: 10,
+        right: 10,
+    },
+    absoluteBottomLeft: {
+        position: "absolute",
+        bottom: 10,
+        left: 10,
+    },
+    absoluteBottom: {
+        position: "absolute",
+        bottom: 10,
+        left: 10,
+        right: 10,
+    },
     appIconSmall: {
         width: 25,
         height: 25

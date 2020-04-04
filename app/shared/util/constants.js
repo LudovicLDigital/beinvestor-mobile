@@ -8,6 +8,7 @@ export const ROUTE_USER_PROFIL_INVEST = 'UserProfilInvestor';
 export const ROUTE_HOME = 'Home';
 export const ROUTE_SIMULATOR = 'Simulator';
 export const ROUTE_FAV_GRP = 'FavoritesGroups';
+export const ROUTE_SEARCH_GRP = 'SearchGroups';
 export const ROUTE_SETTING = 'Settings';
 export const ROUTE_INFO = 'AppInfo';
 export const ROUTE_LOGIN = 'Login';

@@ -29,3 +29,6 @@ export const InfoIcon = (style) => (
 export const SettingsIcon = (style) => (
     <Icon {...style} fill={appColors.primary} name='options-2-outline'/>
 );
+export const SearchIcon = (style) => (
+    <Icon {...style} fill={appColors.primary}  name='search-outline' />
+);

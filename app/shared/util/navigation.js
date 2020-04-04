@@ -12,6 +12,7 @@ import {
     ROUTE_INFO,
     ROUTE_LOGIN,
     ROUTE_SETTING,
+    ROUTE_SEARCH_GRP,
     ROUTE_SIMULATOR,
     ROUTE_USER_PROFIL
 } from './constants'
@@ -72,6 +73,13 @@ function HomeDrawerNavigator() {
             options={{
                 headerShown: false
             }}
+            />
+            <HomeDrawer.Screen
+                name={ROUTE_SEARCH_GRP}
+                component={SearchGroupScreen}
+                options={{
+                    headerShown: false
+                }}
             />
             <HomeDrawer.Screen
             name={ROUTE_FAV_GRP}
