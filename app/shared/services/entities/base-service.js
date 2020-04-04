@@ -18,8 +18,8 @@ export default class BaseService {
             throw error;
         })
     }
-    async fetchMethodWithId(id, options) {
-        return fetch(`${this.resourceURL}/${id}`, options).then((response) => {
+    async fetchMethodWithId(id, urlCompletion, options) {
+        return fetch(`${this.resourceURL}${urlCompletion && urlCompletion !== null ? urlCompletion : ''}/${id}`, options).then((response) => {
             return response.status === 200 ? response.json() : null;
         }).catch((error) => {
             console.error(error);
@@ -40,9 +40,10 @@ export default class BaseService {
     /**
      * Request a create to api with an object in body
      * @param objectToPost the object you want to post
+     * @param urlCompletion : is the precise url, can be null
      * @returns {Promise<void>}
      */
-    async postObject(objectToPost) {
+    async postObject(objectToPost, urlCompletion) {
         const options = await HttpHeaderSetter.setDefaultHeader('POST');
         options.body = JSON.stringify(objectToPost);
         return this.fetchMethod(options);
@@ -50,9 +51,10 @@ export default class BaseService {
     /**
      * Request a update to api with an object in body
      * @param objectToUpdate the object you want to update
+     * @param urlCompletion : is the precise url, can be null
      * @returns {Promise<void>}
      */
-    async updateObject(objectToUpdate) {
+    async updateObject(objectToUpdate, urlCompletion) {
         const options = await HttpHeaderSetter.setDefaultHeader('PUT');
         options.body = JSON.stringify(objectToUpdate);
         return this.fetchMethod(options);
@@ -61,9 +63,10 @@ export default class BaseService {
     /**
      * Request a delete to api with the corresponding object id
      * @param id the id we want to delete
+     * @param urlCompletion : is the precise url, can be null
      * @returns {Promise<void>}
      */
-    async deleteObject(id) {
+    async deleteObject(id, urlCompletion) {
         const options = await HttpHeaderSetter.setDefaultHeader('DELETE');
         return this.fetchMethodWithId(id, options);
     }
@@ -71,10 +74,11 @@ export default class BaseService {
     /**
      * Request to get only the id searched object
      * @param id the id of the object we want
-     * @returns {Promise<void>}
+     * @param urlCompletion : is the precise url, can be null
+     * * @returns {Promise<void>}
      */
-    async getOneById(id) {
+    async getOneById(urlCompletion,id) {
         const options = await HttpHeaderSetter.setDefaultHeader('GET');
-        return this.fetchMethodWithId(id, options);
+        return this.fetchMethodWithId(id, urlCompletion, options);
     }
 }

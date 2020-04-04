@@ -20,15 +20,42 @@ export default class SearchGroupScreen extends Component {
         this.isFavRoute = (this.props.route && this.props.route.params) ? this.props.route.params.isFavRoute : false;
         this.searchPlaceholder = `Rechercher ${this.isFavRoute ? 'dans vos groupes' : 'un groupe ou une ville'} `
     }
+
+    componentDidMount(): void {
+        if(this.isFavRoute) {
+            this.groupService.getAllGroupsOfCurrentUser().then((groups) => {
+                if (groups && groups.length > 0) {
+                    this.fillCityOfGroups(groups);
+                }
+            }).catch((error) => {
+                console.error(error);
+                showToast('Erreur lors de la récupération de vos groupes ');
+            });
+        } else {
+            this.searchTerm('clermont')
+        }
+    }
+    fillCityOfGroups(groups) {
+        for(let i = 0; i < groups.length; i++) {
+            this.groupService.getCityOfGroup(groups[i].id).then(async (city) => {
+                groups[i].city = city[0];
+                groups[i].members = await this.groupService.getMembersOfGroup(groups[i].id);
+                this.setState({groups: groups});
+            }).catch((error) => {
+                console.error(error);
+                showToast('Erreur lors de la récupération de la ville du groupe: ' + group[i].name);
+            });
+        }
+    }
     searchTerm(text) {
         this.setState({
             searchedTerm: text
         });
         if (text && text.toString().length > 3) {
-            this.groupService.searchGroupByTerm(text).then((groups) => {
-                this.setState({groups: groups})
+            this.groupService.searchGroupByTerm(text).then(async (groups) => {
+                this.fillCityOfGroups(groups);
             }).catch((error) => {
-                console.log('ERROR TO searchGroupByCityName');
+                console.log('ERROR TO searchGroupByTerm');
                 console.log(error);
                 showToast('Une erreur est survenue lors de la recherche...')
             })
@@ -44,7 +71,7 @@ export default class SearchGroupScreen extends Component {
             <SafeAreaView style={{ flex: 1 }}>
                 <HeaderBar route={this.props.route.name} navigation={this.props.navigation}/>
                 <DismissKeyboard>
-                    <Layout style={[ styles.fullScreen]}>
+                    <Layout style={{flex:1}}>
                         <SearchBar  style={{flex: 1}}
                                     placeholder={this.searchPlaceholder}
                                     textSubmitted={(submitted) => this.haveSubmitSearch(submitted)}

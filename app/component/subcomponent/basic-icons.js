@@ -32,3 +32,9 @@ export const SettingsIcon = (style) => (
 export const SearchIcon = (style) => (
     <Icon {...style} fill={appColors.primary}  name='search-outline' />
 );
+export const MembersIcon = (style) => (
+    <Icon {...style} fill={appColors.primary}  name='people-outline' />
+);
+export const PositionIcon = (style) => (
+    <Icon {...style} fill={appColors.primary} name='pin-outline' />
+);

@@ -12,3 +12,8 @@ export const ROUTE_SEARCH_GRP = 'SearchGroups';
 export const ROUTE_SETTING = 'Settings';
 export const ROUTE_INFO = 'AppInfo';
 export const ROUTE_LOGIN = 'Login';
+
+// utilitary
+export const MINUTE = 60;
+export const HOUR = 3600;
+export const DAY = 86400;

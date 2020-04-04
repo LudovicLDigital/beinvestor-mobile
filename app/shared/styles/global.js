@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
         height: 100
     },
     boldedTitle: {
-        fontWeight: '900',
+        fontWeight: 'bold',
         color: Colors.dark
     },
     backgroundPrimary: {
@@ -78,6 +78,10 @@ const styles = StyleSheet.create({
     flexCenter: {
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    flexRowAlignCenter: {
+        alignItems: 'center',
+        flexDirection: 'row',
     },
     flexRowBetween: {
         flexDirection: 'row',
