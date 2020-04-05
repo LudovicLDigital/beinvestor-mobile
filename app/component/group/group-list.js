@@ -72,7 +72,6 @@ export default class GroupList extends Component {
     isCurrentUserMember(group) {
         if (group.members && group.members.length > 0) {
             return AuthService.getCurrentUser().then((currentUser) => {
-                console.log(currentUser)
                 this.currentUser = currentUser;
                 const currentUserIn = group.members.filter((user) => user.id === this.currentUser.id)[0];
                 if (currentUserIn) {
