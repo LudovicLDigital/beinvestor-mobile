@@ -72,7 +72,7 @@ export default class SearchGroupScreen extends Component {
                 <HeaderBar route={this.props.route.name} navigation={this.props.navigation}/>
                 <DismissKeyboard>
                     <Layout style={{flex:1}}>
-                        <SearchBar  style={{flex: 1}}
+                        <SearchBar  style={{flex: 1, zIndex: 100}}
                                     placeholder={this.searchPlaceholder}
                                     textSubmitted={(submitted) => this.haveSubmitSearch(submitted)}
                                     textChange={(text) => this.searchTerm(text)}/>

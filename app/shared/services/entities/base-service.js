@@ -46,7 +46,7 @@ export default class BaseService {
     async postObject(objectToPost, urlCompletion) {
         const options = await HttpHeaderSetter.setDefaultHeader('POST');
         options.body = JSON.stringify(objectToPost);
-        return this.fetchMethod(options);
+        return this.fetchMethod(options, urlCompletion);
     }
     /**
      * Request a update to api with an object in body
@@ -57,7 +57,7 @@ export default class BaseService {
     async updateObject(objectToUpdate, urlCompletion) {
         const options = await HttpHeaderSetter.setDefaultHeader('PUT');
         options.body = JSON.stringify(objectToUpdate);
-        return this.fetchMethod(options);
+        return this.fetchMethod(options, urlCompletion);
     }
 
     /**
@@ -68,7 +68,7 @@ export default class BaseService {
      */
     async deleteObject(id, urlCompletion) {
         const options = await HttpHeaderSetter.setDefaultHeader('DELETE');
-        return this.fetchMethodWithId(id, options);
+        return this.fetchMethodWithId(id, urlCompletion, options);
     }
 
     /**

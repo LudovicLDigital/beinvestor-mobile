@@ -23,4 +23,10 @@ export default class GroupService extends BaseService {
     async getMembersOfGroup(groupId) {
         return await this.getOneById('/members/of', groupId)
     }
+    async currentUserJoinGroup(groupId) {
+        return await this.postObject({}, '/current/' + groupId)
+    }
+    async currentUserLeftGroup(groupId) {
+        return await this.deleteObject(groupId, '/current')
+    }
 }

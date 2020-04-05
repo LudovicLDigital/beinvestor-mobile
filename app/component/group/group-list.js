@@ -9,6 +9,7 @@ import {
 } from '@ui-kitten/components';
 import AuthService from "../../shared/services/auth";
 import {calculDurationFromNow} from "../../shared/util/ui-helpers";
+import GroupService from "../../shared/services/entities/groups-service";
 function HeaderGroup({group, currentUserIsMember, joinGroupMethod}) {
     return (
         <Fragment>
@@ -31,10 +32,10 @@ function GroupItem({group, currentUserIsMember, joinGroupMethod}) {
     if (group) {
         const lastMessageTime = calculDurationFromNow(group.lastMessage);
         return (
-            <View style={{flex: 1}}>
+            <View style={{flex: 1, marginBottom: 10}}>
                 <Card>
                     <HeaderGroup group={group} currentUserIsMember={currentUserIsMember}
-                                 joinGroupMethod={joinGroupMethod}/>
+                                 joinGroupMethod={(IsMember) => joinGroupMethod(IsMember)}/>
                     <Text category='h4' style={styles.boldedTitle}>{group.name}</Text>
                     <Text>{lastMessageTime !== -1 ? 'Dernier message il y a' + lastMessageTime : 'Aucun message'}</Text>
                     <View style={styles.flexRowAlignCenter}>
@@ -54,18 +55,17 @@ function GroupItem({group, currentUserIsMember, joinGroupMethod}) {
 export default class GroupList extends Component {
     constructor(props) {
         super(props);
+        this.groupeService = new GroupService();
     }
 
     render() {
         return (
-            <View style={{flex:1}}>
-                <FlatList style={{flex: 1, padding: 20}} data={this.props.groups} keyExtractor={(item, index) => index.toString()}
+                <FlatList style={{flex: 1, padding: 15}} data={this.props.groups} keyExtractor={(item, index) => index.toString()}
                           renderItem={(item) => <GroupItem
                               group={item.item}
                               currentUserIsMember={this.isCurrentUserMember(item.item)}
                               joinGroupMethod={(currentUserIsMember) => this.quitOrJoin(currentUserIsMember, item.item)}
                           />}/>
-            </View>
         )
     }
 
@@ -88,8 +88,13 @@ export default class GroupList extends Component {
     quitOrJoin(currentUserIsMember, group) {
         if (currentUserIsMember) {
             alert('QUIT ?')
+            this.groupeService.currentUserLeftGroup(group.id).then(() => {}).catch((error) => {
+                console.error(error);
+            })
         } else {
-            alert('JOIN ?') // need to bind group for change
+            this.groupeService.currentUserJoinGroup(group.id).then(() => {}).catch((error) => {
+                console.error(error);
+            })
         }
     }
 }

@@ -54,10 +54,10 @@ export default class HomeScreen extends Component {
             <SafeAreaView style={{ flex: 1 }}>
                 <HeaderBar route={this.props.route.name} hideAriane={true} navigation={this.props.navigation}/>
                 <DismissKeyboard>
-                    <Layout style={styles.fullScreen}>
+                    <Layout style={{flex:1}}>
                         <View style={[{flex:1}]}>
                             <SearchBar style={[styles.absoluteTop, {zIndex: 1000}]} placeholder={'Rechercher une ville'}/>
-                            <MapView style={[styles.absoluteTop, styles.absoluteBottom, {zIndex: 10}]}
+                            <MapView style={[{flex:1, zIndex: 10}]}
                                      initialRegion={{
                                          latitude: this.state.currentLocation.coords.latitude,
                                          longitude: this.state.currentLocation.coords.longitude,
