@@ -71,6 +71,9 @@ const styles = StyleSheet.create({
         borderColor: appColors.secondary,
         color: Colors.white
     },
+    fabButton: {
+        borderRadius: 100
+    },
     fullScreen: {
         flex: 1,
         padding: 15

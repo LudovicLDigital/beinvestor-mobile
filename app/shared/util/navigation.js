@@ -14,19 +14,20 @@ import {
     ROUTE_SETTING,
     ROUTE_SEARCH_GRP,
     ROUTE_SIMULATOR,
-    ROUTE_USER_PROFIL
+    ROUTE_USER_PROFIL, ROUTE_DETAIL_GRP
 } from './constants'
 // screens
 import HomeScreen from "../../screens/home-screen";
 import LoginScreen from "../../screens/login-screen";
-import SimulatorScreen from "../../screens/simulator-screen";
-import UserProfilScreen from "../../screens/user-profil-screen";
-import SearchGroupScreen from "../../screens/search-group-screen";
+import SimulatorScreen from "../../screens/simulator/simulator-screen";
+import UserProfilScreen from "../../screens/user-profil/user-profil-screen";
+import SearchGroupScreen from "../../screens/group/search-group-screen";
 import SettingsScreen from "../../screens/settings-screen";
 import AppInfoScreen from "../../screens/app-info-screen";
 // component
 import {CustomDrawerContent} from '../../component/subcomponent/drawer/custom-drawer-content'
-import UserProfilInvestorScreen from "../../screens/user-profil-investor-screen";
+import UserProfilInvestorScreen from "../../screens/user-profil/user-profil-investor-screen";
+import GroupDetailScreen from "../../screens/group/group-detail-screen";
 
 const ProfilEditStack = createStackNavigator();
 function ProfilStackNavigator() {
@@ -102,6 +103,12 @@ function HomeDrawerNavigator() {
                 headerShown: false
             }}
             />
+            <HomeDrawer.Screen
+                name={ROUTE_DETAIL_GRP}
+                component={GroupDetailScreen}
+                options={{
+                    headerShown: false
+                }}/>
         </HomeDrawer.Navigator>
     )
 }

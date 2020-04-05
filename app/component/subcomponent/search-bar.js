@@ -1,9 +1,7 @@
 import React, {Component} from "react";
 import {
-    Text,
     View
 } from "react-native";
-import {styles, appColors} from "../../shared/styles/global";
 import { Icon, Input } from '@ui-kitten/components';
 
 /**

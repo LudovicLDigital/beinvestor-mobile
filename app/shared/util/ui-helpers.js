@@ -17,6 +17,10 @@ export function calculDurationFromNow(date) {
         const actualDate = new Date();
         delta = actualDate.getTime() - datePassed.getTime();
         if (delta > MINUTE && delta < HOUR) {
+            const rest = delta % MINUTE;
+            if (rest > 0) {
+                delta = delta - rest;
+            }
             time = delta / MINUTE;
             return time + ' minutes';
         } else if (delta < MINUTE) {

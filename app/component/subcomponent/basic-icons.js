@@ -35,6 +35,18 @@ export const SearchIcon = (style) => (
 export const MembersIcon = (style) => (
     <Icon {...style} fill={appColors.primary}  name='people-outline' />
 );
+export const SharedFilesIcon = (style) => (
+    <Icon {...style} fill={appColors.primary}  name='layers-outline' />
+);
+export const NotificationIcon = (style) => (
+    <Icon {...style} fill={appColors.primary}  name='bell-outline' />
+);
+export const AddIcon = (style) => (
+    <Icon {...style} fill={appColors.primary}  name='plus' />
+);
+export const SendIcon = (style) => (
+    <Icon {...style} fill={appColors.primary}  name='paper-plane' />
+);
 export const PositionIcon = (style) => (
     <Icon {...style} fill={appColors.primary} name='pin-outline' />
 );

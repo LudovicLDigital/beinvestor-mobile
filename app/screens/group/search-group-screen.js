@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import {styles, appColors} from "../shared/styles/global";
-import GroupService from '../shared/services/entities/groups-service';
-import GroupList from '../component/group/group-list';
+import {styles, appColors} from "../../shared/styles/global";
+import GroupService from '../../shared/services/entities/groups-service';
+import GroupList from '../../component/group/group-list';
 import { SafeAreaView, View } from 'react-native';
 import { Layout } from '@ui-kitten/components';
-import HeaderBar from '../component/subcomponent/header-bar';
-import SearchBar from "../component/subcomponent/search-bar";
-import {DismissKeyboard, showToast} from "../shared/util/ui-helpers";
+import HeaderBar from '../../component/subcomponent/header-bar';
+import SearchBar from "../../component/subcomponent/search-bar";
+import {DismissKeyboard, showToast} from "../../shared/util/ui-helpers";
 
 export default class SearchGroupScreen extends Component {
 
@@ -77,7 +77,7 @@ export default class SearchGroupScreen extends Component {
                                     textSubmitted={(submitted) => this.haveSubmitSearch(submitted)}
                                     textChange={(text) => this.searchTerm(text)}/>
                         <View style={{flex: 15}}>
-                            <GroupList groups={this.state.groups}/>
+                            <GroupList {...this.props} isdisplayingUserGroups={this.isFavRoute} groups={this.state.groups}/>
                         </View>
                     </Layout>
                 </DismissKeyboard>
