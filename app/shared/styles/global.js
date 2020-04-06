@@ -10,6 +10,9 @@ const appColors = {
     secondary: '#6e398d',
     secondaryLight: '#9d65bd',
     secondaryDark: '#3f0a5e',
+
+    white: Colors.white,
+    dark: Colors.dark,
 };
 //*** End app colors *** //
 const styles = StyleSheet.create({

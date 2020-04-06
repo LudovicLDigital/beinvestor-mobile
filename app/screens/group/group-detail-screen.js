@@ -8,7 +8,7 @@ import {AddIcon, MembersIcon, SharedFilesIcon} from "../../component/subcomponen
 import {showToast} from "../../shared/util/ui-helpers";
 import Colors from "react-native/Libraries/NewAppScreen/components/Colors";
 import ChatRoom from "../../component/chat/chatroom";
-import {MINUTE} from "../../shared/util/constants";
+import {MINUTE, ROUTE_DETAIL_GRP, ROUTE_MEMBERS_LIST} from "../../shared/util/constants";
 const messageList = [
     {dateSended: new Date(2020, 3, 2, 15, 16), authorName: 'Ludovic', content: 'Bonjour ! Bienvenue à tous les nouveaux qui souhaitent découvrir, calculer et partager leurs projets immobiliers !', userId: 1},
     {dateSended: new Date(2020, 3, 3, 17, 30), authorName: 'Jean', content: 'Merci !', userId: 2},
@@ -18,6 +18,7 @@ const messageList = [
  * Passing in route params :
  * - isMember : boolean to know on component load if current user is member of the group
  * - groupDisplayed : the group to show detail
+ * - previousRouteIdentifier : the previous route from where user come
  */
 export default class GroupDetailScreen extends Component {
     constructor(props) {
@@ -25,18 +26,19 @@ export default class GroupDetailScreen extends Component {
         this.state = {
             userIsMember: (this.props.route && this.props.route.params) ? this.props.route.params.isMember : false,
             groupDisplay: this.props.route.params.groupDisplayed,
+            previousRouteIdentifier: this.props.route.params.previousRouteIdentifier,
         };
+        this.groupeService = new GroupService();
     }
-
     componentDidMount(): void {
     }
 
     render() {
         return (
             <SafeAreaView style={{ flex: 1 }}>
-                <HeaderBar route={this.props.route.name} navigation={this.props.navigation}/>
+                <HeaderBar route={this.props.route.name} previousRoute={this.state.previousRouteIdentifier} navigation={this.props.navigation}/>
                 <Layout style={styles.fullScreen}>
-                    <Text style={[{textAlign: 'center', backgroundColor: Colors.white}, styles.boldedTitle]} category={'h5'}>{this.state.groupDisplay.name}</Text>
+                    <Text style={[{textAlign: 'center', backgroundColor: appColors.white}, styles.boldedTitle]} category={'h5'}>{this.state.groupDisplay.name}</Text>
                     <Layout style={[{flex: 1}, styles.flexRowBetween]}>
                         <View style={{flex: 2, alignItems: 'flex-start'}}>
                             <Button
@@ -64,7 +66,7 @@ export default class GroupDetailScreen extends Component {
                         <View style={[{flex: 1}, styles.flexColumnBetween]}>
                             <Button
                                 size={'small'}
-                                onPress={() => this.joinOrQuitGroup()}
+                                onPress={() => this.quitOrJoin()}
                                 appearance='outline'
                                 status={!this.state.userIsMember ? 'success':'danger'}>
                                 {!this.state.userIsMember ? 'Rejoindre' : 'Quitter'}
@@ -88,15 +90,48 @@ export default class GroupDetailScreen extends Component {
         );
     }
 
-    joinOrQuitGroup() {
-        return undefined;
+    quitOrJoin() {
+        if (this.state.userIsMember) {
+            this.userWillQuit();
+        } else {
+            this.groupeService.currentUserJoinGroup(this.state.groupDisplay.id).then(() => {
+            }).catch((error) => {
+                console.error(error);
+            })
+        }
+    }
+    userWillQuit() {
+        Alert.alert(
+            `Quitter le groupe ${this.groupDisplay.name}?`,
+            "Vous ne recevrez plus les notifications liées à ce groupe",
+            [
+                {
+                    text: 'Annuler',
+                    onPress: () => {}
+                },
+                {
+                    text: 'Oui',
+                    onPress: () => {
+                        this.groupeService.currentUserLeftGroup(this.state.groupDisplay.id).then(() => {
+                        }).catch((error) => {
+                            console.error(error);
+                        })
+                    }
+                }
+            ]
+        )
     }
 
     /**
-     * show a modal with all members of the group
+     * show all members of the group
      */
     seeMembers() {
-        showToast('see MEMBERS')
+        this.props.navigation.navigate(ROUTE_MEMBERS_LIST, {
+            entityLinkedId: this.state.groupDisplay.id,
+            usersList: this.state.groupDisplay.members,
+            isGroupsMembers: true,
+            previousRouteIdentifier: this.props.route.name
+        })
     }
     /**
      * Navigate to the the file share dashboard

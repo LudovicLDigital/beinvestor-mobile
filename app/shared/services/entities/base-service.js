@@ -1,5 +1,6 @@
 import {API_URL} from '../../util/constants';
 import HttpHeaderSetter from '../../util/http-header-setter';
+import {showToast} from "../../util/ui-helpers";
 
 /**
  * Extends this base service to have minimum fetch method for your service
@@ -12,7 +13,12 @@ export default class BaseService {
     }
     async fetchMethod(options, urlCompletion) {
         return fetch(`${this.resourceURL}${urlCompletion && urlCompletion !== null ? urlCompletion : ''}`, options).then(async(response) => {
-            return response.status === 200 ? response.json() : null;
+            if ((response.status < 200 || response.status >= 300) && response.status !== 404) {
+                showToast('Erreur ' + response.statusText + " code : " + response.status);
+                return null;
+            } else {
+                return response.status === 200 ? response.json() : null;
+            }
         }).catch((error) => {
             console.error(error);
             throw error;
@@ -20,7 +26,12 @@ export default class BaseService {
     }
     async fetchMethodWithId(id, urlCompletion, options) {
         return fetch(`${this.resourceURL}${urlCompletion && urlCompletion !== null ? urlCompletion : ''}/${id}`, options).then((response) => {
-            return response.status === 200 ? response.json() : null;
+            if ((response.status < 200 || response.status >= 300) && response.status !== 404) {
+                showToast('Erreur ' +response.statusText + " code : " + response.status);
+                return null;
+            } else {
+                return response.status === 200 ? response.json() : null;
+            }
         }).catch((error) => {
             console.error(error);
             throw error;
@@ -66,7 +77,7 @@ export default class BaseService {
      * @param urlCompletion : is the precise url, can be null
      * @returns {Promise<void>}
      */
-    async deleteObject(id, urlCompletion) {
+    async deleteObject( urlCompletion, id) {
         const options = await HttpHeaderSetter.setDefaultHeader('DELETE');
         return this.fetchMethodWithId(id, urlCompletion, options);
     }

@@ -85,7 +85,7 @@ const auth = {
                     token: tokenSaved
                 });
                 return fetch(`${API_URL}/logout`, options).then((response) => {
-                    if (response.status === 200) {
+                    if (response.status === 204) {
                         return DeviceStorage.removeCurrentUserToken().then(() => {
                             DeviceStorage.removeKeyValue(REFRESH_TOKEN_KEY);
                             return Promise.resolve(true);

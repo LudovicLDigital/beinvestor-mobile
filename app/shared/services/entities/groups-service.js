@@ -27,6 +27,6 @@ export default class GroupService extends BaseService {
         return await this.postObject({}, '/current/' + groupId)
     }
     async currentUserLeftGroup(groupId) {
-        return await this.deleteObject(groupId, '/current')
+        return await this.deleteObject('/current', groupId)
     }
 }

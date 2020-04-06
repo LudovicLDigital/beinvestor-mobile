@@ -1,6 +1,5 @@
 
 import React, { useEffect } from 'react';
-import {Colors} from "react-native/Libraries/NewAppScreen/index";
 import { Drawer as UIKittenDrawer,DrawerHeaderFooter,Button } from '@ui-kitten/components';
 import {
     FavIcon,
@@ -15,7 +14,10 @@ import {
 import {convertRouteNameToLisible} from "../../../shared/util/converter-for-route-name";
 import {
     ROUTE_FAV_GRP,
-    ROUTE_HOME, ROUTE_INFO, ROUTE_LOGIN, ROUTE_SEARCH_GRP,
+    ROUTE_INFO,
+    ROUTE_LOGIN,
+    ROUTE_MAP,
+    ROUTE_SEARCH_GRP,
     ROUTE_SETTING,
     ROUTE_SIMULATOR,
     ROUTE_USER_PROFIL
@@ -26,7 +28,7 @@ import {appColors} from "../../../shared/styles/global";
 
 const drawerMenuItems = [
     {
-        title: convertRouteNameToLisible(ROUTE_HOME),
+        title: convertRouteNameToLisible(ROUTE_MAP),
         icon: GlobeIcon
     },
     {
@@ -80,7 +82,7 @@ function logout(navigation) {
     )
 }
 const LogoutButton = (style) => (
-    <Button style={[{...style}, {backgroundColor: Colors.white}]} icon={LogoutIcon}/>
+    <Button style={[{...style}, {backgroundColor: appColors.white}]} icon={LogoutIcon}/>
 );
 const Footer = (navigation) => (
     <DrawerHeaderFooter onPress={() => logout(navigation)} accessory={LogoutButton} description='Se déconnecter'/>
@@ -89,7 +91,7 @@ export const CustomDrawerContent = ({ navigation, state }) => {
     useEffect(() => {
         const backAction = () =>
         {
-            if (state.routeNames[state.index] === ROUTE_HOME) {
+            if (state.routeNames[state.index] === ROUTE_MAP) {
                 Alert.alert(
                     "Attention ! ",
                     "Voulez vous quitter l'application ?",
@@ -112,7 +114,7 @@ export const CustomDrawerContent = ({ navigation, state }) => {
     });
     const onSelect = (index) => {
         if (state.routeNames[index] === ROUTE_FAV_GRP) {
-            navigation.navigate(state.routeNames[index], {isFavRoute: true});
+            navigation.navigate(state.routeNames[index], { screen: ROUTE_FAV_GRP, params: {isFavRoute: true}});
         } else {
             navigation.navigate(state.routeNames[index]);
         }

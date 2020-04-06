@@ -6,9 +6,8 @@ import {
 } from "react-native";
 import {styles, appColors} from "../../shared/styles/global";
 import AuthService from "../../shared/services/auth";
-import Colors from "react-native/Libraries/NewAppScreen/components/Colors";
 import {calculDurationFromNow} from "../../shared/util/ui-helpers";
-const specificStyle = StyleSheet.create({
+const chatBubblesStyle = StyleSheet.create({
     bubbleDefault: {
         borderRadius: 15,
         padding: 10,
@@ -26,11 +25,11 @@ const specificStyle = StyleSheet.create({
         marginRight: 20
     },
     textHeader: {
-        color: Colors.black,
-        backgroundColor: Colors.white
+        color: appColors.black,
+        backgroundColor: appColors.white
     },
     textIn: {
-        color: Colors.white,
+        color: appColors.white,
     }
 });
 /**
@@ -44,7 +43,7 @@ export default class ChatBubble extends Component {
         this.state = {
             isOwner: false,
             bubbleColor: styles.backgroundSecondary,
-            containerStyler: specificStyle.mainContainerOtherUser,
+            containerStyler: chatBubblesStyle.mainContainerOtherUser,
         };
         AuthService.getCurrentUser().then((currentUser) => {
             this.currentUser = currentUser;
@@ -52,7 +51,7 @@ export default class ChatBubble extends Component {
                 this.setState({
                     isOwner: true,
                     bubbleColor: styles.backgroundPrimary,
-                    containerStyler: specificStyle.mainContainerCurrentUser
+                    containerStyler: chatBubblesStyle.mainContainerCurrentUser
                 });
             }
         });
@@ -71,8 +70,8 @@ export default class ChatBubble extends Component {
         return (
             <View style={[{flex:1}, this.state.containerStyler]}>
                 {this.togglePositionTextHeader()}
-                <View style={[{flex: 1}, specificStyle.bubbleDefault, this.state.bubbleColor]}>
-                    <Text style={specificStyle.textIn}>{this.props.messageToDisplay.content}</Text>
+                <View style={[{flex: 1}, chatBubblesStyle.bubbleDefault, this.state.bubbleColor]}>
+                    <Text style={chatBubblesStyle.textIn}>{this.props.messageToDisplay.content}</Text>
                 </View>
             </View>
         )
