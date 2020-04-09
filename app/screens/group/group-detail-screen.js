@@ -8,7 +8,7 @@ import HeaderBar from '../../component/subcomponent/header-bar';
 import {AddIcon, MembersIcon, SharedFilesIcon} from "../../component/subcomponent/basic-icons";
 import {showToast} from "../../shared/util/ui-helpers";
 import ChatRoom from "../../component/chat/chatroom";
-import {MINUTE, ROUTE_MEMBERS_LIST} from "../../shared/util/constants";
+import { PAGINATION_SIZE, ROUTE_MEMBERS_LIST} from "../../shared/util/constants";
 import SocketService from "../../shared/services/socket-service";
 /**
  * Passing in route params :
@@ -23,7 +23,8 @@ export default class GroupDetailScreen extends Component {
             userIsMember: (this.props.route && this.props.route.params) ? this.props.route.params.isMember : false,
             groupDisplay: this.props.route.params.groupDisplayed,
             previousRouteIdentifier: this.props.route.params.previousRouteIdentifier,
-            messageList: []
+            messageList: [],
+            page: 0
         };
         this.groupeService = new GroupService();
         this.groupeMessageService = new GroupMessageService();
@@ -31,12 +32,36 @@ export default class GroupDetailScreen extends Component {
         this.listenForMessage();
     }
     getInitMessageList() {
-        this.groupeMessageService.getAllGroupMessage(this.state.groupDisplay.id, null).then((messageList) => {
-            this.setState({messageList: messageList.results})
+        this.groupeMessageService.getAllGroupMessage(this.state.groupDisplay.id, {page: this.state.page, numberItem: PAGINATION_SIZE}).then((messageList) => {
+            if(this.state.messageList || this.state.messageList.length <= 0) {
+                this.setState({messageList: messageList.results.reverse()})
+            } else {
+                const messages = [];
+                this.state.messageList.reverse();
+                this.state.messageList.forEach((message) => {
+                    messages.push(message);
+                });
+                const dataGetted = messageList.results.reverse();
+                dataGetted.forEach((message) => {
+                    messages.push(message)
+                });
+                this.setState({messageList: messages.reverse()})
+            }
         }).catch((error) => {
             showToast('Erreur de récupération des messages');
             console.log(error);
         })
+    }
+    loadMorePreviousMessage(info) {
+        console.log(this.state);
+        if (this.state.page) {
+            const newPage = this.state.page + 1;
+            console.log(this.state.page);
+            this.setState({
+                page: newPage
+            });
+            this.getInitMessageList();
+        }
     }
     listenForMessage() {
         const that = this;
@@ -45,7 +70,7 @@ export default class GroupDetailScreen extends Component {
             that.state.messageList.forEach((message) => {
                 messages.push(message);
             });
-            messages.push(groupMessage);
+            messages.unshift(groupMessage);
             that.setState({messageList: messages});
         });
     }
@@ -102,7 +127,9 @@ export default class GroupDetailScreen extends Component {
                     </Layout>
                     <Layout style={[{flex:2, marginTop: 20}]}>
                         <Divider style={{color: appColors.secondary}}/>
-                        <ChatRoom groupId={this.state.groupDisplay.id} messageList={this.state.messageList}/>
+                        <ChatRoom groupId={this.state.groupDisplay.id}
+                                  loadNewDatas={(info) => this.loadMorePreviousMessage(info)}
+                                  messageList={this.state.messageList}/>
                     </Layout>
                 </Layout>
             </SafeAreaView>

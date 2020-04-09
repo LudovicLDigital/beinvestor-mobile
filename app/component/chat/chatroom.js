@@ -10,9 +10,11 @@ import {styles} from "../../shared/styles/global";
  * PROPS :
  * - messageList: the list of messages
  * - groupId: the id of the chatroom's group
+ * - loadNewDatas: callback for load more datas
  */
 export default class ChatRoom extends Component {
     flatList;
+    haveScroll: false;
     constructor(props) {
         super(props);
         this.state = {
@@ -23,7 +25,10 @@ export default class ChatRoom extends Component {
         });
     }
 
-    componentDidMount(): void {
+    callBackDatas(info) {
+        if (this.props.loadNewDatas) {
+            this.props.loadNewDatas(info)
+        }
     }
 
     render() {
@@ -33,6 +38,9 @@ export default class ChatRoom extends Component {
                     <FlatList data={this.props.messageList}
                               ref={(flatList) => this.flatList = flatList}
                               keyExtractor={(item, index) => index.toString()}
+                              inverted={-1}
+                              onEndReachedThreshold={0.3}
+                              onEndReached={(info) => this.callBackDatas(info)}
                               renderItem={(item) =>
                                   <ChatBubble
                                       messageToDisplay={item.item}

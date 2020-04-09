@@ -45,6 +45,9 @@ export default class ChatBubble extends Component {
             bubbleColor: styles.backgroundSecondary,
             containerStyler: chatBubblesStyle.mainContainerOtherUser,
         };
+    }
+
+    componentDidMount(): void {
         AuthService.getCurrentUser().then((currentUser) => {
             this.currentUser = currentUser;
             if (this.currentUser.userInfo.id === this.props.messageToDisplay.userInfoId) {
@@ -56,9 +59,24 @@ export default class ChatBubble extends Component {
             }
         });
     }
+
+
+    componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS): void {
+        if(this.props.messageToDisplay.content !== prevProps.messageToDisplay.content)
+        {
+            if (this.currentUser && this.currentUser.userInfo.id === this.props.messageToDisplay.userInfoId) {
+                this.setState({
+                    isOwner: true,
+                    bubbleColor: styles.backgroundPrimary,
+                    containerStyler: chatBubblesStyle.mainContainerCurrentUser
+                });
+            }
+        }
+    }
+
     togglePositionTextHeader() {
-        const text1 = !this.state.isOwner ? this.props.messageToDisplay.authorName : `Il y a ${calculDurationFromNow(this.props.messageToDisplay.dateSended)}`;
-        const text2 = !this.state.isOwner ? `Il y a ${calculDurationFromNow(this.props.messageToDisplay.dateSended)}` : 'Vous';
+        const text1 = !this.state.isOwner ? this.props.messageToDisplay.authorName : `Il y a ${calculDurationFromNow(this.props.messageToDisplay.created_at)}`;
+        const text2 = !this.state.isOwner ? `Il y a ${calculDurationFromNow(this.props.messageToDisplay.created_at)}` : 'Vous';
         return(
             <View style={styles.flexRowBetween}>
                 <Text>{text1}</Text>

@@ -23,8 +23,6 @@ export function calculDurationFromNow(date) {
             }
             time = delta / MINUTE;
             return time + ' minutes';
-        } else if (delta < MINUTE) {
-            return delta + ' secondes';
         } else if (delta > HOUR && delta < DAY) {
             const rest = delta % HOUR;
             if (rest > 0) {
@@ -40,9 +38,9 @@ export function calculDurationFromNow(date) {
             time = delta / DAY;
             return time + ' jours';
         } else {
-            return delta;
+            return 'un instant';
         }
     } else {
-        return delta;
+        return 'un instant';
     }
 }
