@@ -1,6 +1,7 @@
 export const USER_TOKEN_KEY = "LOGGED_TOKEN";
 export const REFRESH_TOKEN_KEY = "REFRESH_TOKEN";
 export const API_URL = "http://192.168.1.57:3000/api";
+export const SOCKET_URL = "http://192.168.1.57:3000";
 
 // ROUTE NAMES IDENTIFIER
 export const ROUTE_USER_PROFIL = 'UserProfil';
@@ -22,3 +23,4 @@ export const SECOND = 1000;
 export const MINUTE = 60 * SECOND;
 export const HOUR = 3600 * SECOND;
 export const DAY = 86400 * SECOND;
+export const PAGINATION_SIZE = 15;

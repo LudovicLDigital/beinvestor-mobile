@@ -82,9 +82,9 @@ export default class GroupList extends Component {
         AuthService.getCurrentUser().then((currentUser) => {
             this.currentUser = currentUser;
             const tempMap = new Map();
-            if (this.props.groups && this.groups.length > 0) {
+            if (this.props.groups && this.props.groups.length > 0) {
                 for (let i = 0; i < this.props.groups.length; i++) {
-                    tempMap.set(group[i].id, this.isCurrentUserMember(group[i]));
+                    tempMap.set(this.props.groups[i].id, this.isCurrentUserMember(this.props.groups[i]));
                 }
                 this.setState({isMemberMap: tempMap})
             }

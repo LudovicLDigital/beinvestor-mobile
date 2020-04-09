@@ -1,19 +1,15 @@
 import React, { Component } from 'react';
 import {styles, appColors} from "../../shared/styles/global";
 import GroupService from '../../shared/services/entities/groups-service';
+import GroupMessageService from '../../shared/services/entities/group-message-service';
 import { SafeAreaView, View } from 'react-native';
 import { Text, Layout, Button, Icon, Divider } from '@ui-kitten/components';
 import HeaderBar from '../../component/subcomponent/header-bar';
 import {AddIcon, MembersIcon, SharedFilesIcon} from "../../component/subcomponent/basic-icons";
 import {showToast} from "../../shared/util/ui-helpers";
-import Colors from "react-native/Libraries/NewAppScreen/components/Colors";
 import ChatRoom from "../../component/chat/chatroom";
-import {MINUTE, ROUTE_DETAIL_GRP, ROUTE_MEMBERS_LIST} from "../../shared/util/constants";
-const messageList = [
-    {dateSended: new Date(2020, 3, 2, 15, 16), authorName: 'Ludovic', content: 'Bonjour ! Bienvenue à tous les nouveaux qui souhaitent découvrir, calculer et partager leurs projets immobiliers !', userId: 1},
-    {dateSended: new Date(2020, 3, 3, 17, 30), authorName: 'Jean', content: 'Merci !', userId: 2},
-    {dateSended: new Date(new Date().getTime() - (2 * MINUTE)), authorName: 'Paul', content: 'Bon cash-flow à tous !', userId: 2},
-];
+import {MINUTE, ROUTE_MEMBERS_LIST} from "../../shared/util/constants";
+import SocketService from "../../shared/services/socket-service";
 /**
  * Passing in route params :
  * - isMember : boolean to know on component load if current user is member of the group
@@ -27,8 +23,31 @@ export default class GroupDetailScreen extends Component {
             userIsMember: (this.props.route && this.props.route.params) ? this.props.route.params.isMember : false,
             groupDisplay: this.props.route.params.groupDisplayed,
             previousRouteIdentifier: this.props.route.params.previousRouteIdentifier,
+            messageList: []
         };
         this.groupeService = new GroupService();
+        this.groupeMessageService = new GroupMessageService();
+        this.getInitMessageList();
+        this.listenForMessage();
+    }
+    getInitMessageList() {
+        this.groupeMessageService.getAllGroupMessage(this.state.groupDisplay.id, null).then((messageList) => {
+            this.setState({messageList: messageList.results})
+        }).catch((error) => {
+            showToast('Erreur de récupération des messages');
+            console.log(error);
+        })
+    }
+    listenForMessage() {
+        const that = this;
+        SocketService.socketServer.on(`receivedMessage-${that.state.groupDisplay.id}`, function(groupMessage) {
+            const messages = [];
+            that.state.messageList.forEach((message) => {
+                messages.push(message);
+            });
+            messages.push(groupMessage);
+            that.setState({messageList: messages});
+        });
     }
     componentDidMount(): void {
     }
@@ -83,7 +102,7 @@ export default class GroupDetailScreen extends Component {
                     </Layout>
                     <Layout style={[{flex:2, marginTop: 20}]}>
                         <Divider style={{color: appColors.secondary}}/>
-                        <ChatRoom messageList={messageList}/>
+                        <ChatRoom groupId={this.state.groupDisplay.id} messageList={this.state.messageList}/>
                     </Layout>
                 </Layout>
             </SafeAreaView>

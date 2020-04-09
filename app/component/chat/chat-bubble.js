@@ -47,7 +47,7 @@ export default class ChatBubble extends Component {
         };
         AuthService.getCurrentUser().then((currentUser) => {
             this.currentUser = currentUser;
-            if (currentUser.user.id === this.props.messageToDisplay.userId) {
+            if (this.currentUser.userInfo.id === this.props.messageToDisplay.userInfoId) {
                 this.setState({
                     isOwner: true,
                     bubbleColor: styles.backgroundPrimary,

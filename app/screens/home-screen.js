@@ -5,10 +5,11 @@ import {SafeAreaView, View, Text, PermissionsAndroid} from 'react-native';
 import { Layout } from '@ui-kitten/components';
 import HeaderBar from '../component/subcomponent/header-bar';
 import SearchBar from "../component/subcomponent/search-bar";
-import {DismissKeyboard} from "../shared/util/ui-helpers";
+import {DismissKeyboard, showToast} from "../shared/util/ui-helpers";
 import MapView from 'react-native-maps';
 import { Marker } from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
+import SocketService from '../shared/services/socket-service';
 export default class HomeScreen extends Component {
     isMainScreen: boolean;
     constructor(props) {
@@ -33,6 +34,7 @@ export default class HomeScreen extends Component {
         this.isMainScreen = true;
     }
     componentDidMount(): void {
+        SocketService.connectToBackEnd();
         PermissionsAndroid.request(
             PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
         ).then((granted) => {
@@ -57,17 +59,17 @@ export default class HomeScreen extends Component {
                 <DismissKeyboard>
                     <Layout style={{flex:1}}>
                         <View style={[{flex:1}]}>
-                            <MapView style={[{flex:1, zIndex: 10}]}
-                                     initialRegion={{
-                                         latitude: this.state.currentLocation.coords.latitude,
-                                         longitude: this.state.currentLocation.coords.longitude,
-                                         latitudeDelta: 0.0922,
-                                         longitudeDelta: 0.0421,
-                                     }}>
-                                <Marker coordinate={{latitude: this.state.currentLocation.coords.latitude, longitude: this.state.currentLocation.coords.longitude}}
-                                        title={'Vous'}
-                                />
-                            </MapView>
+                            {/*<MapView style={[{flex:1, zIndex: 10}]}*/}
+                                     {/*initialRegion={{*/}
+                                         {/*latitude: this.state.currentLocation.coords.latitude,*/}
+                                         {/*longitude: this.state.currentLocation.coords.longitude,*/}
+                                         {/*latitudeDelta: 0.0922,*/}
+                                         {/*longitudeDelta: 0.0421,*/}
+                                     {/*}}>*/}
+                                {/*<Marker coordinate={{latitude: this.state.currentLocation.coords.latitude, longitude: this.state.currentLocation.coords.longitude}}*/}
+                                        {/*title={'Vous'}*/}
+                                {/*/>*/}
+                            {/*</MapView>*/}
                             <SearchBar style={[styles.absoluteTop, {zIndex: 1000}]} placeholder={'Rechercher une ville'}/>
                         </View>
                     </Layout>
