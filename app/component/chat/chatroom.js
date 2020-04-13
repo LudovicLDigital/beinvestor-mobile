@@ -4,8 +4,9 @@ import {FlatList, View} from 'react-native';
 import ChatBubble from "./chat-bubble";
 import {SendIcon} from "../subcomponent/basic-icons";
 import AuthService from "../../shared/services/auth";
-import SocketService from "../../shared/services/socket-service";
 import {styles} from "../../shared/styles/global";
+import GroupMessageService from '../../shared/services/entities/group-message-service'
+import {showToast} from "../../shared/util/ui-helpers";
 /**
  * PROPS :
  * - messageList: the list of messages
@@ -20,6 +21,7 @@ export default class ChatRoom extends Component {
         this.state = {
             textMessage: '',
         };
+        this.groupMessageService = new GroupMessageService();
         AuthService.getCurrentUser().then((currentUser) => {
             this.currentUser = currentUser;
         });
@@ -47,7 +49,7 @@ export default class ChatRoom extends Component {
                                   />}
                     />
                     :
-                    <Text category={'h4'} style={[styles.boldedTitle, {textAlign: 'center', marginTop: 35}]}>Aucun message pour le moment</Text>
+                    <Text category={'h4'} style={[styles.boldedTitle, {flex: 5, textAlign: 'center', marginTop: 35}]}>Aucun message pour le moment</Text>
                 }
                 <Input placeholder={'Dire quelque chose ...'}
                        icon={SendIcon}
@@ -67,7 +69,10 @@ export default class ChatRoom extends Component {
             groupId: this.props.groupId
         };
         this.textChange(null);
-        SocketService.emitAMessage(messageToSend)
+        this.groupMessageService.postAndEmitAmessage(messageToSend).then(() => {}, (error) => {
+            showToast('Le message n\'a pas pu être envoyé');
+            console.error(error)
+        });
     }
 
     textChange(text) {

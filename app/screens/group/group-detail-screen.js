@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {styles, appColors} from "../../shared/styles/global";
 import GroupService from '../../shared/services/entities/groups-service';
 import GroupMessageService from '../../shared/services/entities/group-message-service';
-import { SafeAreaView, View } from 'react-native';
+import { SafeAreaView, View, Alert} from 'react-native';
 import { Text, Layout, Button, Icon, Divider } from '@ui-kitten/components';
 import HeaderBar from '../../component/subcomponent/header-bar';
 import {AddIcon, MembersIcon, SharedFilesIcon} from "../../component/subcomponent/basic-icons";
@@ -53,10 +53,8 @@ export default class GroupDetailScreen extends Component {
         })
     }
     loadMorePreviousMessage(info) {
-        console.log(this.state);
         if (this.state.page) {
             const newPage = this.state.page + 1;
-            console.log(this.state.page);
             this.setState({
                 page: newPage
             });
@@ -141,6 +139,10 @@ export default class GroupDetailScreen extends Component {
             this.userWillQuit();
         } else {
             this.groupeService.currentUserJoinGroup(this.state.groupDisplay.id).then(() => {
+                this.setState({
+                    userIsMember: true
+                });
+                SocketService.joinAChannel(this.state.groupDisplay.id);
             }).catch((error) => {
                 console.error(error);
             })
@@ -148,7 +150,7 @@ export default class GroupDetailScreen extends Component {
     }
     userWillQuit() {
         Alert.alert(
-            `Quitter le groupe ${this.groupDisplay.name}?`,
+            `Quitter le groupe ${this.state.groupDisplay.name}?`,
             "Vous ne recevrez plus les notifications liées à ce groupe",
             [
                 {
@@ -159,6 +161,10 @@ export default class GroupDetailScreen extends Component {
                     text: 'Oui',
                     onPress: () => {
                         this.groupeService.currentUserLeftGroup(this.state.groupDisplay.id).then(() => {
+                            this.setState({
+                                userIsMember: false
+                            });
+                            SocketService.leaveAGroupChannel(this.state.groupDisplay.id);
                         }).catch((error) => {
                             console.error(error);
                         })

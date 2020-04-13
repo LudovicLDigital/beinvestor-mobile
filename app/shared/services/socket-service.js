@@ -17,9 +17,6 @@ class SocketService {
             })
         })
     };
-    static emitAMessage(groupMessage) {
-        SocketService.socketServer.emit(`sendMessage`, groupMessage); // Envoi un GroupMessage
-    };
     static joinAChannel(groupId) {
         if (SocketService.socketServer) {
             SocketService.socketServer.emit('joinGroupChannel',groupId); // rejoin le channel du groupId

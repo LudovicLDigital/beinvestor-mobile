@@ -8,6 +8,7 @@ import UsersList from "../component/subcomponent/users-list";
 import HeaderBar from "../component/subcomponent/header-bar";
 import AuthService from "../shared/services/auth";
 import GroupService from "../shared/services/entities/groups-service";
+import SocketService from "../shared/services/socket-service";
 
 /**
  * Passing in route params :
@@ -69,6 +70,8 @@ export default class UsersScreen extends Component {
             this.userWillQuit();
         } else {
             this.groupeService.currentUserJoinGroup(this.state.entityLinkedId).then(() => {
+                this.setState({userIsInList: true});
+                SocketService.joinAChannel(this.state.entityLinkedId);
             }).catch((error) => {
                 console.error(error);
             })
@@ -87,6 +90,8 @@ export default class UsersScreen extends Component {
                     text: 'Oui',
                     onPress: () => {
                         this.groupeService.currentUserLeftGroup(this.state.entityLinkedId).then(() => {
+                            this.setState({userIsInList: false});
+                            SocketService.leaveAGroupChannel(this.state.entityLinkedId);
                         }).catch((error) => {
                             console.error(error);
                         })

@@ -31,7 +31,7 @@ export default class UsersList extends Component {
 
     render() {
         return (
-            <FlatList style={{flex: 1, padding: 15, backgroundColor: appColors.white }} data={this.props.usersList} keyExtractor={(item, index) => index.toString()}
+            <FlatList style={{flex: 1, padding: 15, backgroundColor: appColors.white }} data={this.props.usersList} keyExtractor={(item, index) => item.id.toString()}
                       renderItem={(item) =>
                           <UserItem
                               user={item.item}

@@ -7,6 +7,7 @@ import { Layout, Text } from '@ui-kitten/components';
 import HeaderBar from '../../component/subcomponent/header-bar';
 import SearchBar from "../../component/subcomponent/search-bar";
 import {DismissKeyboard, showToast} from "../../shared/util/ui-helpers";
+import AuthService from "../../shared/services/auth";
 export default class SearchGroupScreen extends Component {
     constructor(props) {
         super(props);
@@ -15,34 +16,40 @@ export default class SearchGroupScreen extends Component {
             groups: [],
             searchedTerm: null
         };
+        AuthService.getCurrentUser().then((currentUser) => {
+            this.currentUser = currentUser;
+        });
         this.isFavRoute = (this.props.route && this.props.route.params) ? this.props.route.params.isFavRoute : false;
         this.searchPlaceholder = `Rechercher ${this.isFavRoute ? 'dans vos groupes' : 'un groupe ou une ville'} `
     }
     componentDidMount(): void {
-        this.prepareListenerForNavigation(this.props.navigation);
+        this._prepareListenerForNavigation(this.props.navigation);
     }
-    prepareListenerForNavigation(navigation) {
-        navigation.addListener('focus', () => this.loadData()); // CALL WHEN USER NAVIGATE TO
-        navigation.addListener('blur', () => this.searchTerm(null)); // CALL WHEN NAVIGATE TO ANOTHER PAGE
+    _prepareListenerForNavigation(navigation) {
+        navigation.addListener('focus', () => this._loadData(false)); // CALL WHEN USER NAVIGATE TO
+        navigation.addListener('blur', () => this._searchTerm(null)); // CALL WHEN NAVIGATE TO ANOTHER PAGE
     }
-    loadData() {
+    _loadData(isARefresh) {
         if(this.isFavRoute) {
             this.groupService.getAllGroupsOfCurrentUser().then((groups) => {
                 if (groups && groups.length > 0) {
-                    this.fillCityOfGroups(groups);
+                    this._fillCityOfGroups(groups);
                 }
             }).catch((error) => {
                 console.error(error);
                 showToast('Erreur lors de la récupération de vos groupes ');
             });
+        } else if (isARefresh && !this.isFavRoute) {
+            this._searchTerm(this.state.searchedTerm);
         }
     }
-    fillCityOfGroups(groups) {
+    _fillCityOfGroups(groups) {
         if (groups && groups.length > 0) {
             for (let i = 0; i < groups.length; i++) {
                 this.groupService.getCityOfGroup(groups[i].id).then(async (city) => {
                     groups[i].city = city[0];
                     groups[i].members = await this.groupService.getMembersOfGroup(groups[i].id);
+                    groups[i].currentUserIsMember = (groups[i].members && groups[i].members.find((userInfo) => userInfo.id === this.currentUser.userInfo.id)) ? true : false;
                     this.setState({groups: groups});
                 }).catch((error) => {
                     console.error(error);
@@ -51,13 +58,14 @@ export default class SearchGroupScreen extends Component {
             }
         }
     }
-    searchTerm(text) {
+    _searchTerm(text) {
         this.setState({
-            searchedTerm: text
+            searchedTerm: text,
+            groups: []
         });
         if (text && text.toString().length > 2) {
             this.groupService.searchGroupByTerm(text).then(async (groups) => {
-                this.fillCityOfGroups(groups);
+                this._fillCityOfGroups(groups);
             }).catch((error) => {
                 console.log('ERROR TO searchGroupByTerm');
                 console.log(error);
@@ -67,7 +75,7 @@ export default class SearchGroupScreen extends Component {
     }
     haveSubmitSearch(submitted) {
         if (submitted) {
-            this.searchTerm(this.state.searchedTerm);
+            this._searchTerm(this.state.searchedTerm);
         }
     }
     render() {
@@ -79,10 +87,10 @@ export default class SearchGroupScreen extends Component {
                         <SearchBar  style={{flex: 1, zIndex: 100}}
                                     placeholder={this.searchPlaceholder}
                                     textSubmitted={(submitted) => this.haveSubmitSearch(submitted)}
-                                    textChange={(text) => this.searchTerm(text)}/>
+                                    textChange={(text) => this._searchTerm(text)}/>
                         <View style={{flex: 15}}>
                             {(this.state.groups && this.state.groups.length > 0) ?
-                                <GroupList {...this.props} isdisplayingUserGroups={this.isFavRoute} groups={this.state.groups}/>
+                                <GroupList {...this.props} updateList={() => this.updateList()} isdisplayingUserGroups={this.isFavRoute} groups={this.state.groups}/>
                                 :
                                 <Text category={'h4'} style={[styles.boldedTitle, {textAlign: 'center', marginTop: 35}]}>Aucun groupe à afficher</Text>
                             }
@@ -91,5 +99,9 @@ export default class SearchGroupScreen extends Component {
                 </DismissKeyboard>
             </SafeAreaView>
         );
+    }
+
+    updateList() {
+        this._loadData(true);
     }
 }

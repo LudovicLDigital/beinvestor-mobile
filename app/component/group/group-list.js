@@ -11,6 +11,7 @@ import AuthService from "../../shared/services/auth";
 import {calculDurationFromNow} from "../../shared/util/ui-helpers";
 import GroupService from "../../shared/services/entities/groups-service";
 import {ROUTE_DETAIL_GRP} from "../../shared/util/constants";
+import SocketService from "../../shared/services/socket-service";
 function HeaderGroup({group, currentUserIsMember, joinGroupMethod}) {
     return (
         <Fragment>
@@ -68,53 +69,31 @@ class GroupItem extends Component {
  * PROPS :
  * - groups: the list of group
  * - isdisplayingUserGroups: if the current list display only group of the current user
+ * - updateList: callback to update list
  */
 export default class GroupList extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            isMemberMap: new Map(), // contain key groupId and value a boolean which indicate if the current user is member of the group
-        };
         this.groupeService = new GroupService();
     }
 
     componentDidMount(): void {
         AuthService.getCurrentUser().then((currentUser) => {
             this.currentUser = currentUser;
-            const tempMap = new Map();
-            if (this.props.groups && this.props.groups.length > 0) {
-                for (let i = 0; i < this.props.groups.length; i++) {
-                    tempMap.set(this.props.groups[i].id, this.isCurrentUserMember(this.props.groups[i]));
-                }
-                this.setState({isMemberMap: tempMap})
-            }
         });
     }
 
     render() {
         return (
-            <FlatList style={{flex: 1, padding: 15}} data={this.props.groups} keyExtractor={(item, index) => index.toString()}
+            <FlatList style={{flex: 1, padding: 15}} data={this.props.groups} keyExtractor={(item, index) => item.id.toString()}
                       renderItem={(item) =>
                           <GroupItem showDetail={(currentUserIsMember) => this.showDetail(item.item, currentUserIsMember)}
                                      group={item.item}
-                                     currentUserIsMember={this.props.isdisplayingUserGroups ? true : this.state.isMemberMap.get(item.item.id)}
+                                     currentUserIsMember={this.props.isdisplayingUserGroups ? true : item.item.currentUserIsMember}
                                      joinGroupMethod={(currentUserIsMember) => this.quitOrJoin(currentUserIsMember, item.item)}
                           />
                       }/>
         )
-    }
-
-    isCurrentUserMember(group) {
-        if (group.members && group.members.length > 0 && this.currentUser) {
-            const currentUserIn = group.members.filter((user) => user.id === this.currentUser.id)[0];
-            if (currentUserIn) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
     }
 
     quitOrJoin(currentUserIsMember, group) {
@@ -122,7 +101,10 @@ export default class GroupList extends Component {
             this.userWillQuit(group);
         } else {
             this.groupeService.currentUserJoinGroup(group.id).then(() => {
-                this.updateViewGroup(group, true);
+                SocketService.joinAChannel(group.id);
+                if (this.props.updateList()) {
+                    this.props.updateList();
+                }
             }).catch((error) => {
                 console.error(error);
             })
@@ -141,7 +123,10 @@ export default class GroupList extends Component {
                     text: 'Oui',
                     onPress: () => {
                         this.groupeService.currentUserLeftGroup(group.id).then(() => {
-                            this.updateViewGroup(group, false);
+                            SocketService.leaveAGroupChannel(group.id);
+                            if (this.props.updateList()) {
+                                this.props.updateList();
+                            }
                         }).catch((error) => {
                             console.error(error);
                         })
@@ -149,34 +134,6 @@ export default class GroupList extends Component {
                 }
             ]
         )
-    }
-    ////////////// todo : le setState ne marche pas ici, il faut que ce soit le parent qui transmettent le bon prop MAJ
-    updateViewGroup(group, isJoining) {
-        let changeOccured = false;
-        if (!group.members || group.members === null) {
-            group.members = [];
-        }
-        if (isJoining) {
-            const found = group.members.find((userInfo) => this.currentUser.userInfo.id === userInfo.id);
-            if(!found || found === null) {
-                group.members.push(this.currentUser.userInfo);
-                changeOccured = true;
-            }
-        } else {
-            const found = group.members.find((userInfo) => this.currentUser.userInfo.id === userInfo.id);
-            if(found && found !== null) {
-                group.members.splice(group.members.indexOf(found), 1);
-                changeOccured = true;
-            }
-        }
-        if (changeOccured) {
-            const currentGroupIndex = this.state.groups.indexOf(this.state.groups.find((groupIn) => groupIn.id === group.id));
-            if (currentGroupIndex !== -1) {
-                const groupsToUpdate = this.state.groups;
-                groupsToUpdate[currentGroupIndex] = group;
-                this.setState({groups: groupsToUpdate})
-            }
-        }
     }
     showDetail(group, currentUserIsMember) {
         this.props.navigation.navigate(ROUTE_DETAIL_GRP, {groupDisplayed: group, isMember: currentUserIsMember, previousRouteIdentifier: this.props.route.name})

@@ -81,6 +81,17 @@ export default class BaseService {
         const options = await HttpHeaderSetter.setDefaultHeader('DELETE');
         return this.fetchMethodWithId(id, urlCompletion, options);
     }
+    /**
+     * Request a delete to api with the corresponding object id in body
+     * Use a simple fetch method
+     * @param id the id we want to delete
+     * @param urlCompletion : is the precise url, can be null
+     * @returns {Promise<void>}
+     */
+    async deleteObjectWithIdInBody( urlCompletion, id) {
+        const options = await HttpHeaderSetter.setDefaultHeader('DELETE');
+        return this.fetchMethod(urlCompletion, options);
+    }
 
     /**
      * Request to get only the id searched object
