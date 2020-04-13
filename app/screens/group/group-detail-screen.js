@@ -17,14 +17,15 @@ import SocketService from "../../shared/services/socket-service";
  * - previousRouteIdentifier : the previous route from where user come
  */
 export default class GroupDetailScreen extends Component {
+    totalMessage;
+    page = 0;
     constructor(props) {
         super(props);
         this.state = {
             userIsMember: (this.props.route && this.props.route.params) ? this.props.route.params.isMember : false,
             groupDisplay: this.props.route.params.groupDisplayed,
             previousRouteIdentifier: this.props.route.params.previousRouteIdentifier,
-            messageList: [],
-            page: 0
+            messageList: []
         };
         this.groupeService = new GroupService();
         this.groupeMessageService = new GroupMessageService();
@@ -32,33 +33,35 @@ export default class GroupDetailScreen extends Component {
         this.listenForMessage();
     }
     getInitMessageList() {
-        this.groupeMessageService.getAllGroupMessage(this.state.groupDisplay.id, {page: this.state.page, numberItem: PAGINATION_SIZE}).then((messageList) => {
-            if(this.state.messageList || this.state.messageList.length <= 0) {
-                this.setState({messageList: messageList.results.reverse()})
+        this.groupeMessageService.getAllGroupMessage(this.state.groupDisplay.id, {
+            page: this.page,
+            numberItem: PAGINATION_SIZE
+        }).then((messageList) => {
+            if (!this.state.messageList || this.state.messageList.length <= 0) {
+                this.totalMessage = messageList.total;
+                this.setState({messageList: messageList.results})
             } else {
-                const messages = [];
-                this.state.messageList.reverse();
-                this.state.messageList.forEach((message) => {
-                    messages.push(message);
+                this.totalMessage = messageList.total;
+                const tempArray = this.state.messageList;
+                messageList.results.forEach((message) => {
+                    const msgIn = tempArray.find((inMsg) => message.content === inMsg.content && message.userInfoId === inMsg.userInfoId && inMsg.created_at === message.created_at);
+                    if (!msgIn) {
+                        tempArray.push(message)
+                    }
                 });
-                const dataGetted = messageList.results.reverse();
-                dataGetted.forEach((message) => {
-                    messages.push(message)
-                });
-                this.setState({messageList: messages.reverse()})
+                this.setState({messageList: tempArray})
             }
         }).catch((error) => {
             showToast('Erreur de récupération des messages');
             console.log(error);
         })
     }
-    loadMorePreviousMessage(info) {
-        if (this.state.page) {
-            const newPage = this.state.page + 1;
-            this.setState({
-                page: newPage
-            });
-            this.getInitMessageList();
+    loadNewDatas() {
+        if (!this.totalMessage || this.totalMessage > this.state.messageList.length) {
+            if (this.page >= 0) {
+                this.page= this.page + 1;
+                this.getInitMessageList();
+            }
         }
     }
     listenForMessage() {
@@ -126,7 +129,8 @@ export default class GroupDetailScreen extends Component {
                     <Layout style={[{flex:2, marginTop: 20}]}>
                         <Divider style={{color: appColors.secondary}}/>
                         <ChatRoom groupId={this.state.groupDisplay.id}
-                                  loadNewDatas={(info) => this.loadMorePreviousMessage(info)}
+                                  disableSendMessage={!this.state.userIsMember}
+                                  loadNewDatas={() => this.loadNewDatas()}
                                   messageList={this.state.messageList}/>
                     </Layout>
                 </Layout>

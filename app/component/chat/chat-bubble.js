@@ -56,19 +56,30 @@ export default class ChatBubble extends Component {
                     bubbleColor: styles.backgroundPrimary,
                     containerStyler: chatBubblesStyle.mainContainerCurrentUser
                 });
+            } else {
+                this.setState({
+                    isOwner: false,
+                    bubbleColor: styles.backgroundSecondary,
+                    containerStyler: chatBubblesStyle.mainContainerOtherUser,
+                });
             }
         });
     }
 
 
     componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS): void {
-        if(this.props.messageToDisplay.content !== prevProps.messageToDisplay.content)
-        {
+        if(this.props.messageToDisplay.content !== prevProps.messageToDisplay.content) {
             if (this.currentUser && this.currentUser.userInfo.id === this.props.messageToDisplay.userInfoId) {
                 this.setState({
                     isOwner: true,
                     bubbleColor: styles.backgroundPrimary,
                     containerStyler: chatBubblesStyle.mainContainerCurrentUser
+                });
+            } else {
+                this.setState({
+                    isOwner: false,
+                    bubbleColor: styles.backgroundSecondary,
+                    containerStyler: chatBubblesStyle.mainContainerOtherUser,
                 });
             }
         }

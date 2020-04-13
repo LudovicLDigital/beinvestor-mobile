@@ -19,7 +19,7 @@ class SocketService {
     };
     static joinAChannel(groupId) {
         if (SocketService.socketServer) {
-            SocketService.socketServer.emit('joinGroupChannel',groupId); // rejoin le channel du groupId
+            SocketService.socketServer.emit('joinGroupChannel',groupId); // rejoins le channel du groupId
         }
     }
     static leaveAGroupChannel(groupId) {

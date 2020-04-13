@@ -12,10 +12,10 @@ import {showToast} from "../../shared/util/ui-helpers";
  * - messageList: the list of messages
  * - groupId: the id of the chatroom's group
  * - loadNewDatas: callback for load more datas
+ * - disableSendMessage: boolean to disable the text input for message sending
  */
 export default class ChatRoom extends Component {
     flatList;
-    haveScroll: false;
     constructor(props) {
         super(props);
         this.state = {
@@ -27,9 +27,9 @@ export default class ChatRoom extends Component {
         });
     }
 
-    callBackDatas(info) {
+    callBackDatas() {
         if (this.props.loadNewDatas) {
-            this.props.loadNewDatas(info)
+            this.props.loadNewDatas()
         }
     }
 
@@ -38,14 +38,15 @@ export default class ChatRoom extends Component {
             <View style={{flex: 1, padding: 15, paddingBottom: 0}}>
                 {this.props.messageList && this.props.messageList.length > 0 ?
                     <FlatList data={this.props.messageList}
+                              extraDate={this.props.messageList}
                               ref={(flatList) => this.flatList = flatList}
                               keyExtractor={(item, index) => index.toString()}
                               inverted={-1}
                               onEndReachedThreshold={0.3}
-                              onEndReached={(info) => this.callBackDatas(info)}
-                              renderItem={(item) =>
+                              onEndReached={() => this.callBackDatas()}
+                              renderItem={({item, index, separators}) =>
                                   <ChatBubble
-                                      messageToDisplay={item.item}
+                                      messageToDisplay={item}
                                   />}
                     />
                     :
@@ -53,6 +54,7 @@ export default class ChatRoom extends Component {
                 }
                 <Input placeholder={'Dire quelque chose ...'}
                        icon={SendIcon}
+                       disabled={this.props.disableSendMessage}
                        onIconPress={() => this.sendMessage()}
                        value={this.state.textMessage}
                        onSubmitEditing={() => this.sendMessage()}
@@ -62,17 +64,21 @@ export default class ChatRoom extends Component {
     }
 
     sendMessage() {
-        const messageToSend = {
-            authorName: this.currentUser.userInfo.firstName,
-            content: this.state.textMessage,
-            userInfoId: this.currentUser.user.id,
-            groupId: this.props.groupId
-        };
-        this.textChange(null);
-        this.groupMessageService.postAndEmitAmessage(messageToSend).then(() => {}, (error) => {
-            showToast('Le message n\'a pas pu être envoyé');
-            console.error(error)
-        });
+        if (!this.props.disableSendMessage) {
+            const messageToSend = {
+                authorName: this.currentUser.userInfo.firstName,
+                content: this.state.textMessage,
+                userInfoId: this.currentUser.user.id,
+                groupId: this.props.groupId
+            };
+            console.log(messageToSend)
+            this.textChange(null);
+            this.groupMessageService.postAndEmitAmessage(messageToSend).then(() => {
+            }, (error) => {
+                    showToast('Le message n\'a pas pu être envoyé');
+                    console.error(error)
+            });
+        }
     }
 
     textChange(text) {

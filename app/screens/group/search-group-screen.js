@@ -7,7 +7,6 @@ import { Layout, Text } from '@ui-kitten/components';
 import HeaderBar from '../../component/subcomponent/header-bar';
 import SearchBar from "../../component/subcomponent/search-bar";
 import {DismissKeyboard, showToast} from "../../shared/util/ui-helpers";
-import AuthService from "../../shared/services/auth";
 export default class SearchGroupScreen extends Component {
     constructor(props) {
         super(props);
@@ -16,9 +15,6 @@ export default class SearchGroupScreen extends Component {
             groups: [],
             searchedTerm: null
         };
-        AuthService.getCurrentUser().then((currentUser) => {
-            this.currentUser = currentUser;
-        });
         this.isFavRoute = (this.props.route && this.props.route.params) ? this.props.route.params.isFavRoute : false;
         this.searchPlaceholder = `Rechercher ${this.isFavRoute ? 'dans vos groupes' : 'un groupe ou une ville'} `
     }
@@ -31,6 +27,10 @@ export default class SearchGroupScreen extends Component {
     }
     _loadData(isARefresh) {
         if(this.isFavRoute) {
+            this.setState({
+                searchedTerm: null,
+                groups: []
+            });
             this.groupService.getAllGroupsOfCurrentUser().then((groups) => {
                 if (groups && groups.length > 0) {
                     this._fillCityOfGroups(groups);
@@ -49,7 +49,7 @@ export default class SearchGroupScreen extends Component {
                 this.groupService.getCityOfGroup(groups[i].id).then(async (city) => {
                     groups[i].city = city[0];
                     groups[i].members = await this.groupService.getMembersOfGroup(groups[i].id);
-                    groups[i].currentUserIsMember = (groups[i].members && groups[i].members.find((userInfo) => userInfo.id === this.currentUser.userInfo.id)) ? true : false;
+                    groups[i].currentUserIsMember = await this.groupService.currentIsMember(groups[i].id);
                     this.setState({groups: groups});
                 }).catch((error) => {
                     console.error(error);

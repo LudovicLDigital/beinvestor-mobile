@@ -60,9 +60,13 @@ export default class UsersScreen extends Component {
     }
     async currentUserIsInList() {
         const user = await AuthService.getCurrentUser();
-        const foundUser = this.state.usersList.filter((userInfo) => user.userInfo.id === userInfo.id)[0];
-        if(foundUser && foundUser !==null) return true;
-        else return false;
+        if (this.state.usersList) {
+            const foundUser = this.state.usersList.filter((userInfo) => user.userInfo.id === userInfo.id)[0];
+            if (foundUser && foundUser !== null) return true;
+            else return false;
+        } else {
+            return false;
+        }
     }
 
     quitOrJoin() {
