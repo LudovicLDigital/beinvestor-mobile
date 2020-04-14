@@ -54,8 +54,6 @@ export default class SearchGroupScreen extends Component {
                 this.groupService.getCityOfGroup(groups[i].id).then(async (city) => {
                     groups[i].city = city[0];
                     groups[i].members = await this.groupService.getMembersOfGroup(groups[i].id);
-                    console.log('groups[i].members')
-                    console.log(groups[i].members)
                     groups[i].currentUserIsMember = await this.groupService.currentIsMember(groups[i].id);
                     this.setState({groups: groups});
                 }).catch((error) => {

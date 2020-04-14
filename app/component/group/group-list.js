@@ -39,24 +39,20 @@ function HeaderGroup({group, currentUserIsMember, joinGroupMethod}) {
 class GroupItem extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            group: this.props.group,
-            currentUserIsMember: this.props.currentUserIsMember,
-        }
     }
     render() {
-        if (this.state.group) {
-            const lastMessageTime = calculDurationFromNow(this.state.group.lastMessage);
+        if (this.props.group) {
+            const lastMessageTime = calculDurationFromNow(this.props.group.lastMessage);
             return (
                 <View style={{flex: 1, marginBottom: 10}}>
-                    <Card onPress={() => this.props.showDetail(this.state.currentUserIsMember)}>
-                        <HeaderGroup group={this.state.group} currentUserIsMember={this.state.currentUserIsMember}
+                    <Card onPress={() => this.props.showDetail(this.props.currentUserIsMember)}>
+                        <HeaderGroup group={this.props.group} currentUserIsMember={this.props.currentUserIsMember}
                                      joinGroupMethod={(IsMember) => this.props.joinGroupMethod(IsMember)}/>
-                        <Text category='h4' style={styles.boldedTitle}>{this.state.group.name}</Text>
+                        <Text category='h4' style={styles.boldedTitle}>{this.props.group.name}</Text>
                         <Text>{lastMessageTime !== -1 ? 'Dernier message il y a' + lastMessageTime : 'Aucun message'}</Text>
                         <View style={styles.flexRowAlignCenter}>
                             <Icon width={20} height={20} fill={appColors.secondary} name='pin-outline'/>
-                            <Text category={'h6'}>{this.state.group.city ? this.state.group.city.name : 'Ville inconnue'}</Text>
+                            <Text category={'h6'}>{this.props.group.city ? this.props.group.city.name : 'Ville inconnue'}</Text>
                         </View>
                         <Text>Pas d'évènements à venir</Text>
                     </Card>
@@ -98,7 +94,7 @@ export default class GroupList extends Component {
 
     quitOrJoin(currentUserIsMember, group) {
         if (currentUserIsMember) {
-            this.userWillQuit(group);
+            this._userWillQuit(group);
         } else {
             this.groupeService.currentUserJoinGroup(group.id).then(() => {
                 SocketService.joinAChannel(group.id);
@@ -110,7 +106,7 @@ export default class GroupList extends Component {
             })
         }
     }
-    userWillQuit(group) {
+    _userWillQuit(group) {
         Alert.alert(
             `Quitter le groupe ${group.name} ?`,
             "Vous ne recevrez plus les notifications liées à ce groupe",
