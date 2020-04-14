@@ -18,7 +18,7 @@ function HeaderGroup({group, currentUserIsMember, joinGroupMethod}) {
             <View style={[{flex: 1}, styles.flexRowAlignCenter, styles.flexRowBetween]}>
                 <View style={[styles.flexRowAlignCenter]}>
                     <Icon width={20} height={20} fill={appColors.primary} name='people-outline' />
-                    <Text style={{marginLeft: 5}}>{group.members ? group.members.length : 0} membres</Text>
+                    <Text style={{marginLeft: 5}}>{group.totalMembers} membres</Text>
                 </View>
                 <Button
                     size={'small'}

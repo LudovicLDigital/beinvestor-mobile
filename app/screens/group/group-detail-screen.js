@@ -22,17 +22,19 @@ export default class GroupDetailScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            userIsMember: (this.props.route && this.props.route.params) ? this.props.route.params.isMember : false,
+            userIsMember: (this.props.route && this.props.route.params) ? this.props.route.params.isMember : null,
             groupDisplay: this.props.route.params.groupDisplayed,
             previousRouteIdentifier: this.props.route.params.previousRouteIdentifier,
-            messageList: []
+            messageList: [],
+            members: []
         };
         this.groupeService = new GroupService();
         this.groupeMessageService = new GroupMessageService();
-        this.getInitMessageList();
-        this.listenForMessage();
+        this._getInitMessageList();
+        this._listenForMessage();
+        this._getInitMembersList();
     }
-    getInitMessageList() {
+    _getInitMessageList() {
         this.groupeMessageService.getAllGroupMessage(this.state.groupDisplay.id, {
             page: this.page,
             numberItem: PAGINATION_SIZE
@@ -56,15 +58,25 @@ export default class GroupDetailScreen extends Component {
             console.log(error);
         })
     }
+    _getInitMembersList() {
+        this.groupeService.getMembersOfGroup(this.state.groupDisplay.id).then((users) => {
+            this.setState({
+                members: users
+            })
+        }).catch((error) => {
+            console.error('ERROR TO RECOVER MEMBERS');
+            console.error(error);
+        })
+    }
     loadNewDatas() {
         if (!this.totalMessage || this.totalMessage > this.state.messageList.length) {
             if (this.page >= 0) {
                 this.page= this.page + 1;
-                this.getInitMessageList();
+                this._getInitMessageList();
             }
         }
     }
-    listenForMessage() {
+    _listenForMessage() {
         const that = this;
         SocketService.socketServer.on(`receivedMessage-${that.state.groupDisplay.id}`, function(groupMessage) {
             const messages = [];
@@ -76,6 +88,15 @@ export default class GroupDetailScreen extends Component {
         });
     }
     componentDidMount(): void {
+        if (this.state.userIsMember === null && this.state.groupDisplay) {
+            this.groupeService.currentIsMember(this.state.groupDisplay.id).then((isMember) => {
+                this.setState({
+                    userIsMember: isMember
+                });
+            }).catch((error) => {
+                console.error(error);
+            })
+        }
     }
 
     render() {
@@ -182,10 +203,10 @@ export default class GroupDetailScreen extends Component {
      * show all members of the group
      */
     seeMembers() {
-        // console.log(this.state.groupDisplay.members)
         this.props.navigation.navigate(ROUTE_MEMBERS_LIST, {
             entityLinkedId: this.state.groupDisplay.id,
-            usersList: this.state.groupDisplay.members,
+            usersList: this.state.members,
+            isInInList: this.state.userIsMember,
             isGroupsMembers: true,
             previousRouteIdentifier: this.props.route.name
         })
@@ -194,20 +215,20 @@ export default class GroupDetailScreen extends Component {
      * Navigate to the the file share dashboard
      */
     seeFiles() {
-        showToast('see FILES')
+        showToast('Prochainement l\'espace de partage de fichiers ici');
     }
 
     /**
      * show modal with all futurs event, click on one send to map location with marker
      */
     seeEvents() {
-        showToast('see EVENTS')
+        showToast('Prochainement la possibilité de voir les évènements liés au groupe');
     }
 
     /**
      * will open a form modal to create a group event, user can only if have one week old on group and send one or more message
      */
     addEvent() {
-        showToast('create EVENTS')
+        showToast('Prochainement la possiblité de créer des évènements de groupe');
     }
 }

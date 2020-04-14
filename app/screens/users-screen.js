@@ -6,13 +6,13 @@ import {styles, appColors} from "../shared/styles/global";
 import { Text, Button } from '@ui-kitten/components';
 import UsersList from "../component/subcomponent/users-list";
 import HeaderBar from "../component/subcomponent/header-bar";
-import AuthService from "../shared/services/auth";
 import GroupService from "../shared/services/entities/groups-service";
 import SocketService from "../shared/services/socket-service";
 
 /**
  * Passing in route params :
  * - usersList : the list of users to display
+ * - isInInList: if the current user is in the list (like the case where he is member of group)
  * - isGroupsMembers : if the actual users list is member's group
  * - entityLinkedId : the id of the object (if there is one) containing the list
  * - previousRouteIdentifier : if the actual users list is member's group
@@ -26,12 +26,9 @@ export default class UsersScreen extends Component {
             isGroupsMembers: this.props.route.params.isGroupsMembers,
             entityLinkedId: this.props.route.params.entityLinkedId,
             previousRouteIdentifier: this.props.route.params.previousRouteIdentifier,
-            userIsInList: false,
+            userIsInList: this.props.route.params.isInInList,
         };
         this.noOneMessage = this.props.isGroupsMembers ? 'Il n\'y a pas encore de members dans ce groupe' : 'Aucun utilisateurs';
-        this.currentUserIsInList().then((isIn) => {
-            this.setState({userIsInList: isIn})
-        })
     }
 
     render() {
@@ -57,16 +54,6 @@ export default class UsersScreen extends Component {
                 }
             </View>
         )
-    }
-    async currentUserIsInList() {
-        const user = await AuthService.getCurrentUser();
-        if (this.state.usersList) {
-            const foundUser = this.state.usersList.filter((userInfo) => user.userInfo.id === userInfo.id)[0];
-            if (foundUser && foundUser !== null) return true;
-            else return false;
-        } else {
-            return false;
-        }
     }
 
     quitOrJoin() {

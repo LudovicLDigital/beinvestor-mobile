@@ -5,6 +5,7 @@ import {appColors, styles} from "../../shared/styles/global";
 
 import {BackAction, MenuAction, SimulatorAction} from "./basic-top-action";
 import {convertRouteNameToLisible} from "../../shared/util/converter-for-route-name";
+import {ROUTE_MAP} from "../../shared/util/constants";
 
 /**
  * PROPS :
@@ -57,6 +58,10 @@ export default class HeaderBar extends Component {
     }
 
     backPressed() {
-        this.navigationSytem.goBack();
+        if (this.previousRoute === ROUTE_MAP) {
+            this.navigationSytem.popToTop();
+        } else {
+            this.navigationSytem.goBack();
+        }
     }
 }
