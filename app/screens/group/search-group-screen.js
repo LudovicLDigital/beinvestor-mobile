@@ -7,7 +7,9 @@ import { Layout, Text } from '@ui-kitten/components';
 import HeaderBar from '../../component/subcomponent/header-bar';
 import SearchBar from "../../component/subcomponent/search-bar";
 import {DismissKeyboard, showToast} from "../../shared/util/ui-helpers";
+import {PAGINATION_SIZE} from "../../shared/util/constants";
 export default class SearchGroupScreen extends Component {
+    page = 0;
     constructor(props) {
         super(props);
         this.groupService = new GroupService();
@@ -31,9 +33,12 @@ export default class SearchGroupScreen extends Component {
                 searchedTerm: null,
                 groups: []
             });
-            this.groupService.getAllGroupsOfCurrentUser().then((groups) => {
-                if (groups && groups.length > 0) {
-                    this._fillCityOfGroups(groups);
+            this.groupService.getAllGroupsOfCurrentUser({
+                page: this.page,
+                numberItem: 22
+            }).then((groups) => {
+                if (groups.results && groups.results.length > 0) {
+                    this._fillCityOfGroups(groups.results);
                 }
             }).catch((error) => {
                 console.error(error);
@@ -49,6 +54,8 @@ export default class SearchGroupScreen extends Component {
                 this.groupService.getCityOfGroup(groups[i].id).then(async (city) => {
                     groups[i].city = city[0];
                     groups[i].members = await this.groupService.getMembersOfGroup(groups[i].id);
+                    console.log('groups[i].members')
+                    console.log(groups[i].members)
                     groups[i].currentUserIsMember = await this.groupService.currentIsMember(groups[i].id);
                     this.setState({groups: groups});
                 }).catch((error) => {
@@ -64,8 +71,11 @@ export default class SearchGroupScreen extends Component {
             groups: []
         });
         if (text && text.toString().length > 2) {
-            this.groupService.searchGroupByTerm(text).then(async (groups) => {
-                this._fillCityOfGroups(groups);
+            this.groupService.searchGroupByTerm(text, {
+                page: this.page,
+                    numberItem: PAGINATION_SIZE
+            }).then(async (groups) => {
+                this._fillCityOfGroups(groups.results);
             }).catch((error) => {
                 console.log('ERROR TO searchGroupByTerm');
                 console.log(error);

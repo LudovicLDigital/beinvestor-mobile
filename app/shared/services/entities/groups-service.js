@@ -1,21 +1,46 @@
 import BaseService from "./base-service";
+import {PAGINATION_SIZE} from "../../util/constants";
 
 export default class GroupService extends BaseService {
     constructor() {
         super();
         this.resourceURL = this.resourceURL + '/groups';
     }
-    async getAllGroups() {
-        return await this.basicGetQuery();
+    async getAllGroups(pagination) {
+        if (!pagination || pagination === null) {
+            pagination = {
+                page: 0,
+                numberItem: PAGINATION_SIZE
+            }
+        }
+        return await this.basicGetQuery('/all/' + JSON.stringify(pagination));
     }
-    async getAllGroupsOfCurrentUser() {
-        return await this.basicGetQuery('/current');
+    async getAllGroupsOfCurrentUser(pagination) {
+        if (!pagination || pagination === null) {
+            pagination = {
+                page: 0,
+                numberItem: PAGINATION_SIZE
+            }
+        }
+        return await this.basicGetQuery('/current/' + JSON.stringify(pagination));
     }
-    async searchGroupByCityName(term) {
-        return await this.basicGetQuery('/city/search/' + term)
+    async searchGroupByCityName(term, pagination) {
+        if (!pagination || pagination === null) {
+            pagination = {
+                page: 0,
+                numberItem: PAGINATION_SIZE
+            }
+        }
+        return await this.basicGetQuery('/city/search/' + term + '/' + JSON.stringify(pagination))
     }
-    async searchGroupByTerm(term) {
-        return await this.basicGetQuery('/terms/' + term)
+    async searchGroupByTerm(term, pagination) {
+        if (!pagination || pagination === null) {
+            pagination = {
+                page: 0,
+                numberItem: PAGINATION_SIZE
+            }
+        }
+        return await this.basicGetQuery('/terms/' + term + '/' + JSON.stringify(pagination))
     }
     async getCityOfGroup(groupId) {
         return await this.getOneById('/city/of', groupId)

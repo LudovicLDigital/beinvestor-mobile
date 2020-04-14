@@ -182,6 +182,7 @@ export default class GroupDetailScreen extends Component {
      * show all members of the group
      */
     seeMembers() {
+        // console.log(this.state.groupDisplay.members)
         this.props.navigation.navigate(ROUTE_MEMBERS_LIST, {
             entityLinkedId: this.state.groupDisplay.id,
             usersList: this.state.groupDisplay.members,
