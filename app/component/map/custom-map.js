@@ -62,6 +62,12 @@ export default class CustomMap extends Component {
         this.cityService = new CityService();
         this.state = {
             groups: [],
+            regionLooked: {
+                latitude: 45.7790407,
+                longitude: 3.107877,
+                latitudeDelta: 0.5,
+                longitudeDelta: 0.5,
+            },
             currentLocation: {
                 coords:
                     {
@@ -76,7 +82,6 @@ export default class CustomMap extends Component {
                 timestamp: 1586079323195
             }
         };
-        this._recoverGroups();
     }
 
     componentDidMount(): void {
@@ -84,33 +89,48 @@ export default class CustomMap extends Component {
             PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
         ).then((granted) => {
             if(granted === PermissionsAndroid.RESULTS.GRANTED) {
-                Geolocation.getCurrentPosition(
-                    (position) => {
-                        this.setState({currentLocation: position});
-                    },
-                    (error) => {
-                        // See error code charts below.
-                        console.log(error.code, error.message);
-                    },
-                    {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000}
-                );
+                this._watchUserPositionChange();
+            } else {
+                this._recoverGroups();
             }
         });
     }
-
+    _watchUserPositionChange() {
+        Geolocation.watchPosition((position) => {
+                this._setActualPosition(position)
+            },
+            (error) => {
+                console.log(error.code, error.message);
+            },
+            {distanceFilter: 200, timeout: 30000, maximumAge: 30000, interval: 60000})
+    }
+    _setActualPosition(position) {
+        this.setState({
+            currentLocation: position,
+            regionLooked: {
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+                latitudeDelta: 0.5,
+                longitudeDelta: 0.5,
+            }
+        });
+        this._recoverGroups();
+    }
+    onRegionChange(region) {
+        this.setState({ regionLooked: region });
+        this._recoverGroups();
+    }
     render() {
         return (
             <View style={[{flex: 1}]}>
                 <MapView style={[{flex:1, zIndex: 10}]}
                          showsUserLocation={true}
                          showsMyLocationButton={true}
+                         followsUserLocation={true}
+                         minZoomLevel={6.5}
                          maxZoomLevel={16}
-                         initialRegion={{
-                             latitude: this.state.currentLocation.coords.latitude,
-                             longitude: this.state.currentLocation.coords.longitude,
-                             latitudeDelta: 0.0922,
-                             longitudeDelta: 0.0421,
-                         }}>
+                         region={this.state.regionLooked}
+                         onRegionChangeComplete={(region) => this.onRegionChange(region)}>
                     {this.state.groups.map(group => {
                             if (group.geoCoords) {
                                 return (
@@ -134,11 +154,9 @@ export default class CustomMap extends Component {
             </View>
         )
     }
-
-
     _recoverGroups() {
-        this.groupService.getAllGroups({page: 3, numberItem: 5}).then((groups) => {
-            this._prepareGeoPositionOfGroups(groups.results)
+        this.groupService.getAllGroupsAroundUser({latitude: this.state.currentLocation.coords.latitude, longitude: this.state.currentLocation.coords.longitude}).then((groups) => {
+            this._prepareGeoPositionOfGroups(groups)
         }).catch((error) => {
             console.log(error);
         });
@@ -146,21 +164,23 @@ export default class CustomMap extends Component {
     _prepareGeoPositionOfGroups(groups) {
         if (groups && groups.length > 0) {
             groups.forEach((group) => {
-                this.cityService.getGeoAdressOfCity(group.cityId).then((geoAdress) => {
-                    group.geoCoords = {
-                        latitude: parseFloat(geoAdress.latitude),
-                        longitude: parseFloat(geoAdress.longitude)
-                    };
-                    this.setState({
-                        groups: groups
-                    });
-                }).catch((error) => {
-                    showToast('ERREUR POUR RECUPERER LA GEOLOCALISATION DES GROUPES :  ' + error.status);
-                    console.error(error);
-                })
+                const groupFound = this.state.groups.find((groupIn) => groupIn.id === group.id);
+                if (!groupFound) {
+                    this.cityService.getGeoAdressOfCity(group.cityId).then((geoAdress) => {
+                        group.geoCoords = {
+                            latitude: parseFloat(geoAdress.latitude),
+                            longitude: parseFloat(geoAdress.longitude)
+                        };
+                    }).catch((error) => {
+                        showToast('ERREUR POUR RECUPERER LA GEOLOCALISATION DES GROUPES :  ' + error.status);
+                        console.error(error);
+                    })
+                } else {
+                    groups.splice(groups.indexOf(groupFound), 1);
+                }
             });
             this.setState({
-                groups: groups
+                groups: [...this.state.groups, ...groups]
             });
         }
     }

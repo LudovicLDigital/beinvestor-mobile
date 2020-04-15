@@ -6,6 +6,9 @@ export default class GroupService extends BaseService {
         super();
         this.resourceURL = this.resourceURL + '/groups';
     }
+    async getAllGroupsAroundUser(userPosition) {
+        return await this.postObject(userPosition, '/load-perimeter');
+    }
     async getAllGroups(pagination) {
         if (!pagination || pagination === null) {
             pagination = {
