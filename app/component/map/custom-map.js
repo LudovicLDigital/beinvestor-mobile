@@ -13,7 +13,7 @@ import Geolocation from 'react-native-geolocation-service';
 import CityService from "../../shared/services/entities/city-service";
 import {showToast} from "../../shared/util/ui-helpers";
 import {Icon} from '@ui-kitten/components';
-import {ROUTE_DETAIL_GRP, ROUTE_MAP, ROUTE_SEARCH_GRP} from "../../shared/util/constants";
+import {HOUR, ROUTE_DETAIL_GRP, ROUTE_MAP, ROUTE_SEARCH_GRP} from "../../shared/util/constants";
 import {convertRouteNameToLisible} from "../../shared/util/converter-for-route-name";
 /**
  * PROPS :
@@ -56,31 +56,23 @@ class CustomMarker extends Component {
  * - navigation: pass the actual navigation system
  */
 export default class CustomMap extends Component {
+    _initializedCurrentPosition = false;
+    _trackMovementId;
+    _navigatingOnMap = false;
+    _initialRegion = {
+        latitude: 45.7790407,
+        longitude: 3.107877,
+        latitudeDelta: 0.5,
+        longitudeDelta: 0.5,
+    };
     constructor(props) {
         super(props);
         this.groupService = new GroupService();
         this.cityService = new CityService();
         this.state = {
             groups: [],
-            regionLooked: {
-                latitude: 45.7790407,
-                longitude: 3.107877,
-                latitudeDelta: 0.5,
-                longitudeDelta: 0.5,
-            },
-            currentLocation: {
-                coords:
-                    {
-                        accuracy: 12.875,
-                        altitude: 404.20001220703125,
-                        heading: 0,
-                        latitude: 45.7790407,
-                        longitude: 3.107877,
-                        speed: 0
-                    },
-                mocked: false,
-                timestamp: 1586079323195
-            }
+            regionLooked: this._initialRegion,
+            currentLocation: null
         };
     }
 
@@ -90,23 +82,56 @@ export default class CustomMap extends Component {
         ).then((granted) => {
             if(granted === PermissionsAndroid.RESULTS.GRANTED) {
                 this._watchUserPositionChange();
+                this._currentPosition();
             } else {
-                this._recoverGroups();
+                this._recoverGroups(this._initialRegion.latitude, this._initialRegion.longitude);
             }
         });
     }
+
+    componentWillUnmount(): void {
+        if( this._trackMovementId !== null && this._trackMovementId) {
+            Geolocation.clearWatch(this._trackMovementId);
+        }
+    }
+
+    _currentPosition() {
+        Geolocation.getCurrentPosition(
+            (position) => {
+                this.setState({
+                    currentLocation: position.coords,
+                    regionLooked: {
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude,
+                        latitudeDelta: 0.5,
+                        longitudeDelta: 0.5,
+                    }
+                });
+                this._initializedCurrentPosition = true;
+                this._recoverGroups(this.state.currentLocation.latitude, this.state.currentLocation.longitude);
+            },
+            (error) => {
+                // See error code charts below.
+                console.log(error.code, error.message);
+            },
+            {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000}
+        );
+
+    }
     _watchUserPositionChange() {
-        Geolocation.watchPosition((position) => {
-                this._setActualPosition(position)
+        this._trackMovementId = Geolocation.watchPosition((position) => {
+                if (this._initializedCurrentPosition && !this._navigatingOnMap) {
+                    this._setActualPosition(position)
+                }
             },
             (error) => {
                 console.log(error.code, error.message);
             },
-            {distanceFilter: 200, timeout: 30000, maximumAge: 30000, interval: 60000})
+            {distanceFilter: 200, enableHighAccuracy: true, interval: 60000, fastestInterval: 30000 })
     }
     _setActualPosition(position) {
         this.setState({
-            currentLocation: position,
+            currentLocation: position.coords,
             regionLooked: {
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude,
@@ -114,12 +139,13 @@ export default class CustomMap extends Component {
                 longitudeDelta: 0.5,
             }
         });
-        this._recoverGroups();
+        this._recoverGroups(this.state.currentLocation.latitude, this.state.currentLocation.longitude);
     }
-    onRegionChange(region) {
-        this.setState({ regionLooked: region });
-        this._recoverGroups();
+    onRegionChangeCompleted(region) {
+        this._navigatingOnMap = true;
+        this._recoverGroups(region.latitude, region.longitude);
     }
+
     render() {
         return (
             <View style={[{flex: 1}]}>
@@ -127,10 +153,10 @@ export default class CustomMap extends Component {
                          showsUserLocation={true}
                          showsMyLocationButton={true}
                          followsUserLocation={true}
-                         minZoomLevel={6.5}
+                         minZoomLevel={8}
                          maxZoomLevel={16}
-                         region={this.state.regionLooked}
-                         onRegionChangeComplete={(region) => this.onRegionChange(region)}>
+                         initialRegion={this.state.regionLooked}
+                         onRegionChangeComplete={(region) => this.onRegionChangeCompleted(region)}>
                     {this.state.groups.map(group => {
                             if (group.geoCoords) {
                                 return (
@@ -154,8 +180,8 @@ export default class CustomMap extends Component {
             </View>
         )
     }
-    _recoverGroups() {
-        this.groupService.getAllGroupsAroundUser({latitude: this.state.currentLocation.coords.latitude, longitude: this.state.currentLocation.coords.longitude}).then((groups) => {
+    _recoverGroups(latitude, longitude) {
+        this.groupService.getAllGroupsAroundUser({latitude: latitude, longitude: longitude}).then((groups) => {
             this._prepareGeoPositionOfGroups(groups)
         }).catch((error) => {
             console.log(error);
@@ -171,16 +197,14 @@ export default class CustomMap extends Component {
                             latitude: parseFloat(geoAdress.latitude),
                             longitude: parseFloat(geoAdress.longitude)
                         };
+                        this.setState({
+                            groups: groups
+                        });
                     }).catch((error) => {
                         showToast('ERREUR POUR RECUPERER LA GEOLOCALISATION DES GROUPES :  ' + error.status);
                         console.error(error);
                     })
-                } else {
-                    groups.splice(groups.indexOf(groupFound), 1);
                 }
-            });
-            this.setState({
-                groups: [...this.state.groups, ...groups]
             });
         }
     }
