@@ -9,10 +9,13 @@ import GroupService from "../../shared/services/entities/groups-service";
 import MapView from 'react-native-maps';
 import { Marker } from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
-import {Icon} from '@ui-kitten/components';
+import {Icon, Button} from '@ui-kitten/components';
 import { ROUTE_DETAIL_GRP, ROUTE_MAP, ROUTE_SEARCH_GRP} from "../../shared/util/constants";
 import {delimitACircleAround} from "../../shared/util/ui-helpers";
-
+import {AddIcon} from "../subcomponent/basic-icons";
+const CurrentPositionIcon = (style) => (
+    <Icon {...style} fill={appColors.secondary} name='compass-outline' />
+);
 /**
  * PROPS :
  * - group: pass the group datas
@@ -93,8 +96,7 @@ export default class CustomMap extends Component {
     }
     _watchUserPositionChange() {
         Geolocation.watchPosition((position) => {
-                if (this._showingCurrentPosition &&
-                    (position.coords.latitude !== this.state.currentLocation.latitude && position.coords.longitude !== this.state.currentLocation.longitude)) {
+                if (this.state.currentLocation && (position.coords.latitude !== this.state.currentLocation.latitude && position.coords.longitude !== this.state.currentLocation.longitude)) {
                     if (!this._navigatingOnMap) {
                         this._setActualPosition(position)
                     }
@@ -118,8 +120,10 @@ export default class CustomMap extends Component {
             }
         });
         this._previousRegionLooked = this.state.regionLooked;
-        this.map.animateToRegion(this.state.regionLooked);
-        this._recoverGroups(this.state.currentLocation.latitude, this.state.currentLocation.longitude);
+        if (this._showingCurrentPosition) {
+            this.map.animateToRegion(this.state.regionLooked);
+            this._recoverGroups(this.state.currentLocation.latitude, this.state.currentLocation.longitude);
+        }
     }
     onRegionChangeCompleted(region) {
         if (this._navigatingOnMap) {
@@ -175,6 +179,12 @@ export default class CustomMap extends Component {
                         }
                     )}
                 </MapView>
+                <Button
+                    style={[styles.absoluteBottomRight, styles.fabButton, {zIndex: 1000, backgroundColor: appColors.white, borderColor: appColors.secondary}]}
+                    size={'large'}
+                    onPress={() => this.goToCurrentUserPosition()}
+                    icon={CurrentPositionIcon}>
+                </Button>
             </View>
         )
     }
@@ -200,5 +210,17 @@ export default class CustomMap extends Component {
 
     mapDragged() {
         this._navigatingOnMap = true;
+    }
+
+    goToCurrentUserPosition() {
+        this.map.getCamera().then((camera) => {
+            if (this.state.currentLocation) {
+                camera.center.latitude = this.state.currentLocation.latitude;
+                camera.center.longitude = this.state.currentLocation.longitude;
+                this._showingCurrentPosition = true;
+                this._navigatingOnMap = false;
+                this.map.animateCamera(camera);
+            }
+        })
     }
 }
