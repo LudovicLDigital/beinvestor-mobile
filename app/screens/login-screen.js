@@ -33,7 +33,7 @@ export default class LoginScreen extends Component {
     }
     backAction() {
         Alert.alert(
-            "Attention LOGIN! ",
+            "Attention ! ",
             "Voulez vous quitter l'application ?",
             [
                 {

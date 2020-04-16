@@ -2,19 +2,17 @@ import React, {Component} from "react";
 import {
     PermissionsAndroid,
     Text,
-    View,
-    FlatList
+    View
 } from "react-native";
 import {styles, appColors} from "../../shared/styles/global";
 import GroupService from "../../shared/services/entities/groups-service";
 import MapView from 'react-native-maps';
 import { Marker } from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
-import CityService from "../../shared/services/entities/city-service";
-import {showToast} from "../../shared/util/ui-helpers";
 import {Icon} from '@ui-kitten/components';
-import {HOUR, ROUTE_DETAIL_GRP, ROUTE_MAP, ROUTE_SEARCH_GRP} from "../../shared/util/constants";
-import {convertRouteNameToLisible} from "../../shared/util/converter-for-route-name";
+import { ROUTE_DETAIL_GRP, ROUTE_MAP, ROUTE_SEARCH_GRP} from "../../shared/util/constants";
+import {delimitACircleAround} from "../../shared/util/ui-helpers";
+
 /**
  * PROPS :
  * - group: pass the group datas
@@ -22,21 +20,6 @@ import {convertRouteNameToLisible} from "../../shared/util/converter-for-route-n
 class CustomMarker extends Component {
     constructor(props) {
         super(props);
-        this.cityService = new CityService();
-        this.state = {
-            groupCity: null
-        };
-    }
-
-    componentDidMount(): void {
-        this.cityService.getCityById(this.props.group.cityId).then((city) => {
-            this.setState({
-                groupCity: city,
-            });
-        }).catch((error) => {
-            showToast('Erreur pour récupérer la ville du group : ' + this.props.group.name);
-            console.error(error);
-        })
     }
 
     render() {
@@ -45,7 +28,7 @@ class CustomMarker extends Component {
                 <Text style={[{fontSize: 15, fontWeight: 'bold',color: appColors.white}]}>Groupe {this.props.group.name}</Text>
                 <View style={styles.flexRowAlignCenter}>
                     <Icon width={15} height={15} fill={appColors.white} name='pin-outline'/>
-                    <Text style={[{color: appColors.white}]}>{this.state.groupCity ? this.state.groupCity.name : 'Ville inconnue'}</Text>
+                    <Text style={[{color: appColors.white}]}>{this.props.group.city.name ? this.props.group.city.name : 'Ville inconnue'}</Text>
                 </View>
             </View>
         )
@@ -56,19 +39,19 @@ class CustomMarker extends Component {
  * - navigation: pass the actual navigation system
  */
 export default class CustomMap extends Component {
-    _initializedCurrentPosition = false;
-    _trackMovementId;
-    _navigatingOnMap = false;
+    _showingCurrentPosition = false;
+    _navigatingOnMap;
+    map = null;
     _initialRegion = {
-        latitude: 45.7790407,
-        longitude: 3.107877,
+        latitude: 46.5594357,
+        longitude: 2.3994582,
         latitudeDelta: 0.5,
         longitudeDelta: 0.5,
     };
+    _previousRegionLooked;
     constructor(props) {
         super(props);
         this.groupService = new GroupService();
-        this.cityService = new CityService();
         this.state = {
             groups: [],
             regionLooked: this._initialRegion,
@@ -90,25 +73,15 @@ export default class CustomMap extends Component {
     }
 
     componentWillUnmount(): void {
-        if( this._trackMovementId !== null && this._trackMovementId) {
-            Geolocation.clearWatch(this._trackMovementId);
-        }
+        Geolocation.stopObserving();
     }
 
     _currentPosition() {
         Geolocation.getCurrentPosition(
             (position) => {
-                this.setState({
-                    currentLocation: position.coords,
-                    regionLooked: {
-                        latitude: position.coords.latitude,
-                        longitude: position.coords.longitude,
-                        latitudeDelta: 0.5,
-                        longitudeDelta: 0.5,
-                    }
-                });
-                this._initializedCurrentPosition = true;
-                this._recoverGroups(this.state.currentLocation.latitude, this.state.currentLocation.longitude);
+                this._showingCurrentPosition = true;
+                this._navigatingOnMap = false;
+                this._setActualPosition(position)
             },
             (error) => {
                 // See error code charts below.
@@ -119,15 +92,20 @@ export default class CustomMap extends Component {
 
     }
     _watchUserPositionChange() {
-        this._trackMovementId = Geolocation.watchPosition((position) => {
-                if (this._initializedCurrentPosition && !this._navigatingOnMap) {
-                    this._setActualPosition(position)
+        Geolocation.watchPosition((position) => {
+                if (this._showingCurrentPosition &&
+                    (position.coords.latitude !== this.state.currentLocation.latitude && position.coords.longitude !== this.state.currentLocation.longitude)) {
+                    if (!this._navigatingOnMap) {
+                        this._setActualPosition(position)
+                    }
+                } else {
+                    this._navigatingOnMap = false;
                 }
             },
             (error) => {
                 console.log(error.code, error.message);
             },
-            {distanceFilter: 200, enableHighAccuracy: true, interval: 60000, fastestInterval: 30000 })
+            {distanceFilter: 200, enableHighAccuracy: true, interval: 60000, fastestInterval: 45000 })
     }
     _setActualPosition(position) {
         this.setState({
@@ -139,23 +117,43 @@ export default class CustomMap extends Component {
                 longitudeDelta: 0.5,
             }
         });
+        this._previousRegionLooked = this.state.regionLooked;
+        this.map.animateToRegion(this.state.regionLooked);
         this._recoverGroups(this.state.currentLocation.latitude, this.state.currentLocation.longitude);
     }
     onRegionChangeCompleted(region) {
-        this._navigatingOnMap = true;
-        this._recoverGroups(region.latitude, region.longitude);
+        if (this._navigatingOnMap) {
+            this._showingCurrentPosition = false;
+            const circleAroundPrevious = delimitACircleAround(this._previousRegionLooked, 50);
+            // if suivant cherche a voir déplacer la carte de plus de 50 km,  il faut alors recharger le perimetre de 100km de recherche
+            if (!(this._isInLimitToLoad(region, circleAroundPrevious))) {
+                const franceCircle = delimitACircleAround(this._initialRegion, 650);
+                if (this._isInLimitToLoad(region, franceCircle)) {
+                    this._recoverGroups(region.latitude, region.longitude);
+                    this._previousRegionLooked = region;
+                }
+            }
+        }
     }
-
+    _isInLimitToLoad(region, circleLimit) {
+        if (region.latitude >= circleLimit.latitudeMin && region.latitude <= circleLimit.latitudeMax
+            && region.longitude >= circleLimit.longitudeMin && region.longitude <= circleLimit.longitudeMax) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     render() {
         return (
             <View style={[{flex: 1}]}>
                 <MapView style={[{flex:1, zIndex: 10}]}
+                         ref={map => this.map = map}
                          showsUserLocation={true}
-                         showsMyLocationButton={true}
                          followsUserLocation={true}
                          minZoomLevel={8}
                          maxZoomLevel={16}
                          initialRegion={this.state.regionLooked}
+                         onPanDrag={() => this.mapDragged()}
                          onRegionChangeComplete={(region) => this.onRegionChangeCompleted(region)}>
                     {this.state.groups.map(group => {
                             if (group.geoCoords) {
@@ -165,8 +163,8 @@ export default class CustomMap extends Component {
                                         key={group.id.toString()}
                                         onPress={() => this._goToDetailGroup(group)}
                                         coordinate={{
-                                            latitude: group.geoCoords.latitude,
-                                            longitude: group.geoCoords.longitude
+                                            latitude: parseFloat(group.geoCoords.latitude),
+                                            longitude: parseFloat(group.geoCoords.longitude)
                                         }}>
                                         <CustomMarker group={group}/>
                                     </Marker>
@@ -182,33 +180,15 @@ export default class CustomMap extends Component {
     }
     _recoverGroups(latitude, longitude) {
         this.groupService.getAllGroupsAroundUser({latitude: latitude, longitude: longitude}).then((groups) => {
-            this._prepareGeoPositionOfGroups(groups)
+            if (groups && groups !== null) {
+                this.setState({
+                    groups: groups
+                });
+            }
         }).catch((error) => {
             console.log(error);
         });
     }
-    _prepareGeoPositionOfGroups(groups) {
-        if (groups && groups.length > 0) {
-            groups.forEach((group) => {
-                const groupFound = this.state.groups.find((groupIn) => groupIn.id === group.id);
-                if (!groupFound) {
-                    this.cityService.getGeoAdressOfCity(group.cityId).then((geoAdress) => {
-                        group.geoCoords = {
-                            latitude: parseFloat(geoAdress.latitude),
-                            longitude: parseFloat(geoAdress.longitude)
-                        };
-                        this.setState({
-                            groups: groups
-                        });
-                    }).catch((error) => {
-                        showToast('ERREUR POUR RECUPERER LA GEOLOCALISATION DES GROUPES :  ' + error.status);
-                        console.error(error);
-                    })
-                }
-            });
-        }
-    }
-
     _goToDetailGroup(group) {
         this.props.navigation.navigate(ROUTE_SEARCH_GRP, {
             screen: ROUTE_DETAIL_GRP,
@@ -216,5 +196,9 @@ export default class CustomMap extends Component {
                 groupDisplayed: group, isMember: null, previousRouteIdentifier: ROUTE_MAP
             }
         });
+    }
+
+    mapDragged() {
+        this._navigatingOnMap = true;
     }
 }
