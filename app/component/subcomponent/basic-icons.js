@@ -53,3 +53,6 @@ export const SendIcon = (style) => (
 export const PositionIcon = (style) => (
     <Icon {...style} fill={appColors.primary} name='pin-outline' />
 );
+export const CalendarIcon = (style) => (
+    <Icon {...style} fill={appColors.primary} name='calendar-outline' />
+);

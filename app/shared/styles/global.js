@@ -13,6 +13,8 @@ const appColors = {
 
     white: Colors.white,
     dark: Colors.dark,
+    danger: '#CB070E',
+    success: '#3ACB00'
 };
 const {height, width} = Dimensions.get('window');
 //*** End app colors *** //
@@ -85,7 +87,8 @@ const styles = StyleSheet.create({
     },
     fullScreen: {
         flex: 1,
-        padding: 15
+        padding: 15,
+        backgroundColor: appColors.white
     },
     flexCenter: {
         alignItems: 'center',
@@ -118,4 +121,4 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.white,
     },
 });
-module.exports = {styles: styles, appColors: appColors};
+module.exports = {styles: styles, appColors: appColors, deviceWidth: width, deviceHeigth: height};

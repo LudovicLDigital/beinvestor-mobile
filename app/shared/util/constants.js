@@ -24,3 +24,13 @@ export const MINUTE = 60 * SECOND;
 export const HOUR = 3600 * SECOND;
 export const DAY = 86400 * SECOND;
 export const PAGINATION_SIZE = 15;
+
+// FIELD LIST
+export const FIRST_NAME = 'first name';
+export const LAST_NAME = 'last name';
+export const BIRTH = 'birth';
+export const MAIL = 'mail';
+export const PHONE = 'phone number';
+export const LOGIN = 'login';
+export const OLD_PASS = 'old password';
+export const NEW_PASS = 'new password';
