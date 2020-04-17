@@ -11,8 +11,9 @@ import { Marker } from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import {Icon, Button} from '@ui-kitten/components';
 import { ROUTE_DETAIL_GRP, ROUTE_MAP, ROUTE_SEARCH_GRP} from "../../shared/util/constants";
-import {delimitACircleAround} from "../../shared/util/ui-helpers";
-import {AddIcon} from "../subcomponent/basic-icons";
+import {delimitACircleAround, showToast} from "../../shared/util/ui-helpers";
+import GouvAdressService from "../../shared/services/gouv-adresse-service";
+import BeInvestorAutoComplete from "../subcomponent/autocomplete";
 const CurrentPositionIcon = (style) => (
     <Icon {...style} fill={appColors.secondary} name='compass-outline' />
 );
@@ -58,8 +59,12 @@ export default class CustomMap extends Component {
         this.state = {
             groups: [],
             regionLooked: this._initialRegion,
-            currentLocation: null
+            currentLocation: null,
+            searchResults: [],
+            citySelect: null,
         };
+        this._previousRegionLooked = this._initialRegion;
+        this.gouvAdressService = new GouvAdressService();
     }
 
     componentDidMount(): void {
@@ -84,10 +89,17 @@ export default class CustomMap extends Component {
             (position) => {
                 this._showingCurrentPosition = true;
                 this._navigatingOnMap = false;
-                this._setActualPosition(position)
+                this._setActualPosition(position);
+                this.setState({
+                    regionLooked: {
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude,
+                        latitudeDelta: 0.5,
+                        longitudeDelta: 0.5,
+                    }
+                });
             },
             (error) => {
-                // See error code charts below.
                 console.log(error.code, error.message);
             },
             {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000}
@@ -107,35 +119,30 @@ export default class CustomMap extends Component {
             (error) => {
                 console.log(error.code, error.message);
             },
-            {distanceFilter: 200, enableHighAccuracy: true, interval: 60000, fastestInterval: 45000 })
+            {distanceFilter: 200, enableHighAccuracy: true, interval: 15000, fastestInterval: 10000 })
     }
     _setActualPosition(position) {
         this.setState({
-            currentLocation: position.coords,
-            regionLooked: {
-                latitude: position.coords.latitude,
-                longitude: position.coords.longitude,
-                latitudeDelta: 0.5,
-                longitudeDelta: 0.5,
-            }
+            currentLocation: position.coords
         });
-        this._previousRegionLooked = this.state.regionLooked;
         if (this._showingCurrentPosition) {
-            this.map.animateToRegion(this.state.regionLooked);
-            this._recoverGroups(this.state.currentLocation.latitude, this.state.currentLocation.longitude);
+            this.goToCurrentUserPosition(false, this.state.currentLocation.latitude, this.state.currentLocation.longitude, true);
+            this._checkPositionIfNeedLoadData(this.state.currentLocation);
         }
     }
     onRegionChangeCompleted(region) {
         if (this._navigatingOnMap) {
             this._showingCurrentPosition = false;
-            const circleAroundPrevious = delimitACircleAround(this._previousRegionLooked, 50);
-            // if suivant cherche a voir déplacer la carte de plus de 50 km,  il faut alors recharger le perimetre de 100km de recherche
-            if (!(this._isInLimitToLoad(region, circleAroundPrevious))) {
-                const franceCircle = delimitACircleAround(this._initialRegion, 650);
-                if (this._isInLimitToLoad(region, franceCircle)) {
-                    this._recoverGroups(region.latitude, region.longitude);
-                    this._previousRegionLooked = region;
-                }
+            this._checkPositionIfNeedLoadData(region);
+        }
+    }
+    _checkPositionIfNeedLoadData(regionDisplayed) {
+        const circleAroundPrevious = delimitACircleAround(this._previousRegionLooked, 50);
+        if (!(this._isInLimitToLoad(regionDisplayed, circleAroundPrevious))) {
+            const franceCircle = delimitACircleAround(this._initialRegion, 650);
+            if (this._isInLimitToLoad(regionDisplayed, franceCircle)) {
+                this._recoverGroups(regionDisplayed.latitude, regionDisplayed.longitude);
+                this._previousRegionLooked = regionDisplayed;
             }
         }
     }
@@ -179,10 +186,17 @@ export default class CustomMap extends Component {
                         }
                     )}
                 </MapView>
+
+                <BeInvestorAutoComplete
+                    style={[styles.absoluteTop, {zIndex: 1000}]}
+                    autocompleteList={this.state.searchResults}
+                    onChoiceSelect={(item) => this.onChoiceSelect(item)}
+                    onTxtChange={(text) => this.onTxtChange(text)}
+                    placeholder={'Rechercher une ville'}/>
                 <Button
                     style={[styles.absoluteBottomRight, styles.fabButton, {zIndex: 1000, backgroundColor: appColors.white, borderColor: appColors.secondary}]}
                     size={'large'}
-                    onPress={() => this.goToCurrentUserPosition()}
+                    onPress={() => this.goToCurrentUserPosition(true, this.state.currentLocation.latitude, this.state.currentLocation.longitude, true)}
                     icon={CurrentPositionIcon}>
                 </Button>
             </View>
@@ -212,15 +226,65 @@ export default class CustomMap extends Component {
         this._navigatingOnMap = true;
     }
 
-    goToCurrentUserPosition() {
+    goToCurrentUserPosition(fromButton, latitude, longitude, isGoingOnUserPosition) {
         this.map.getCamera().then((camera) => {
             if (this.state.currentLocation) {
-                camera.center.latitude = this.state.currentLocation.latitude;
-                camera.center.longitude = this.state.currentLocation.longitude;
-                this._showingCurrentPosition = true;
-                this._navigatingOnMap = false;
+                camera.center.latitude = latitude;
+                camera.center.longitude = longitude;
+                if (fromButton) {
+                    camera.zoom = 14;
+                }
+                if (isGoingOnUserPosition) {
+                    this._showingCurrentPosition = true;
+                    this._navigatingOnMap = false;
+                } else {
+
+                    this._showingCurrentPosition = false;
+                    this._navigatingOnMap = true;
+                }
                 this.map.animateCamera(camera);
             }
         })
+    }
+
+
+    onChoiceSelect(item) {
+        this.setState({
+            citySelect: item
+        });
+        this.goToCurrentUserPosition(false, item.geoCoords.latitude, item.geoCoords.longitude, false)
+    }
+
+    onTxtChange(text) {
+        if (text && text.trim() !== '' && text.trim().length > 2) {
+            this.gouvAdressService.getAdressesCorresponding(text).then((results) => {
+                this._prepareDataForAutoComplete(results.features);
+            }).catch((error) => {
+                showToast('ERROR FROM GOUV API');
+                console.error(error);
+            })
+        } else if (text === null) {
+            this.setState({
+                searchResults: [],
+            });
+        }
+    }
+    _prepareDataForAutoComplete(results) {
+        const tempArray = [];
+        results.forEach((data) => {
+            tempArray.push({
+                title: data.properties.label + ', ' + data.properties.postcode,
+                city: data.properties.city,
+                postCode: data.properties.postcode,
+                context: data.properties.context,
+                geoCoords: {
+                    latitude: data.geometry.coordinates[1],
+                    longitude: data.geometry.coordinates[0],
+                }
+            });
+        });
+        this.setState({
+            searchResults: tempArray,
+        });
     }
 }
