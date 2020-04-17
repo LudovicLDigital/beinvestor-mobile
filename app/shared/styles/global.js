@@ -1,4 +1,4 @@
-import {StyleSheet} from "react-native";
+import {StyleSheet, Dimensions} from "react-native";
 import {Colors} from "react-native/Libraries/NewAppScreen/index";
 
 const appColors = {
@@ -14,8 +14,14 @@ const appColors = {
     white: Colors.white,
     dark: Colors.dark,
 };
+const {height, width} = Dimensions.get('window');
 //*** End app colors *** //
 const styles = StyleSheet.create({
+    absoluteCenter: {
+        position: "absolute",
+        top: height/2,
+        left: width/2,
+    },
     absoluteTop: {
         position: "absolute",
         top: 10,

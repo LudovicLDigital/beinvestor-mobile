@@ -14,6 +14,7 @@ import { ROUTE_DETAIL_GRP, ROUTE_MAP, ROUTE_SEARCH_GRP} from "../../shared/util/
 import {delimitACircleAround, showToast} from "../../shared/util/ui-helpers";
 import GouvAdressService from "../../shared/services/gouv-adresse-service";
 import BeInvestorAutoComplete from "../subcomponent/autocomplete";
+import GroupPopAnimated from '../group/group-pop-animated';
 const CurrentPositionIcon = (style) => (
     <Icon {...style} fill={appColors.secondary} name='compass-outline' />
 );
@@ -62,6 +63,8 @@ export default class CustomMap extends Component {
             currentLocation: null,
             searchResults: [],
             citySelect: null,
+            showPopGroup: false,
+            groupForPop: null,
         };
         this._previousRegionLooked = this._initialRegion;
         this.gouvAdressService = new GouvAdressService();
@@ -186,7 +189,9 @@ export default class CustomMap extends Component {
                         }
                     )}
                 </MapView>
-
+                {this.state.showPopGroup ?
+                    <GroupPopAnimated navigation={this.props.navigation} group={this.state.groupForPop}/>
+                : null}
                 <BeInvestorAutoComplete
                     style={[styles.absoluteTop, {zIndex: 1000}]}
                     autocompleteList={this.state.searchResults}
@@ -214,12 +219,10 @@ export default class CustomMap extends Component {
         });
     }
     _goToDetailGroup(group) {
-        this.props.navigation.navigate(ROUTE_SEARCH_GRP, {
-            screen: ROUTE_DETAIL_GRP,
-            params: {
-                groupDisplayed: group, isMember: null, previousRouteIdentifier: ROUTE_MAP
-            }
-        });
+        this.setState({
+            showPopGroup: true,
+            groupForPop: group
+        })
     }
 
     mapDragged() {
