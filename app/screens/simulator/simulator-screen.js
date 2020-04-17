@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import {styles, appColors} from "../shared/styles/global";
+import {styles, appColors} from "../../shared/styles/global";
 import { SafeAreaView } from 'react-native';
 import { Text, Layout } from '@ui-kitten/components';
-import HeaderBar from '../component/subcomponent/header-bar';
-export default class UserProfilScreen extends Component {
+import HeaderBar from '../../component/subcomponent/header-bar';
+export default class SimulatorScreen extends Component {
     constructor(props) {
         super(props);
     }
@@ -16,7 +16,7 @@ export default class UserProfilScreen extends Component {
             <SafeAreaView style={{ flex: 1 }}>
                 <HeaderBar route={this.props.route.name} navigation={this.props.navigation}/>
                 <Layout style={styles.fullScreen}>
-                    <Text>USER PROFIL</Text>
+                    <Text>SIMULATOR</Text>
                 </Layout>
             </SafeAreaView>
         );

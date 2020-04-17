@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import {styles, appColors} from "../shared/styles/global";
-import GroupService from '../shared/services/entities/groups-service';
+import {styles, appColors} from "../../shared/styles/global";
 import { SafeAreaView } from 'react-native';
 import { Text, Layout } from '@ui-kitten/components';
-import HeaderBar from '../component/subcomponent/header-bar';
-export default class GroupDetailScreen extends Component {
+import HeaderBar from '../../component/subcomponent/header-bar';
+export default class UserProfilScreen extends Component {
     constructor(props) {
         super(props);
     }
@@ -17,7 +16,7 @@ export default class GroupDetailScreen extends Component {
             <SafeAreaView style={{ flex: 1 }}>
                 <HeaderBar route={this.props.route.name} navigation={this.props.navigation}/>
                 <Layout style={styles.fullScreen}>
-                    <Text>GROUP DETAIL</Text>
+                    <Text>USER PROFIL</Text>
                 </Layout>
             </SafeAreaView>
         );

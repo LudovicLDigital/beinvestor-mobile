@@ -1,4 +1,4 @@
-import {StyleSheet} from "react-native";
+import {StyleSheet, Dimensions} from "react-native";
 import {Colors} from "react-native/Libraries/NewAppScreen/index";
 
 const appColors = {
@@ -10,9 +10,50 @@ const appColors = {
     secondary: '#6e398d',
     secondaryLight: '#9d65bd',
     secondaryDark: '#3f0a5e',
+
+    white: Colors.white,
+    dark: Colors.dark,
 };
+const {height, width} = Dimensions.get('window');
 //*** End app colors *** //
 const styles = StyleSheet.create({
+    absoluteCenter: {
+        position: "absolute",
+        top: height/2,
+        left: width/2,
+    },
+    absoluteTop: {
+        position: "absolute",
+        top: 10,
+        left: 10,
+        right: 10
+    },
+    absoluteTopLeft: {
+        position: "absolute",
+        top: 10,
+        left: 10,
+    },
+    absoluteTopRight: {
+        position: "absolute",
+        top: 10,
+        right: 10,
+    },
+    absoluteBottomRight: {
+        position: "absolute",
+        bottom: 10,
+        right: 10,
+    },
+    absoluteBottomLeft: {
+        position: "absolute",
+        bottom: 10,
+        left: 10,
+    },
+    absoluteBottom: {
+        position: "absolute",
+        bottom: 10,
+        left: 10,
+        right: 10,
+    },
     appIconSmall: {
         width: 25,
         height: 25
@@ -26,7 +67,7 @@ const styles = StyleSheet.create({
         height: 100
     },
     boldedTitle: {
-        fontWeight: '900',
+        fontWeight: 'bold',
         color: Colors.dark
     },
     backgroundPrimary: {
@@ -39,6 +80,9 @@ const styles = StyleSheet.create({
         borderColor: appColors.secondary,
         color: Colors.white
     },
+    fabButton: {
+        borderRadius: 100
+    },
     fullScreen: {
         flex: 1,
         padding: 15
@@ -46,6 +90,10 @@ const styles = StyleSheet.create({
     flexCenter: {
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    flexRowAlignCenter: {
+        alignItems: 'center',
+        flexDirection: 'row',
     },
     flexRowBetween: {
         flexDirection: 'row',

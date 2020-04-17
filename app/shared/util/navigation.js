@@ -1,6 +1,5 @@
 
 import * as React from 'react';
-import {Colors} from "react-native/Libraries/NewAppScreen/index";
 import { appColors} from '../../shared/styles/global';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -12,21 +11,23 @@ import {
     ROUTE_INFO,
     ROUTE_LOGIN,
     ROUTE_SETTING,
+    ROUTE_SEARCH_GRP,
     ROUTE_SIMULATOR,
-    ROUTE_USER_PROFIL
+    ROUTE_USER_PROFIL, ROUTE_DETAIL_GRP, ROUTE_MAP, ROUTE_MEMBERS_LIST
 } from './constants'
 // screens
 import HomeScreen from "../../screens/home-screen";
 import LoginScreen from "../../screens/login-screen";
-import SimulatorScreen from "../../screens/simulator-screen";
-import UserProfilScreen from "../../screens/user-profil-screen";
-import SearchGroupScreen from "../../screens/search-group-screen";
+import SimulatorScreen from "../../screens/simulator/simulator-screen";
+import UserProfilScreen from "../../screens/user-profil/user-profil-screen";
+import SearchGroupScreen from "../../screens/group/search-group-screen";
 import SettingsScreen from "../../screens/settings-screen";
 import AppInfoScreen from "../../screens/app-info-screen";
 // component
 import {CustomDrawerContent} from '../../component/subcomponent/drawer/custom-drawer-content'
-import UserProfilInvestorScreen from "../../screens/user-profil-investor-screen";
-
+import UserProfilInvestorScreen from "../../screens/user-profil/user-profil-investor-screen";
+import GroupDetailScreen from "../../screens/group/group-detail-screen";
+import UsersScreen from "../../screens/users-screen";
 const ProfilEditStack = createStackNavigator();
 function ProfilStackNavigator() {
     return (
@@ -47,13 +48,65 @@ function ProfilStackNavigator() {
         </ProfilEditStack.Navigator>
     )
 }
+const GroupFavStack = createStackNavigator();
+function GroupFavStackNavigator() {
+    return (
+        <GroupFavStack.Navigator initialRouteName={ROUTE_FAV_GRP}>
+            <GroupFavStack.Screen
+                name={ROUTE_FAV_GRP}
+                component={SearchGroupScreen}
+                options={{
+                    headerShown: false
+                }}
+            />
+            <GroupFavStack.Screen
+                name={ROUTE_DETAIL_GRP}
+                component={GroupDetailScreen}
+                options={{
+                    headerShown: false
+                }}/>
+            <GroupFavStack.Screen
+                name={ROUTE_MEMBERS_LIST}
+                component={UsersScreen}
+                options={{
+                    headerShown: false
+                }}/>
+        </GroupFavStack.Navigator>
+    )
+}
+const GroupSearchStack = createStackNavigator();
+function GroupSearchStackNavigator() {
+    return (
+        <GroupSearchStack.Navigator initialRouteName={ROUTE_SEARCH_GRP}>
+            <GroupSearchStack.Screen
+                name={ROUTE_SEARCH_GRP}
+                component={SearchGroupScreen}
+                options={{
+                    headerShown: false
+                }}
+            />
+            <GroupSearchStack.Screen
+                name={ROUTE_DETAIL_GRP}
+                component={GroupDetailScreen}
+                options={{
+                    headerShown: false
+                }}/>
+            <GroupFavStack.Screen
+                name={ROUTE_MEMBERS_LIST}
+                component={UsersScreen}
+                options={{
+                    headerShown: false
+                }}/>
+        </GroupSearchStack.Navigator>
+    )
+}
 
 const HomeDrawer = createDrawerNavigator();
 function HomeDrawerNavigator() {
     return (
-        <HomeDrawer.Navigator initialRouteName={ROUTE_HOME} drawerContent={props => <CustomDrawerContent {...props}/>} >
+        <HomeDrawer.Navigator initialRouteName={ROUTE_MAP} drawerContent={props => <CustomDrawerContent {...props}/>} >
             <HomeDrawer.Screen
-            name={ROUTE_HOME}
+            name={ROUTE_MAP}
             component={HomeScreen}
             options={{
                 headerShown: false
@@ -74,8 +127,15 @@ function HomeDrawerNavigator() {
             }}
             />
             <HomeDrawer.Screen
+                name={ROUTE_SEARCH_GRP}
+                component={GroupSearchStackNavigator}
+                options={{
+                    headerShown: false
+                }}
+            />
+            <HomeDrawer.Screen
             name={ROUTE_FAV_GRP}
-            component={SearchGroupScreen}
+            component={GroupFavStackNavigator}
             options={{
                 headerShown: false
             }}
@@ -107,7 +167,7 @@ export const AppNavigator = () => (
                 options={{
                     title: 'Bienvenue sur BeInvestor !',
                     headerStyle: { backgroundColor: appColors.primary },
-                    headerTitleStyle: { color: Colors.white},
+                    headerTitleStyle: { color: appColors.white},
                     headerTitleContainerStyle: {left: 90}
                 }}
             />

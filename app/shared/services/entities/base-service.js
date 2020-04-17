@@ -1,5 +1,6 @@
 import {API_URL} from '../../util/constants';
 import HttpHeaderSetter from '../../util/http-header-setter';
+import {showToast} from "../../util/ui-helpers";
 
 /**
  * Extends this base service to have minimum fetch method for your service
@@ -10,17 +11,27 @@ export default class BaseService {
     constructor() {
         this.resourceURL = API_URL;
     }
-    async fetchMethod(options) {
-        return fetch(`${this.resourceURL}`, options).then(async(response) => {
-            return response.json();
+    async fetchMethod(options, urlCompletion) {
+        return fetch(`${this.resourceURL}${urlCompletion && urlCompletion !== null ? urlCompletion : ''}`, options).then(async(response) => {
+            if ((response.status < 200 || response.status >= 300) && response.status !== 404) {
+                showToast('Erreur ' + response.statusText + " code : " + response.status);
+                return null;
+            } else {
+                return response.status === 200 ? response.json() : null;
+            }
         }).catch((error) => {
             console.error(error);
             throw error;
         })
     }
-    async fetchMethodWithId(id, options) {
-        return fetch(`${this.resourceURL}/${id}`, options).then((response) => {
-            return response.json();
+    async fetchMethodWithId(id, urlCompletion, options) {
+        return fetch(`${this.resourceURL}${urlCompletion && urlCompletion !== null ? urlCompletion : ''}/${id}`, options).then((response) => {
+            if ((response.status < 200 || response.status >= 300) && response.status !== 404) {
+                showToast('Erreur ' +response.statusText + " code : " + response.status);
+                return null;
+            } else {
+                return response.status === 200 ? response.json() : null;
+            }
         }).catch((error) => {
             console.error(error);
             throw error;
@@ -29,51 +40,67 @@ export default class BaseService {
 
     /**
      * Request API with a basic GET method, no body
+     * @param urlCompletion : is the precise url, can be null
      * @returns {Promise<void>}
      */
-    async basicGetQuery() {
+    async basicGetQuery(urlCompletion) {
         const options = await HttpHeaderSetter.setDefaultHeader('GET');
-        return this.fetchMethod(options);
+        return this.fetchMethod(options, urlCompletion);
     }
 
     /**
      * Request a create to api with an object in body
      * @param objectToPost the object you want to post
+     * @param urlCompletion : is the precise url, can be null
      * @returns {Promise<void>}
      */
-    async postObject(objectToPost) {
+    async postObject(objectToPost, urlCompletion) {
         const options = await HttpHeaderSetter.setDefaultHeader('POST');
         options.body = JSON.stringify(objectToPost);
-        return this.fetchMethod(options);
+        return this.fetchMethod(options, urlCompletion);
     }
     /**
      * Request a update to api with an object in body
      * @param objectToUpdate the object you want to update
+     * @param urlCompletion : is the precise url, can be null
      * @returns {Promise<void>}
      */
-    async updateObject(objectToUpdate) {
+    async updateObject(objectToUpdate, urlCompletion) {
         const options = await HttpHeaderSetter.setDefaultHeader('PUT');
         options.body = JSON.stringify(objectToUpdate);
-        return this.fetchMethod(options);
+        return this.fetchMethod(options, urlCompletion);
     }
 
     /**
      * Request a delete to api with the corresponding object id
      * @param id the id we want to delete
+     * @param urlCompletion : is the precise url, can be null
      * @returns {Promise<void>}
      */
-    async deleteObject(id) {
+    async deleteObject( urlCompletion, id) {
         const options = await HttpHeaderSetter.setDefaultHeader('DELETE');
-        return this.fetchMethodWithId(id, options);
+        return this.fetchMethodWithId(id, urlCompletion, options);
+    }
+    /**
+     * Request a delete to api with the corresponding object id in body
+     * Use a simple fetch method
+     * @param id the id we want to delete
+     * @param urlCompletion : is the precise url, can be null
+     * @returns {Promise<void>}
+     */
+    async deleteObjectWithIdInBody( urlCompletion, id) {
+        const options = await HttpHeaderSetter.setDefaultHeader('DELETE');
+        return this.fetchMethod(urlCompletion, options);
     }
 
     /**
      * Request to get only the id searched object
      * @param id the id of the object we want
-     * @returns {Promise<void>}
+     * @param urlCompletion : is the precise url, can be null
+     * * @returns {Promise<void>}
      */
-    async getOneById(id) {
+    async getOneById(urlCompletion,id) {
         const options = await HttpHeaderSetter.setDefaultHeader('GET');
-        return this.fetchMethodWithId(id, options);
+        return this.fetchMethodWithId(id, urlCompletion, options);
     }
 }

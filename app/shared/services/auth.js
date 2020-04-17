@@ -2,7 +2,25 @@
 import DeviceStorage from '../util/device-storage';
 import {API_URL, USER_TOKEN_KEY, REFRESH_TOKEN_KEY} from '../util/constants';
 import HttpHeaderSetter from "../util/http-header-setter";
+import UsersService from "./entities/users-service";
 const auth = {
+    currentUser: null,
+    getCurrentUser() {
+        if (this.currentUser && this.currentUser !== null) {
+            return Promise.resolve(this.currentUser);
+        } else {
+            return new Promise(async (resolve) => {
+                const userService = new UsersService();
+                try {
+                    this.currentUser = await userService.getCurrentUser();
+                    resolve(this.currentUser);
+                } catch (error) {
+                    console.log('Error to get current user from api');
+                    console.error(error);
+                }
+            })
+        }
+    },
     login(loginReceived, passwordReceived) {
         if (loginReceived && passwordReceived &&
             loginReceived.toString().trim() !== '' && passwordReceived.toString().trim() !== '') {
@@ -67,7 +85,7 @@ const auth = {
                     token: tokenSaved
                 });
                 return fetch(`${API_URL}/logout`, options).then((response) => {
-                    if (response.status === 200) {
+                    if (response.status === 204) {
                         return DeviceStorage.removeCurrentUserToken().then(() => {
                             DeviceStorage.removeKeyValue(REFRESH_TOKEN_KEY);
                             return Promise.resolve(true);

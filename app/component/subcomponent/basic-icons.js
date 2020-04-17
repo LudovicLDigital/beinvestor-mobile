@@ -29,3 +29,27 @@ export const InfoIcon = (style) => (
 export const SettingsIcon = (style) => (
     <Icon {...style} fill={appColors.primary} name='options-2-outline'/>
 );
+export const SearchIcon = (style) => (
+    <Icon {...style} fill={appColors.primary}  name='search-outline' />
+);
+export const MembersIcon = (style) => (
+    <Icon {...style} fill={appColors.primary}  name='people-outline' />
+);
+export const CloseCircleIcon = (style) => (
+    <Icon {...style} fill={appColors.primary}  name='close-circle-outline' />
+);
+export const SharedFilesIcon = (style) => (
+    <Icon {...style} fill={appColors.primary}  name='layers-outline' />
+);
+export const NotificationIcon = (style) => (
+    <Icon {...style} fill={appColors.primary}  name='bell-outline' />
+);
+export const AddIcon = (style) => (
+    <Icon {...style} fill={appColors.primary}  name='plus' />
+);
+export const SendIcon = (style) => (
+    <Icon {...style} fill={appColors.primary}  name='paper-plane' />
+);
+export const PositionIcon = (style) => (
+    <Icon {...style} fill={appColors.primary} name='pin-outline' />
+);

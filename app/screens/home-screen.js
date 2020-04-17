@@ -1,42 +1,31 @@
 import React, { Component } from 'react';
-import {styles, appColors} from "../shared/styles/global";
-import GroupService from '../shared/services/entities/groups-service';
-import {SafeAreaView, View, Text} from 'react-native';
+import {SafeAreaView, View} from 'react-native';
 import { Layout } from '@ui-kitten/components';
 import HeaderBar from '../component/subcomponent/header-bar';
+import {DismissKeyboard} from "../shared/util/ui-helpers";
+import SocketService from '../shared/services/socket-service';
+import CustomMap from '../component/map/custom-map';
 export default class HomeScreen extends Component {
     isMainScreen: boolean;
     constructor(props) {
         super(props);
-        this.groupService = new GroupService();
-        this.state = {
-            groups: []
-        };
         this.isMainScreen = true;
     }
     componentDidMount(): void {
-        this.recover();
+        SocketService.connectToBackEnd();
     }
     render() {
         return (
             <SafeAreaView style={{ flex: 1 }}>
                 <HeaderBar route={this.props.route.name} hideAriane={true} navigation={this.props.navigation}/>
-                <Layout style={styles.fullScreen}>
-                    <View style={[{flex:1}, styles.backgroundPrimary]}>
-                        <Text>MAP</Text>
-                    </View>
-                </Layout>
+                <DismissKeyboard>
+                    <Layout style={{flex:1}}>
+                        <View style={[{flex:1}]}>
+                            <CustomMap navigation={this.props.navigation}/>
+                        </View>
+                    </Layout>
+                </DismissKeyboard>
             </SafeAreaView>
         );
-    }
-
-    async recover() {
-        this.groupService.getAllGroups().then((groups) => {
-            this.setState({
-                groups: groups
-            })
-        }).catch((error) => {
-            console.log(error);
-        });
     }
 }

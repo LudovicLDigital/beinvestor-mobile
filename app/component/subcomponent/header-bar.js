@@ -2,21 +2,27 @@ import React, { Component } from 'react';
 import { View, Image,Text } from 'react-native';
 import { Divider, TopNavigation } from '@ui-kitten/components';
 import {appColors, styles} from "../../shared/styles/global";
-import {Colors} from "react-native/Libraries/NewAppScreen/index";
 
 import {BackAction, MenuAction, SimulatorAction} from "./basic-top-action";
 import {convertRouteNameToLisible} from "../../shared/util/converter-for-route-name";
+import {ROUTE_MAP} from "../../shared/util/constants";
 
 /**
  * PROPS :
  * - hideAriane : hide the "fil d'ariane" which show the actual position of the user
  * - navigation: pass the actual navigation system
+ * - previousRoute: pass the previous route of navigation system
  */
 export default class HeaderBar extends Component {
     constructor(props) {
         super(props);
         this.navigationSytem = this.props.navigation;
-        this.actualRoute = convertRouteNameToLisible(this.props.route);
+        this.previousRoute = convertRouteNameToLisible(this.props.previousRoute);
+        if (this.previousRoute && this.previousRoute !== null) {
+            this.actualRoute = this.previousRoute + ' < ' + convertRouteNameToLisible(this.props.route);
+        } else {
+            this.actualRoute = convertRouteNameToLisible(this.props.route);
+        }
     }
     componentDidMount(): void {
     }
@@ -33,7 +39,7 @@ export default class HeaderBar extends Component {
                 <TopNavigation alignment='center' rightControls={this.renderRightControls(this.navigationSytem)}/>
                 <Divider/>
                 {!this.props.hideAriane ?
-                        <View style={{backgroundColor: Colors.white, flexDirection: 'row', alignItems: 'center'}}>
+                        <View style={{backgroundColor: appColors.white, flexDirection: 'row', alignItems: 'center'}}>
                             <BackAction onPress={() => this.backPressed()}/>
                             <Text style={{fontWeight: 'bold'}}>{this.actualRoute}</Text>
                         </View>
@@ -52,6 +58,10 @@ export default class HeaderBar extends Component {
     }
 
     backPressed() {
-        this.navigationSytem.goBack();
+        if (this.previousRoute === ROUTE_MAP) {
+            this.navigationSytem.popToTop();
+        } else {
+            this.navigationSytem.goBack();
+        }
     }
 }

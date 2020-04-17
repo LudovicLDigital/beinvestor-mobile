@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import {styles, appColors} from "../shared/styles/global";
+import {styles, appColors} from "../../shared/styles/global";
 import { SafeAreaView } from 'react-native';
 import { Text, Layout } from '@ui-kitten/components';
-import HeaderBar from '../component/subcomponent/header-bar';
+import HeaderBar from '../../component/subcomponent/header-bar';
 export default class UserProfilInvestorScreen extends Component {
     constructor(props) {
         super(props);
