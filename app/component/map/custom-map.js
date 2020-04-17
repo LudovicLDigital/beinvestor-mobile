@@ -168,6 +168,7 @@ export default class CustomMap extends Component {
                          maxZoomLevel={16}
                          initialRegion={this.state.regionLooked}
                          onPanDrag={() => this.mapDragged()}
+                         onPress={() => this.closePop()}
                          onRegionChangeComplete={(region) => this.onRegionChangeCompleted(region)}>
                     {this.state.groups.map(group => {
                             if (group.geoCoords) {
@@ -190,7 +191,11 @@ export default class CustomMap extends Component {
                     )}
                 </MapView>
                 {this.state.showPopGroup ?
-                    <GroupPopAnimated navigation={this.props.navigation} group={this.state.groupForPop}/>
+                    <GroupPopAnimated
+                        closePop={() => this.closePop()}
+                        showPop={this.state.showPopGroup}
+                        navigation={this.props.navigation}
+                        group={this.state.groupForPop}/>
                 : null}
                 <BeInvestorAutoComplete
                     style={[styles.absoluteTop, {zIndex: 1000}]}
@@ -226,6 +231,7 @@ export default class CustomMap extends Component {
     }
 
     mapDragged() {
+        this.closePop();
         this._navigatingOnMap = true;
     }
 
@@ -252,6 +258,7 @@ export default class CustomMap extends Component {
 
 
     onChoiceSelect(item) {
+        this.closePop();
         this.setState({
             citySelect: item
         });
@@ -259,6 +266,7 @@ export default class CustomMap extends Component {
     }
 
     onTxtChange(text) {
+        this.closePop();
         if (text && text.trim() !== '' && text.trim().length > 2) {
             this.gouvAdressService.getAdressesCorresponding(text).then((results) => {
                 this._prepareDataForAutoComplete(results.features);
@@ -288,6 +296,13 @@ export default class CustomMap extends Component {
         });
         this.setState({
             searchResults: tempArray,
+        });
+    }
+
+    closePop() {
+        this.setState({
+            showPopGroup: false,
+            groupForPop: null
         });
     }
 }

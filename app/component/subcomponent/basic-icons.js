@@ -35,6 +35,9 @@ export const SearchIcon = (style) => (
 export const MembersIcon = (style) => (
     <Icon {...style} fill={appColors.primary}  name='people-outline' />
 );
+export const CloseCircleIcon = (style) => (
+    <Icon {...style} fill={appColors.primary}  name='close-circle-outline' />
+);
 export const SharedFilesIcon = (style) => (
     <Icon {...style} fill={appColors.primary}  name='layers-outline' />
 );
