@@ -40,7 +40,7 @@ export default class GroupPopAnimated extends Component {
                         icon={CloseCircleIcon}>
                     </Button>
                 </View>
-                <Text style={{textAlign: 'center'}} category={'h2'}>{this.props.group.name}</Text>
+                <Text style={{textAlign: 'center'}} category={'h3'}>{this.props.group.name}</Text>
                 <FieldWithIcon iconName={'pin-outline'}
                                colorIcon={appColors.secondary}
                                textDisplay={this.props.group.city ? this.props.group.city.name : 'Ville inconnue'} />

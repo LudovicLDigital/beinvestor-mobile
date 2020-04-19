@@ -8,4 +8,10 @@ export default class UsersService extends BaseService {
     async getCurrentUser() {
         return await this.basicGetQuery('/current')
     }
+    async updateUser(userDatas) {
+        return await this.updateObject(userDatas, null);
+    }
+    async updateCurrentUser(userDatas) {
+        return await this.updateObject(userDatas, '/current')
+    }
 }

@@ -43,7 +43,7 @@ export default class PopUp extends Component {
             Animated.timing(
                 this.state.heightSize,
                 {
-                    toValue: deviceHeigth/3,
+                    toValue: deviceHeigth/2.5,
                     duration: 2000, // Le temps est en milliseconds ici (3000ms = 3sec)
                     easing: Easing.inOut(Easing.exp), // https://easings.net/fr
                 }

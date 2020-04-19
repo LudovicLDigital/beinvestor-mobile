@@ -21,6 +21,9 @@ const auth = {
             })
         }
     },
+    currentUserHaveBeenUpdate(user) {
+        this.currentUser = user;
+    },
     login(loginReceived, passwordReceived) {
         if (loginReceived && passwordReceived &&
             loginReceived.toString().trim() !== '' && passwordReceived.toString().trim() !== '') {
