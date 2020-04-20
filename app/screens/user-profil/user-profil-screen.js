@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {styles, appColors, deviceHeigth, deviceWidth} from "../../shared/styles/global";
 import { SafeAreaView, ScrollView, View } from 'react-native';
-import { Text, Avatar, Button, Datepicker} from '@ui-kitten/components';
+import { Icon, Avatar, Button, Datepicker} from '@ui-kitten/components';
 import HeaderBar from '../../component/subcomponent/header-bar';
 import SectionDivider from '../../component/subcomponent/form/section-divider';
 import InputField from '../../component/subcomponent/form/input-field';
@@ -11,6 +11,9 @@ import AuthService from '../../shared/services/auth';
 import {showToast} from "../../shared/util/ui-helpers";
 import UsersService from "../../shared/services/entities/users-service";
 const requiredMessage = ' est un champs requis';
+const SaveIcon = (style) => (
+    <Icon {...style} fill={appColors.white}  name='save' />
+);
 export default class UserProfilScreen extends Component {
     _currentUser;
     _userService;
@@ -25,6 +28,8 @@ export default class UserProfilScreen extends Component {
             login: null,
             password: null,
             newPassword: null,
+            dataHaveChange: false,
+            marginBottomDivider: 20
         };
         this._userService = new UsersService();
     }
@@ -41,7 +46,6 @@ export default class UserProfilScreen extends Component {
 
     componentDidMount(): void {
         this._recoverCurrentUserData();
-        this._prepareListenerForNavigation(this.props.navigation);
     }
     _recoverCurrentUserData() {
         AuthService.getCurrentUser().then((user) => {
@@ -52,17 +56,15 @@ export default class UserProfilScreen extends Component {
             console.error(error);
         });
     }
-    _prepareListenerForNavigation(navigation) {
-        navigation.addListener('blur', () => this._quitProfilPage()); // CALL WHEN NAVIGATE TO ANOTHER PAGE
-    }
-    _quitProfilPage() {
+    _updateUserInfo() {
         if(this._compareUserAndDatasChanged()) {
             const updatedData = this._setUpdateData();
             this._userService.updateCurrentUser(updatedData).then((userWithUpdate) => {
                 this._currentUser = userWithUpdate;
                 AuthService.currentUserHaveBeenUpdate(this._currentUser);
-                console.log('+++++++current AFTER UPDATE+++++++')
-                console.log(this._currentUser)
+                this.setState({
+                    dataHaveChange: false
+                });
             }).catch((error) => {
                 showToast('Problème lors de la mise à jours de vos données');
                 console.log(error);
@@ -70,12 +72,26 @@ export default class UserProfilScreen extends Component {
         }
     }
     _compareUserAndDatasChanged() {
-        if (this.state.firstName !== this._currentUser.userInfo.firstName) return true;
-        if (this.state.lastName !== this._currentUser.userInfo.lastName) return true;
-        if (this.state.birth !== this._currentUser.userInfo.birthDate) return true;
-        if (this.state.mail !== this._currentUser.user.mail) return true;
-        if (this.state.phone !== this._currentUser.user.phone) return true;
-        if (this.state.login !== this._currentUser.user.login) return true;
+        const previousUserBirth = new Date(this._currentUser.userInfo.birthDate);
+        const stateBirth = new Date(this.state.birth);
+        if (this.state.firstName !== this._currentUser.userInfo.firstName) {
+            return true;
+        }
+        if (this.state.lastName !== this._currentUser.userInfo.lastName) {
+            return true;
+        }
+        if (this.state.mail !== this._currentUser.user.mail) {
+            return true;
+        }
+        if (this.state.phone !== this._currentUser.user.phone) {
+            return true;
+        }
+        if (this.state.login !== this._currentUser.user.login) {
+            return true;
+        }
+        if (stateBirth.getDate() !== previousUserBirth.getDate() || stateBirth.getFullYear() !== previousUserBirth.getFullYear() || stateBirth.getMonth() !== previousUserBirth.getMonth()) {
+            return true;
+        }
         return false;
     }
     _setUpdateData() {
@@ -99,8 +115,22 @@ export default class UserProfilScreen extends Component {
         return (
             <SafeAreaView style={{ flex: 1 }}>
                 <HeaderBar route={this.props.route.name} navigation={this.props.navigation}/>
+                { this.state.dataHaveChange ?
+                    <Button
+                        style={[styles.absoluteBottom, {
+                            zIndex: 1000,
+                            backgroundColor: appColors.success,
+                            borderColor: appColors.success
+                        }]}
+                        size={'medium'}
+                        onPress={() => this._updateUserInfo()}
+                        icon={SaveIcon}>
+                        Sauvegarder
+                    </Button>
+                    : null
+                }
                 <ScrollView style={[{ flex:1},styles.fullScreen]}>
-                    <Avatar style={{borderWidth: 2, borderColor: appColors.secondary, alignSelf: 'center'}} size={'giant'} source={require('../../assets/icon.png')}/>
+                    <Avatar style={{borderWidth: 2, borderColor: appColors.secondary, alignSelf: 'center'}} size={'giant'} source={require('../../assets/no-pic.png')}/>
                     <View style={{flexDirection: 'row'}}>
                         <InputField label={'Prénom'}
                                     style={{marginRight: 10}}
@@ -168,7 +198,7 @@ export default class UserProfilScreen extends Component {
                         </View>
                     </View>
                     <SectionDivider sectionName={'Profil investisseur'}/>
-                    <Button style={{backgroundColor: appColors.primary, borderColor: appColors.primary, marginBottom: deviceHeigth/20, marginTop: 15}}>
+                    <Button style={{backgroundColor: appColors.primary, borderColor: appColors.primary, marginBottom: deviceHeigth/this.state.marginBottomDivider, marginTop: 15}}>
                         Editer mon profil investisseur
                     </Button>
                 </ScrollView>
@@ -176,29 +206,37 @@ export default class UserProfilScreen extends Component {
         );
     }
 
-    _fieldValueChange(fieldChanged, value) {
+    async _fieldValueChange(fieldChanged, value) {
         switch (fieldChanged) {
             case FIRST_NAME:
-                this.setState({firstName: value});
+                await this.setState({firstName: value});
                 break;
             case LAST_NAME:
-                this.setState({lastName: value});
+                await this.setState({lastName: value});
                 break;
             case BIRTH:
-                this.setState({birth: value});
+                await this.setState({birth: value});
                 break;
             case MAIL:
-                this.setState({mail: value});
+                await this.setState({mail: value});
                 break;
             case PHONE:
-                this.setState({phone: value});
+                await this.setState({phone: value});
                 break;
             case OLD_PASS:
-                this.setState({password: value});
+                await this.setState({password: value});
                 break;
             case NEW_PASS:
-                this.setState({newPassword: value});
+                await this.setState({newPassword: value});
                 break;
         }
+        this._displayOrNotSave();
+    }
+    _displayOrNotSave() {
+        const changed = this._compareUserAndDatasChanged();
+        this.setState({
+            dataHaveChange: changed,
+            marginBottomDivider: changed ? 7 : 20
+        });
     }
 }
