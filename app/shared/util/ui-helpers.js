@@ -1,5 +1,5 @@
 import React from "react";
-import { TouchableWithoutFeedback, Keyboard, ToastAndroid} from 'react-native';
+import { TouchableWithoutFeedback, Keyboard, ToastAndroid, Alert} from 'react-native';
 import {DAY, HOUR, MINUTE} from "./constants";
 export const DismissKeyboard = ({children}) => (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -7,7 +7,12 @@ export const DismissKeyboard = ({children}) => (
     </TouchableWithoutFeedback>
 );
 export function showToast(message) {
-    ToastAndroid.showWithGravity(message, ToastAndroid.SHORT, ToastAndroid.BOTTOM);
+    ToastAndroid.showWithGravity(message, ToastAndroid.LONG, ToastAndroid.BOTTOM);
+}
+export function showInfoAlert(message) {
+    Alert.alert(
+        message,
+    )
 }
 export function calculDurationFromNow(date) {
     let delta = -1;

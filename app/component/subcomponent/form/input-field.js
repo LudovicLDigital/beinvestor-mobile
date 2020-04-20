@@ -13,6 +13,7 @@ import {styles, appColors} from "../../../shared/styles/global";
  * - onTextChange: call back when text change
  * - validationRegex : the regex we want to
  * - disabled: if the input must be disable
+ * - errorOnField: throwed when field is in error case
  */
 export default class  extends Component {
     constructor(props) {
@@ -66,16 +67,25 @@ export default class  extends Component {
                 isValidated: false,
                 messageError:  this.state.mapErrors.get('required')
             });
+            if (this.props.errorOnField) {
+                this.props.errorOnField(true)
+            }
         } else if (this.props.messageErrors && this.props.validationRegex && !this.props.validationRegex.test(text)) {
             this.setState({
                 isValidated: false,
                 messageError: this.state.mapErrors.get('pattern')
             });
+            if (this.props.errorOnField) {
+                this.props.errorOnField(true)
+            }
         } else {
             this.setState({
                 isValidated: true,
                 messageError: ''
             });
+            if (this.props.errorOnField) {
+                this.props.errorOnField(false)
+            }
         }
     }
     _messageErrorToDisplay() {

@@ -6,9 +6,9 @@ import HeaderBar from '../../component/subcomponent/header-bar';
 import SectionDivider from '../../component/subcomponent/form/section-divider';
 import InputField from '../../component/subcomponent/form/input-field';
 import {CalendarIcon} from "../../component/subcomponent/basic-icons";
-import {BIRTH, FIRST_NAME, LAST_NAME, LOGIN, MAIL, NEW_PASS, OLD_PASS, PHONE} from '../../shared/util/constants'
+import {BIRTH, FIRST_NAME, LAST_NAME, MAIL, NEW_PASS, OLD_PASS, PHONE} from '../../shared/util/constants'
 import AuthService from '../../shared/services/auth';
-import {showToast} from "../../shared/util/ui-helpers";
+import {showInfoAlert, showToast} from "../../shared/util/ui-helpers";
 import UsersService from "../../shared/services/entities/users-service";
 const requiredMessage = ' est un champs requis';
 const SaveIcon = (style) => (
@@ -17,6 +17,7 @@ const SaveIcon = (style) => (
 export default class UserProfilScreen extends Component {
     _currentUser;
     _userService;
+    _arrayOfFieldOnError: [];
     constructor(props) {
         super(props);
         this.state = {
@@ -32,6 +33,7 @@ export default class UserProfilScreen extends Component {
             marginBottomDivider: 20
         };
         this._userService = new UsersService();
+        this._arrayOfFieldOnError = [];
     }
     _setUserStatesDatas( user) {
         this.setState({
@@ -58,17 +60,21 @@ export default class UserProfilScreen extends Component {
     }
     _updateUserInfo() {
         if(this._compareUserAndDatasChanged()) {
-            const updatedData = this._setUpdateData();
-            this._userService.updateCurrentUser(updatedData).then((userWithUpdate) => {
-                this._currentUser = userWithUpdate;
-                AuthService.currentUserHaveBeenUpdate(this._currentUser);
-                this.setState({
-                    dataHaveChange: false
-                });
-            }).catch((error) => {
-                showToast('Problème lors de la mise à jours de vos données');
-                console.log(error);
-            })
+            if (this._arrayOfFieldOnError.length <= 0) {
+                const updatedData = this._setUpdateData();
+                this._userService.updateCurrentUser(updatedData).then((userWithUpdate) => {
+                    this._currentUser = userWithUpdate;
+                    AuthService.currentUserHaveBeenUpdate(this._currentUser);
+                    this.setState({
+                        dataHaveChange: false
+                    });
+                }).catch((error) => {
+                    showToast('Problème lors de la mise à jours de vos données');
+                    console.log(error);
+                })
+            } else {
+                showInfoAlert('Un ou plusieurs champs sont invalides')
+            }
         }
     }
     _compareUserAndDatasChanged() {
@@ -98,7 +104,6 @@ export default class UserProfilScreen extends Component {
         const updatedUser = {
             id: this._currentUser.user.id,
             login: this.state.login,
-            // password: this._currentUser.user.password,
             mail: this.state.mail,
             phone: this.state.phone,
             userInfo: {
@@ -157,6 +162,7 @@ export default class UserProfilScreen extends Component {
                                 value={this.state.mail}
                                 validationRegex={/^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]{2,}\.[a-z]{2,4}$/}
                                 messageErrors={[['required', 'L\'email'+requiredMessage], ['pattern', 'L\'email n\'est pas valide']]}
+                                errorOnField={(isOnError) => this.errorOnField(MAIL, isOnError)}
                                 onTextChange={(text) => this._fieldValueChange(MAIL, text)}/>
                     <InputField label={'Téléphone'}
                                 type={'numeric'}
@@ -164,6 +170,7 @@ export default class UserProfilScreen extends Component {
                                 messageErrors={[['pattern', 'Le numéro de téléphone n\'est pas valide, rentrer les 10 chiffres']]}
                                 validationRegex={/^[0-9]{10}$/}
                                 value={this.state.phone}
+                                errorOnField={(isOnError) => this.errorOnField(PHONE, isOnError)}
                                 onTextChange={(text) => this._fieldValueChange(PHONE, text)}/>
                     <SectionDivider sectionName={'Identifiants'}/>
                     <InputField label={'Login'}
@@ -179,7 +186,7 @@ export default class UserProfilScreen extends Component {
                             <InputField label={'Nouveau mot de passe'}
                                         type={'password'}
                                         disabled={this.state.password === '' || !this.state.password}
-                                        messageErrors={[['required', 'Le nouveau mot de passe'+requiredMessage], ['pattern', 'Le mot de passe doit contenir une majuscule, une minuscule, un chiffre et au moins 8 charactères']]}
+                                        messageErrors={[['required', 'Le nouveau mot de passe' + requiredMessage], ['pattern', 'Le mot de passe doit contenir une majuscule, une minuscule, un chiffre et au moins 8 charactères']]}
                                         style={{width: deviceWidth/2, marginRight: 10}}
                                         value={this.state.newPassword}
                                         validationRegex={/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)([-+!*$@%_\w]{8,})$/}
@@ -187,6 +194,7 @@ export default class UserProfilScreen extends Component {
                         </View>
                         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
                             <Button size={'small'}
+                                    onPress={() => this._tryChangePassword()}
                                     disabled={this.state.newPassword === '' || !this.state.newPassword}
                                     style={{
                                         backgroundColor: (this.state.newPassword === '' || !this.state.newPassword) ? appColors.primaryLight : appColors.success,
@@ -204,6 +212,15 @@ export default class UserProfilScreen extends Component {
                 </ScrollView>
             </SafeAreaView>
         );
+    }
+
+    errorOnField(fieldIdentifier, isOnError) {
+        const index = this._arrayOfFieldOnError.indexOf(fieldIdentifier);
+        if (index === -1 && isOnError) {
+            this._arrayOfFieldOnError.push(fieldIdentifier);
+        } else if (!isOnError && index !== -1) {
+            this._arrayOfFieldOnError.splice(index, 1);
+        }
     }
 
     async _fieldValueChange(fieldChanged, value) {
@@ -238,5 +255,9 @@ export default class UserProfilScreen extends Component {
             dataHaveChange: changed,
             marginBottomDivider: changed ? 7 : 20
         });
+    }
+
+    _tryChangePassword() {
+        // requete back pour savoir si old est le bon, si yes return true, puis update avec le nouveau
     }
 }
