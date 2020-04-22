@@ -6,10 +6,21 @@ import HeaderBar from '../../component/subcomponent/header-bar';
 import SectionDivider from '../../component/subcomponent/form/section-divider';
 import InputField from '../../component/subcomponent/form/input-field';
 import {CalendarIcon} from "../../component/subcomponent/basic-icons";
-import {BIRTH, FIRST_NAME, LAST_NAME, MAIL, NEW_PASS, OLD_PASS, PHONE} from '../../shared/util/constants'
+import {
+    BIRTH,
+    FIRST_NAME,
+    LAST_NAME,
+    MAIL,
+    NEW_PASS,
+    OLD_PASS,
+    PHONE,
+    REFRESH_TOKEN_KEY
+} from '../../shared/util/constants'
 import AuthService from '../../shared/services/auth';
 import {showInfoAlert, showToast} from "../../shared/util/ui-helpers";
 import UsersService from "../../shared/services/entities/users-service";
+import Loader from "../../component/subcomponent/loader";
+import DeviceStorage from "../../shared/util/device-storage";
 const requiredMessage = ' est un champs requis';
 const SaveIcon = (style) => (
     <Icon {...style} fill={appColors.white}  name='save' />
@@ -18,6 +29,7 @@ export default class UserProfilScreen extends Component {
     _currentUser;
     _userService;
     _arrayOfFieldOnError: [];
+    _newPasswordIsValid: false;
     constructor(props) {
         super(props);
         this.state = {
@@ -30,6 +42,8 @@ export default class UserProfilScreen extends Component {
             password: null,
             newPassword: null,
             dataHaveChange: false,
+            oldPasswordError: null,
+            waitingForChange: false,
             marginBottomDivider: 20
         };
         this._userService = new UsersService();
@@ -177,15 +191,19 @@ export default class UserProfilScreen extends Component {
                                 disabled={true}
                                 value={this.state.login}/>
                     <View style={{flex: 1, flexDirection: 'row'}}>
+                        <Loader loadTitle={'Changement du mot de passe...'} isDisplayed={this.state.waitingForChange}/>
                         <View style={{flex: 3}}>
                             <InputField label={'Mot de passe'}
                                         type={'password'}
                                         value={this.state.password}
                                         style={{width: deviceWidth/2}}
+                                        messageErrors={[['invalid', 'Mot de passe incorrect']]}
+                                        receivedErrorByForm={this.state.oldPasswordError}
                                         onTextChange={(text) => this._fieldValueChange(OLD_PASS, text)}/>
                             <InputField label={'Nouveau mot de passe'}
                                         type={'password'}
                                         disabled={this.state.password === '' || !this.state.password}
+                                        errorOnField={(isOnError) => this._newPasswordIsValid = !isOnError}
                                         messageErrors={[['required', 'Le nouveau mot de passe' + requiredMessage], ['pattern', 'Le mot de passe doit contenir une majuscule, une minuscule, un chiffre et au moins 8 charactères']]}
                                         style={{width: deviceWidth/2, marginRight: 10}}
                                         value={this.state.newPassword}
@@ -258,6 +276,39 @@ export default class UserProfilScreen extends Component {
     }
 
     _tryChangePassword() {
-        // requete back pour savoir si old est le bon, si yes return true, puis update avec le nouveau
+        if (this._newPasswordIsValid) {
+            this.setState({waitingForChange: true});
+            this._userService.changePassword(this.state.password, this.state.newPassword).then((newTokens) => {
+                if (newTokens) {
+                    DeviceStorage.setCurrentUserToken(newTokens.accessToken).then(() => {
+                        DeviceStorage.storeNewKeyValue(REFRESH_TOKEN_KEY, newTokens.refreshToken);
+                        this.setState({
+                            password: '',
+                            newPassword: '',
+                            oldPasswordError: null,
+                            waitingForChange: false
+                        });
+                        showToast('Mot de passe changé');
+                    }).catch((error) => {
+                        this.setState({
+                            waitingForChange: false
+                        });
+                        showToast('Une erreur est survenue');
+                        console.error(error);
+                    });
+                } else {
+                    this.setState({
+                        oldPasswordError: 'invalid',
+                        waitingForChange: false
+                    });
+                    showToast('Mot de passe incorrect');
+                }
+            }).catch((error) => {
+                this.setState({
+                    waitingForChange: false
+                });
+                console.log(error)
+            });
+        }
     }
 }

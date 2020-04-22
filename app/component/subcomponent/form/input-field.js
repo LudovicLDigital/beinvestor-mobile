@@ -7,7 +7,7 @@ import {styles, appColors} from "../../../shared/styles/global";
  * - label : label of the field
  * - value : the value of the field
  * - messageErrors : message errors Map of the field, can contain key : 'required', 'pattern'; the value will be the associated message
- * - receivedErrorByForm: a string with the error to display ('required', 'pattern')
+ * - receivedErrorByForm: a string with the error to display ('required', 'pattern', 'invalid')
  * - data : the data string to display in the field
  * - type : the type of input 'password', 'password-show', 'numeric', 'email-address'
  * - onTextChange: call back when text change
@@ -21,11 +21,15 @@ export default class  extends Component {
         this.state = {
             isValidated: true,
             messageError: null,
+            showPassType: this.props.type,
             mapErrors: new Map(this.props.messageErrors)
         }
     }
 
     render() {
+        const onIconPress = () => {
+            this.setState({showPassType: this.state.showPassType === 'password' ? 'text' : 'password'});
+        };
         if (this.props.type === 'password' || this.props.type === 'password-show') {
             return (
                 <Input label={this.props.label}
@@ -35,10 +39,11 @@ export default class  extends Component {
                        labelStyle={styles.inputLabelPrimary}
                        style={[{borderColor: appColors.primary, flex: 1}, this.props.style]}
                        status={(this.state.isValidated && !this.props.receivedErrorByForm) ? '' : 'danger'}
-                       secureTextEntry={this.props.type === 'password'}
+                       secureTextEntry={this.state.showPassType === 'password'}
                        caption={(this.state.isValidated && !this.props.receivedErrorByForm) ? '' : this._messageErrorToDisplay()}
+                       onIconPress={onIconPress}
                        icon={(style) => {
-                           const eyeOff = this.props.type === 'password';
+                           const eyeOff = this.state.showPassType === 'password';
                            return (<Icon {...style} fill={appColors.primary} name={eyeOff ? 'eye-off' : 'eye'}/>)
                        }}
                        captionStyle={{fontWeight: 'bold'}}
@@ -90,9 +95,11 @@ export default class  extends Component {
     }
     _messageErrorToDisplay() {
         let messageError;
-        if (this.props.receivedErrorByForm && (this.props.receivedErrorByForm === 'required' || this.props.receivedErrorByForm === 'pattern')) {
+        if (this.props.receivedErrorByForm && (this.props.receivedErrorByForm === 'required' || this.props.receivedErrorByForm === 'pattern' || this.props.receivedErrorByForm === 'invalid' )) {
             messageError = this.state.mapErrors.get(this.props.receivedErrorByForm);
-            this.setState({messageError: messageError});
+            if(messageError !== this.state.messageError) {
+                this.setState({messageError: messageError});
+            }
         }
         return this.state.messageError;
     }

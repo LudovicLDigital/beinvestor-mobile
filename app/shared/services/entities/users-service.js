@@ -14,4 +14,7 @@ export default class UsersService extends BaseService {
     async updateCurrentUser(userDatas) {
         return await this.updateObject(userDatas, '/current')
     }
+    async changePassword(password, newPassword) {
+        return await this.postObject({password: password, newPassword: newPassword}, '/change-password');
+    }
 }

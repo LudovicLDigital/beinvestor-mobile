@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React, {Fragment, useEffect} from 'react';
 import {convertRouteNameToLisible} from "../../../shared/util/converter-for-route-name";
 import {
     ROUTE_FAV_GRP,
@@ -124,7 +124,9 @@ export const CustomDrawerContent = (props) => { //{ navigation, state }
             <HeaderUser/>
             {drawerMenuItems.map((item, index) => {
                 return (
-                    <MenuItem label={item.title} icon={item.icon} isFocused={props.state.index === index} onSelect={() => onSelect(item.route)}/>
+                    <Fragment key={index}>
+                        <MenuItem label={item.title} icon={item.icon} isFocused={props.state.index === index} onSelect={() => onSelect(item.route)}/>
+                    </Fragment>
                 )
             })}
             <MenuItem label={'Se déconnecter'} icon={'log-out'} onSelect={() => onSelect(LOGOUT)}/>
