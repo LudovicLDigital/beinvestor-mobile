@@ -151,7 +151,12 @@ export default class LoginScreen extends Component {
             if (value) {
                 this.props.navigation.navigate("Home");
             } else {
-                alert("Login ou mot de passe incorrect");
+                Alert.alert(
+                    "Attention ! ",
+                    "Login ou mot de passe incorrect",
+                    [
+                        {text: "Oups", onPress: () => {}}
+                    ]);
             }
         }).catch((error) => alert(`Une erreur est survenue : ${error.message}`));
     }

@@ -17,4 +17,16 @@ export default class UsersService extends BaseService {
     async changePassword(password, newPassword) {
         return await this.postObject({password: password, newPassword: newPassword}, '/change-password');
     }
+    async changeUserProfilPicture(picture, userId) {
+        const ext = picture.path.split('.');
+        const file = {
+            uri: picture.path,
+            name: 'user-pic-of-' + userId + '.' + ext[1],
+            type: picture.mime
+        };
+        return await this.sendFile(file, '/save-profil-pic');
+    }
+    async getProfilPictureOfCurrent() {
+        return await this.getFile('/current/profil-pic');
+    }
 }

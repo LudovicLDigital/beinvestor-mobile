@@ -1,7 +1,8 @@
 import {API_URL} from '../../util/constants';
 import HttpHeaderSetter from '../../util/http-header-setter';
 import {showToast} from "../../util/ui-helpers";
-
+import RNFetchBlob from 'rn-fetch-blob'
+import DeviceStorage from "../../util/device-storage";
 /**
  * Extends this base service to have minimum fetch method for your service
  * Don't forget to set the variable resourceURL to your endpoint value (Already contain Constant.API_URL)
@@ -19,6 +20,20 @@ export default class BaseService {
             } else {
                 return response.status === 200 ? response.json() : null;
             }
+        }).catch((error) => {
+            console.error(error);
+            throw error;
+        })
+    }
+    async fetchFile(urlCompletion) {
+        const token = await DeviceStorage.getCurrentUserToken();
+        const bearer = `Bearer ${token}`;
+        const options = {
+                'Content-Type': 'multipart/form-data,octet-stream',
+                'Authorization': bearer
+            };
+        return RNFetchBlob.fetch('GET', `${this.resourceURL}${urlCompletion && urlCompletion !== null ? urlCompletion : ''}`, options).then((response) => {
+            return response;
         }).catch((error) => {
             console.error(error);
             throw error;
@@ -49,6 +64,15 @@ export default class BaseService {
     }
 
     /**
+     * Request API with a basic GET method, for a file
+     * @param urlCompletion : is the precise url, can be null
+     * @returns {Promise<void>}
+     */
+    async getFile(urlCompletion) {
+        return this.fetchFile( urlCompletion);
+    }
+
+    /**
      * Request a create to api with an object in body
      * @param objectToPost the object you want to post
      * @param urlCompletion : is the precise url, can be null
@@ -57,6 +81,19 @@ export default class BaseService {
     async postObject(objectToPost, urlCompletion) {
         const options = await HttpHeaderSetter.setDefaultHeader('POST');
         options.body = JSON.stringify(objectToPost);
+        return this.fetchMethod(options, urlCompletion);
+    }
+
+    /**
+     * Request to send a file to api
+     * @param file the file to send
+     * @param urlCompletion : is the precise url, can be null
+     * @returns {Promise<void>}
+     */
+    async sendFile(file, urlCompletion) {
+        const options = await HttpHeaderSetter.setFormDataHeader('POST');
+        options.body = new FormData();
+        options.body.append('file', file);
         return this.fetchMethod(options, urlCompletion);
     }
     /**

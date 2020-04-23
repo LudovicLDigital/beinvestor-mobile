@@ -3,7 +3,7 @@ const httpHeaderSetter = {
     async setDefaultHeader(method) {
         const token = await DeviceStorage.getCurrentUserToken();
         const bearer = `Bearer ${token}`;
-        const options = {
+        return {
             method: method,
             headers: {
                 'Accept': 'application/json',
@@ -11,7 +11,17 @@ const httpHeaderSetter = {
                 'Authorization': bearer
             }
         };
-        return options;
+    },
+    async setFormDataHeader(method) {
+        const token = await DeviceStorage.getCurrentUserToken();
+        const bearer = `Bearer ${token}`;
+        return {
+            method: method,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': bearer
+            }
+        };
     }
 };
 module.exports = httpHeaderSetter;

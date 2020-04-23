@@ -21,6 +21,7 @@ import {showInfoAlert, showToast} from "../../shared/util/ui-helpers";
 import UsersService from "../../shared/services/entities/users-service";
 import Loader from "../../component/subcomponent/loader";
 import DeviceStorage from "../../shared/util/device-storage";
+import ProfilPicturePicker from "../../component/subcomponent/form/profil-picture-picker";
 const requiredMessage = ' est un champs requis';
 const SaveIcon = (style) => (
     <Icon {...style} fill={appColors.white}  name='save' />
@@ -134,7 +135,7 @@ export default class UserProfilScreen extends Component {
         return (
             <SafeAreaView style={{ flex: 1 }}>
                 <HeaderBar route={this.props.route.name} navigation={this.props.navigation}/>
-                { this.state.dataHaveChange ?
+                { this.state.dataHaveChange &&
                     <Button
                         style={[styles.absoluteBottom, {
                             zIndex: 1000,
@@ -146,10 +147,9 @@ export default class UserProfilScreen extends Component {
                         icon={SaveIcon}>
                         Sauvegarder
                     </Button>
-                    : null
                 }
                 <ScrollView style={[{ flex:1},styles.fullScreen]}>
-                    <Avatar style={{borderWidth: 2, borderColor: appColors.secondary, alignSelf: 'center'}} size={'giant'} source={require('../../assets/no-pic.png')}/>
+                    <ProfilPicturePicker isAbleToEdit={true}/>
                     <View style={{flexDirection: 'row'}}>
                         <InputField label={'Prénom'}
                                     style={{marginRight: 10}}

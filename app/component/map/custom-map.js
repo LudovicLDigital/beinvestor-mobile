@@ -190,13 +190,12 @@ export default class CustomMap extends Component {
                         }
                     )}
                 </MapView>
-                {this.state.showPopGroup ?
+                {this.state.showPopGroup &&
                     <GroupPopAnimated
                         closePop={() => this.closePop()}
                         showPop={this.state.showPopGroup}
                         navigation={this.props.navigation}
-                        group={this.state.groupForPop}/>
-                : null}
+                        group={this.state.groupForPop}/>}
                 <BeInvestorAutoComplete
                     style={[styles.absoluteTop, {zIndex: 1000}]}
                     autocompleteList={this.state.searchResults}
