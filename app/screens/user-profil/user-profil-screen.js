@@ -45,7 +45,8 @@ export default class UserProfilScreen extends Component {
             dataHaveChange: false,
             oldPasswordError: null,
             waitingForChange: false,
-            marginBottomDivider: 20
+            marginBottomDivider: 20,
+            passwordChangeViewHeight: null
         };
         this._userService = new UsersService();
         this._arrayOfFieldOnError = [];
@@ -190,8 +191,8 @@ export default class UserProfilScreen extends Component {
                     <InputField label={'Login'}
                                 disabled={true}
                                 value={this.state.login}/>
-                    <View style={{flex: 1, flexDirection: 'row'}}>
-                        <Loader loadTitle={'Changement du mot de passe...'} isDisplayed={this.state.waitingForChange}/>
+                    <View style={{flex: 1, flexDirection: 'row'}} onLayout={(event) => { this.setEndViewForLoader(event.nativeEvent.layout) }}>
+                        <Loader loadTitle={'Changement du mot de passe...'} parentHeight={this.state.passwordChangeViewHeight} isDisplayed={this.state.waitingForChange}/>
                         <View style={{flex: 3}}>
                             <InputField label={'Mot de passe'}
                                         type={'password'}
@@ -310,5 +311,12 @@ export default class UserProfilScreen extends Component {
                 console.log(error)
             });
         }
+    }
+
+    setEndViewForLoader(layout) {
+        const {height} = layout;
+        this.setState({
+            passwordChangeViewHeight: height
+        })
     }
 }

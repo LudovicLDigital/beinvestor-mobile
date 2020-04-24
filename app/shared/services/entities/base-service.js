@@ -15,7 +15,8 @@ export default class BaseService {
     async fetchMethod(options, urlCompletion) {
         return fetch(`${this.resourceURL}${urlCompletion && urlCompletion !== null ? urlCompletion : ''}`, options).then(async(response) => {
             if ((response.status < 200 || response.status >= 300) && response.status !== 404) {
-                showToast('Erreur ' + response.statusText + " code : " + response.status);
+                console.log(response)
+                showToast('Erreur fetchMethod on '+ urlCompletion+ ' error -->' + response.statusText + " code : " + response.status);
                 return null;
             } else {
                 return response.status === 200 ? response.json() : null;
@@ -42,7 +43,7 @@ export default class BaseService {
     async fetchMethodWithId(id, urlCompletion, options) {
         return fetch(`${this.resourceURL}${urlCompletion && urlCompletion !== null ? urlCompletion : ''}/${id}`, options).then((response) => {
             if ((response.status < 200 || response.status >= 300) && response.status !== 404) {
-                showToast('Erreur ' +response.statusText + " code : " + response.status);
+                showToast('Erreur fetchMethodWithId on '+ urlCompletion+ ' error -->' + response.statusText + " code : " + response.status);
                 return null;
             } else {
                 return response.status === 200 ? response.json() : null;
@@ -81,6 +82,8 @@ export default class BaseService {
     async postObject(objectToPost, urlCompletion) {
         const options = await HttpHeaderSetter.setDefaultHeader('POST');
         options.body = JSON.stringify(objectToPost);
+        console.log('============ postObject objectToPost =============');
+        console.log(objectToPost);
         return this.fetchMethod(options, urlCompletion);
     }
 

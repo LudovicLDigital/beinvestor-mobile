@@ -19,7 +19,6 @@ export default class ProfilPicturePicker extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            pictureChoose: null,
             picDisplay: null
         };
         this._chooseAPicture = this._chooseAPicture.bind(this);
@@ -29,14 +28,19 @@ export default class ProfilPicturePicker extends Component {
         this._userService = new UsersService();
     }
     componentDidMount() {
-        this._getCurrentUserPic();
+        this._recoverBackendImage();
     }
-    _getCurrentUserPic() {
+    _recoverBackendImage() {
         this._userService.getProfilPictureOfCurrent().then((picture) => {
-            this.setState({
-                pictureChoose: picture,
-                picDisplay: { uri : 'data:image/jpeg;base64,'+ picture.data }
-            });
+            if (picture.info().status === 200) {
+                this.setState({
+                    picDisplay: {uri: 'data:image/jpeg;base64,' + picture.data}
+                });
+            } else {
+                this.setState({
+                    picDisplay: require('../../../assets/no-pic.png')
+                });
+            }
         }).catch((error) => {
             console.error(error);
             showToast('Erreur lors de la récupération de la photo de profil');
@@ -46,7 +50,7 @@ export default class ProfilPicturePicker extends Component {
         return (
             <View style={[{flex: 1}]}>
                 <TouchableWithoutFeedback onPress={this._chooseAPicture}>
-                    <Avatar style={{borderWidth: 1, borderColor: appColors.secondary, alignSelf: 'center'}} size={'giant'} source={this.state.picDisplay === null ? require('../../../assets/no-pic.png') : this.state.picDisplay}/>
+                    <Avatar style={{borderWidth: 1, borderColor: appColors.secondary, alignSelf: 'center'}} size={'giant'} source={this.state.picDisplay}/>
                 </TouchableWithoutFeedback>
             </View>
         )
@@ -66,6 +70,10 @@ export default class ProfilPicturePicker extends Component {
                 "Choisir votre photo de profil depuis...",
                 "",
                 [
+                    {
+                        text: 'Annuler',
+                        onPress: () => {}
+                    },
                     {
                         text: 'Galerie',
                         onPress: () => {
@@ -88,11 +96,15 @@ export default class ProfilPicturePicker extends Component {
     }
 
     _savePicture(image) {
-        this._userService.changeUserProfilPicture(image, this._currentUser.user.id).then(() => {
-            this._getCurrentUserPic();
-        }).catch((error) => {
-            console.error(error);
+        if (this._currentUser && this._currentUser.user) {
+            this._userService.changeUserProfilPicture(image, this._currentUser.user.id).then(() => {
+                this._recoverBackendImage();
+            }).catch((error) => {
+                console.error(error);
+                showInfoAlert('La photo de profil n\'a pas pu être sauvegardé');
+            });
+        } else {
             showInfoAlert('La photo de profil n\'a pas pu être sauvegardé');
-        })
+        }
     }
 }

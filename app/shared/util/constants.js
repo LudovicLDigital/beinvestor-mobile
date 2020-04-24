@@ -1,5 +1,6 @@
 export const USER_TOKEN_KEY = "LOGGED_TOKEN";
 export const REFRESH_TOKEN_KEY = "REFRESH_TOKEN";
+export const USER_PICTURE_KEY = "user profil picture";
 export const API_URL = "http://192.168.1.57:3000/api";
 export const SOCKET_URL = "http://192.168.1.57:3000";
 
