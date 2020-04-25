@@ -35,7 +35,7 @@ export default class SearchGroupScreen extends Component {
             });
             this.groupService.getAllGroupsOfCurrentUser({
                 page: this.page,
-                numberItem: 22
+                numberItem: 5
             }).then((groups) => {
                 if (groups.results && groups.results.length > 0) {
                     this._fillCityOfGroups(groups.results);

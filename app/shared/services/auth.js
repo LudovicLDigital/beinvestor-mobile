@@ -61,14 +61,22 @@ const auth = {
         }
     },
     autoLogin() {
-        return DeviceStorage.getKeyValue(REFRESH_TOKEN_KEY).then((refreshToken) => {
+        return DeviceStorage.getKeyValue(REFRESH_TOKEN_KEY).then(async (refreshToken) => {
             if (refreshToken &&  refreshToken !== null) {
-                return fetch(`${API_URL}/token/${refreshToken}`).then((response) => {
-                    return response.json()
+                const options = await HttpHeaderSetter.setFormDataHeader('POST');
+                options.body = {
+                    token: refreshToken
+                };
+                return fetch(`${API_URL}/token`).then((response) => {
+                    return response.status === 200 ?response.json() : null;
                 }).then((responseJson) => {
-                    return DeviceStorage.setCurrentUserToken(responseJson.accessToken).then(() => {
-                        return Promise.resolve(true);
-                    }).catch(() => Promise.resolve(false));
+                    if (responseJson && responseJson !== null) {
+                        return DeviceStorage.setCurrentUserToken(responseJson.accessToken).then(() => {
+                            return Promise.resolve(true);
+                        }).catch(() => Promise.resolve(false));
+                    } else {
+                        Promise.resolve(false);
+                    }
                 }).catch((error) => {
                     console.error(`ERROR TO fetch : ${error}`);
                     return Promise.resolve(false);

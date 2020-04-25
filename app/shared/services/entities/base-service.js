@@ -15,7 +15,6 @@ export default class BaseService {
     async fetchMethod(options, urlCompletion) {
         return fetch(`${this.resourceURL}${urlCompletion && urlCompletion !== null ? urlCompletion : ''}`, options).then(async(response) => {
             if ((response.status < 200 || response.status >= 300) && response.status !== 404) {
-                console.log(response)
                 showToast('Erreur fetchMethod on '+ urlCompletion+ ' error -->' + response.statusText + " code : " + response.status);
                 return null;
             } else {
@@ -82,8 +81,6 @@ export default class BaseService {
     async postObject(objectToPost, urlCompletion) {
         const options = await HttpHeaderSetter.setDefaultHeader('POST');
         options.body = JSON.stringify(objectToPost);
-        console.log('============ postObject objectToPost =============');
-        console.log(objectToPost);
         return this.fetchMethod(options, urlCompletion);
     }
 
