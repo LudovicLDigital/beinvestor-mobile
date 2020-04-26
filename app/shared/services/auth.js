@@ -63,12 +63,18 @@ const auth = {
     autoLogin() {
         return DeviceStorage.getKeyValue(REFRESH_TOKEN_KEY).then(async (refreshToken) => {
             if (refreshToken &&  refreshToken !== null) {
-                const options = await HttpHeaderSetter.setFormDataHeader('POST');
-                options.body = {
-                    token: refreshToken
+                const options = {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        token: refreshToken
+                    })
                 };
-                return fetch(`${API_URL}/token`).then((response) => {
-                    return response.status === 200 ?response.json() : null;
+                return fetch(`${API_URL}/token`, options).then((response) => {
+                    return response.status === 200 ? response.json() : null;
                 }).then((responseJson) => {
                     if (responseJson && responseJson !== null) {
                         return DeviceStorage.setCurrentUserToken(responseJson.accessToken).then(() => {
