@@ -71,7 +71,6 @@ export default class ChatRoom extends Component {
                 userInfoId: this.currentUser.user.id,
                 groupId: this.props.groupId
             };
-            console.log(messageToSend)
             this.textChange(null);
             this.groupMessageService.postAndEmitAmessage(messageToSend).then(() => {
             }, (error) => {

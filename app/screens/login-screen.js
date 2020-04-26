@@ -28,7 +28,8 @@ export default class LoginScreen extends Component {
             login: "",
             password: "",
             waitingForConnect: false,
-            securizedText: true
+            securizedText: true,
+            credentialsViewHeight: null,
         };
     }
     backAction() {
@@ -52,12 +53,19 @@ export default class LoginScreen extends Component {
     componentWillUnmount() {
         BackHandler.removeEventListener("hardwareBackPress", () => this.backAction());
     }
+
+    setEndViewForLoader(layout) {
+        const {height} = layout;
+        this.setState({
+            credentialsViewHeight: height
+        })
+    }
     render() {
         return (
             <SafeAreaView style={{ flex: 1 }}>
                 <DismissKeyboard>
                     <Layout style={[styles.fullScreen, styles.flexColumnBetween]}>
-                        <KeyboardAvoidingView style={[{flex:2, justifyContent: 'space-between', marginBottom: 20}]} behavior="position">
+                        <KeyboardAvoidingView style={[{flex:2, justifyContent: 'space-between', marginBottom: 20}]} onLayout={(event) => { this.setEndViewForLoader(event.nativeEvent.layout) }} behavior="position">
                             <Image style={[{alignSelf: 'center'}, styles.appIconLarge]} source={require('../assets/icon.png')}/>
                             <Input label="Login"
                                    labelStyle={styles.inputLabelPrimary}
@@ -85,7 +93,7 @@ export default class LoginScreen extends Component {
                                     onPress={() => this.submitCredentials()}>
                                 CONNEXION
                             </Button>
-                            <Loader loadTitle={'Ravi de vous revoir !'} isDisplayed={this.state.waitingForConnect}/>
+                            <Loader loadTitle={'Ravi de vous revoir !'} parentHeight={this.state.credentialsViewHeight} isDisplayed={this.state.waitingForConnect}/>
                         </KeyboardAvoidingView>
                         <View style={[{flex: 1}, styles.flexColumnBetween]}>
                             <View >
@@ -151,7 +159,12 @@ export default class LoginScreen extends Component {
             if (value) {
                 this.props.navigation.navigate("Home");
             } else {
-                alert("Login ou mot de passe incorrect");
+                Alert.alert(
+                    "Attention ! ",
+                    "Login ou mot de passe incorrect",
+                    [
+                        {text: "Oups", onPress: () => {}}
+                    ]);
             }
         }).catch((error) => alert(`Une erreur est survenue : ${error.message}`));
     }

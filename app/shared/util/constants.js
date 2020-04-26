@@ -1,5 +1,6 @@
 export const USER_TOKEN_KEY = "LOGGED_TOKEN";
 export const REFRESH_TOKEN_KEY = "REFRESH_TOKEN";
+export const USER_PICTURE_KEY = "user profil picture";
 export const API_URL = "http://192.168.1.57:3000/api";
 export const SOCKET_URL = "http://192.168.1.57:3000";
 
@@ -24,3 +25,13 @@ export const MINUTE = 60 * SECOND;
 export const HOUR = 3600 * SECOND;
 export const DAY = 86400 * SECOND;
 export const PAGINATION_SIZE = 15;
+
+// FIELD LIST
+export const FIRST_NAME = 'first name';
+export const LAST_NAME = 'last name';
+export const BIRTH = 'birth';
+export const MAIL = 'mail';
+export const PHONE = 'phone number';
+export const LOGIN = 'login';
+export const OLD_PASS = 'old password';
+export const NEW_PASS = 'new password';

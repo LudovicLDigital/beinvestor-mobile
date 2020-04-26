@@ -8,9 +8,7 @@ import {
     Text,
     Icon
 } from '@ui-kitten/components';
-import {styles, appColors} from "../../shared/styles/global";
-
-const {height, width} = Dimensions.get('window');
+import {styles, appColors, deviceWidth, deviceHeigth} from "../../shared/styles/global";
 /**
  * PROPS :
  * - textDisplay : the text to display
@@ -25,7 +23,7 @@ export default class FieldWithIcon extends Component {
     render() {
         return (
             <View style={styles.flexRowAlignCenter}>
-                <Icon width={width/15} height={width/15} fill={this.props.colorIcon} name={this.props.iconName}/>
+                <Icon width={deviceWidth/15} height={deviceWidth/15} fill={this.props.colorIcon} name={this.props.iconName}/>
                 <Text category={'h6'}>{this.props.textDisplay}</Text>
             </View>
         )

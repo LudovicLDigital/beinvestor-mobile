@@ -11,12 +11,11 @@ import {
     Text,
     Icon
 } from '@ui-kitten/components';
-import {styles, appColors} from "../../shared/styles/global";
+import {styles, appColors, deviceHeigth, deviceWidth} from "../../shared/styles/global";
 import {ROUTE_DETAIL_GRP, ROUTE_MAP, ROUTE_SEARCH_GRP} from "../../shared/util/constants";
 import {CloseCircleIcon} from "../subcomponent/basic-icons";
 import FieldWithIcon from '../subcomponent/field-with-icon';
 import PopUp from '../subcomponent/animation/pop-up';
-const {height, width} = Dimensions.get('window');
 /**
  * PROPS :
  * - group : the group datas
@@ -34,14 +33,14 @@ export default class GroupPopAnimated extends Component {
             <PopUp>
                 <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
                     <Button
-                        style={{width: width/10}}
+                        style={{width: deviceWidth/10}}
                         size={'medium'}
                         onPress={() => this.emitClosePop()}
                         appearance='ghost'
                         icon={CloseCircleIcon}>
                     </Button>
                 </View>
-                <Text style={{textAlign: 'center'}} category={'h2'}>{this.props.group.name}</Text>
+                <Text style={{textAlign: 'center'}} category={'h3'}>{this.props.group.name}</Text>
                 <FieldWithIcon iconName={'pin-outline'}
                                colorIcon={appColors.secondary}
                                textDisplay={this.props.group.city ? this.props.group.city.name : 'Ville inconnue'} />

@@ -12,7 +12,7 @@ const deviceStorage = {
      */
     async storeNewKeyValue(key, value) {
         try {
-            return await AsyncStorage.setItem(key.toString(), value.toString());
+            return await AsyncStorage.setItem(key.toString(), JSON.stringify(value));
         } catch (e) {
             logStorageError(e, 'storeNewKeyValue');
         }

@@ -1,16 +1,5 @@
 
-import React, { useEffect } from 'react';
-import { Drawer as UIKittenDrawer,DrawerHeaderFooter,Button } from '@ui-kitten/components';
-import {
-    FavIcon,
-    GlobeIcon,
-    InfoIcon,
-    LogoutIcon,
-    PersonIcon,
-    SearchIcon,
-    SettingsIcon,
-    SimulatorIcon
-} from "../basic-icons";
+import React, {Fragment, useEffect} from 'react';
 import {convertRouteNameToLisible} from "../../../shared/util/converter-for-route-name";
 import {
     ROUTE_FAV_GRP,
@@ -22,38 +11,50 @@ import {
     ROUTE_SIMULATOR,
     ROUTE_USER_PROFIL
 } from "../../../shared/util/constants";
+import {
+    DrawerContentScrollView,
+} from '@react-navigation/drawer';
 import AuthService from "../../../shared/services/auth";
-import {Alert, BackHandler} from "react-native";
+import {Alert, BackHandler, View} from "react-native";
 import {appColors} from "../../../shared/styles/global";
+import MenuItem from "./MenuItem";
+import HeaderUser from "../header-user";
 
 const drawerMenuItems = [
     {
         title: convertRouteNameToLisible(ROUTE_MAP),
-        icon: GlobeIcon
+        icon: 'globe-2-outline',
+        route: ROUTE_MAP
     },
     {
         title: convertRouteNameToLisible(ROUTE_SIMULATOR),
-        icon: SimulatorIcon
+        icon: 'pie-chart-2',
+        route: ROUTE_SIMULATOR
     },
     {
         title: convertRouteNameToLisible(ROUTE_USER_PROFIL),
-        icon: PersonIcon
+        icon: 'person-outline',
+        route: ROUTE_USER_PROFIL
     },
     {
         title: convertRouteNameToLisible(ROUTE_SEARCH_GRP),
-        icon: SearchIcon
+        icon: 'search-outline',
+        route: ROUTE_SEARCH_GRP
     },
     {
         title: convertRouteNameToLisible(ROUTE_FAV_GRP),
-        icon: FavIcon
+        icon: 'heart',
+        route: ROUTE_FAV_GRP
     },
     {
         title: convertRouteNameToLisible(ROUTE_SETTING),
-        icon: SettingsIcon
+        icon: 'options-2-outline',
+        route: ROUTE_SETTING
     },
     {
         title: convertRouteNameToLisible(ROUTE_INFO),
-        icon: InfoIcon
+        icon: 'info-outline',
+        route: ROUTE_INFO
     },
 ];
 function logout(navigation) {
@@ -81,17 +82,11 @@ function logout(navigation) {
         ]
     )
 }
-const LogoutButton = (style) => (
-    <Button style={[{...style}, {backgroundColor: appColors.white}]} icon={LogoutIcon}/>
-);
-const Footer = (navigation) => (
-    <DrawerHeaderFooter onPress={() => logout(navigation)} accessory={LogoutButton} description='Se déconnecter'/>
-);
-export const CustomDrawerContent = ({ navigation, state }) => {
+export const CustomDrawerContent = (props) => { //{ navigation, state }
     useEffect(() => {
         const backAction = () =>
         {
-            if (state.routeNames[state.index] === ROUTE_MAP) {
+            if (props.state.routeNames[props.state.index] === ROUTE_MAP) {
                 Alert.alert(
                     "Attention ! ",
                     "Voulez vous quitter l'application ?",
@@ -112,20 +107,29 @@ export const CustomDrawerContent = ({ navigation, state }) => {
 
         return () => backHandler.remove();
     });
-    const onSelect = (index) => {
-        if (state.routeNames[index] === ROUTE_FAV_GRP) {
-            navigation.navigate(state.routeNames[index], { screen: ROUTE_FAV_GRP, params: {isFavRoute: true}});
-        } else {
-            navigation.navigate(state.routeNames[index]);
+    const LOGOUT = 'logout';
+    const onSelect = (route) => {
+        if (route === ROUTE_FAV_GRP) {
+            props.navigation.navigate(route, { screen: ROUTE_FAV_GRP, params: {isFavRoute: true}});
+        } else if(route === LOGOUT) {
+            logout(props.navigation);
+        }
+        else{
+            props.navigation.navigate(route);
         }
     };
 
     return (
-        <UIKittenDrawer
-            data={drawerMenuItems}
-            footer={() => Footer(navigation)}
-            selectedIndex={state.index}
-            onSelect={onSelect}
-        />
+        <DrawerContentScrollView {...props}>
+            <HeaderUser/>
+            {drawerMenuItems.map((item, index) => {
+                return (
+                    <Fragment key={index}>
+                        <MenuItem label={item.title} icon={item.icon} isFocused={props.state.index === index} onSelect={() => onSelect(item.route)}/>
+                    </Fragment>
+                )
+            })}
+            <MenuItem label={'Se déconnecter'} icon={'log-out'} onSelect={() => onSelect(LOGOUT)}/>
+        </DrawerContentScrollView>
     );
 };

@@ -38,12 +38,11 @@ export default class HeaderBar extends Component {
             <View >
                 <TopNavigation alignment='center' rightControls={this.renderRightControls(this.navigationSytem)}/>
                 <Divider/>
-                {!this.props.hideAriane ?
+                {!this.props.hideAriane &&
                         <View style={{backgroundColor: appColors.white, flexDirection: 'row', alignItems: 'center'}}>
                             <BackAction onPress={() => this.backPressed()}/>
                             <Text style={{fontWeight: 'bold'}}>{this.actualRoute}</Text>
-                        </View>
-                    : null}
+                        </View>}
             </View>
         )
     }
