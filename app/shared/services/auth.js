@@ -119,6 +119,24 @@ const auth = {
                 })
             })
         });
+    },
+    register(userDatas) {
+        const options = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userDatas)
+        };
+        return fetch(`${API_URL}/subscribe`, options).then((response) => {
+            return response.json()
+        }).then((responseJson) => {
+            return Promise.resolve(responseJson);
+        }).catch((e) => {
+            console.error(e);
+            throw e;
+        });
     }
 };
 module.exports = auth;

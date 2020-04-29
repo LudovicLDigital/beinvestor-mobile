@@ -95,8 +95,7 @@ export default class Loader extends Component {
         if (this.props.isDisplayed) {
             return (
                 <View style={[{flex:1}, styles.flexCenter, styles.overlayElement]}>
-                    <Text style={styles.boldedTitle}>{this.props.loadTitle}</Text>
-                    {/*<ActivityIndicator size={100} color={appColors.primaryDark}/>*/}
+                    <Text style={[styles.boldedTitle, {textAlign: 'center'}]}>{this.props.loadTitle}</Text>
                     <View style={{flex:1, flexDirection: 'row'}}>
                         <Animated.Image source={require('../../assets/loader-house0.png')} style={{width: this.state.H0size, height: this.state.H0size, top: this.state.H0Position}}/>
                         <Animated.Image source={require('../../assets/loader-house1.png')} style={{width: this.state.H1size, height: this.state.H1size, top: this.state.H1Position}}/>
