@@ -13,7 +13,7 @@ import {
     ROUTE_SETTING,
     ROUTE_SEARCH_GRP,
     ROUTE_SIMULATOR,
-    ROUTE_USER_PROFIL, ROUTE_DETAIL_GRP, ROUTE_MAP, ROUTE_MEMBERS_LIST, ROUTE_REGISTER
+    ROUTE_USER_PROFIL, ROUTE_DETAIL_GRP, ROUTE_MAP, ROUTE_MEMBERS_LIST, ROUTE_REGISTER, ROUTE_RESET_PASSWORD
 } from './constants'
 // screens
 import HomeScreen from "../../screens/home-screen";
@@ -29,6 +29,7 @@ import UserProfilInvestorScreen from "../../screens/user-profil/user-profil-inve
 import GroupDetailScreen from "../../screens/group/group-detail-screen";
 import UsersScreen from "../../screens/users-screen";
 import RegisterScreen from "../../screens/register-screen";
+import ResetPassScreen from "../../screens/reset-pass-screen";
 const ProfilEditStack = createStackNavigator();
 function ProfilStackNavigator() {
     return (
@@ -177,6 +178,16 @@ export const AppNavigator = () => (
                 component={RegisterScreen}
                 options={{
                     title: 'S\'inscrire sur BeInvestor',
+                    headerStyle: { backgroundColor: appColors.primary },
+                    headerTitleStyle: { color: appColors.white},
+                    headerTitleContainerStyle: {left: 90}
+                }}
+            />
+            <MainStack.Screen
+                name={ROUTE_RESET_PASSWORD}
+                component={ResetPassScreen}
+                options={{
+                    title: 'Mot de passe oublié',
                     headerStyle: { backgroundColor: appColors.primary },
                     headerTitleStyle: { color: appColors.white},
                     headerTitleContainerStyle: {left: 90}

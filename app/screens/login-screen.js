@@ -3,6 +3,7 @@ import {
     View,
     Image,
     Text,
+    TouchableWithoutFeedback,
     BackHandler, Alert,
     KeyboardAvoidingView,
     SafeAreaView
@@ -12,7 +13,7 @@ import Loader from "../component/subcomponent/loader";
 import {styles, appColors} from "../shared/styles/global";
 import AuthService from "../shared/services/auth";
 import {DismissKeyboard, showInfoAlert} from "../shared/util/ui-helpers";
-import {CITATIONS, ROUTE_HOME, ROUTE_REGISTER} from "../shared/util/constants";
+import {CITATIONS, ROUTE_HOME, ROUTE_REGISTER, ROUTE_RESET_PASSWORD} from "../shared/util/constants";
 const LOGIN = "login";
 const PASS = "password";
 export const FacebookIcon = (style) => (
@@ -99,22 +100,26 @@ export default class LoginScreen extends Component {
                             <Loader loadTitle={this.state.citationForLoading} parentHeight={this.state.credentialsViewHeight} isDisplayed={this.state.waitingForConnect}/>
                         </KeyboardAvoidingView>
                         <View style={[{flex: 1}, styles.flexColumnBetween]}>
-                            <View >
-                                <Text style={[styles.inputLabelSecondary, {alignSelf: 'center', marginBottom: 20}]}>Se connecter avec :</Text>
-                                <View style={[{flex: 1},styles.flexRowBetween]}>
-                                    <Button
-                                        disabled={this.state.waitingForConnect}
-                                        icon={FacebookIcon}
-                                        onPress={() => showInfoAlert('La connexion avec Facebook n\'est pas encore disponible')}
-                                        style={{backgroundColor: '#365899'}}>Facebook</Button>
-                                    <Button
-                                        disabled={this.state.waitingForConnect}
-                                        icon={GoogleIcon}
-                                        appearance='ghost'
-                                        onPress={() => showInfoAlert('La connexion avec Google n\'est pas encore disponible')}
-                                        status='danger'>Google</Button>
-                                </View>
-                            </View>
+                            <TouchableWithoutFeedback onPress={() => this._resetPassword()}>
+                                <Text style={[styles.textAsLink, {textAlign: 'center'}]}>Mot de passe oublié ?</Text>
+                            </TouchableWithoutFeedback>
+                            {/* todo: WILL BE ADDED WHEN IMPLEMENT SOCIAL CONNEXIONS*/}
+                            {/*<View >*/}
+                                {/*<Text style={[styles.inputLabelSecondary, {alignSelf: 'center', marginBottom: 20}]}>Se connecter avec :</Text>*/}
+                                {/*<View style={[{flex: 1},styles.flexRowBetween]}>*/}
+                                    {/*<Button*/}
+                                        {/*disabled={this.state.waitingForConnect}*/}
+                                        {/*icon={FacebookIcon}*/}
+                                        {/*onPress={() => showInfoAlert('La connexion avec Facebook n\'est pas encore disponible')}*/}
+                                        {/*style={{backgroundColor: '#365899'}}>Facebook</Button>*/}
+                                    {/*<Button*/}
+                                        {/*disabled={this.state.waitingForConnect}*/}
+                                        {/*icon={GoogleIcon}*/}
+                                        {/*appearance='ghost'*/}
+                                        {/*onPress={() => showInfoAlert('La connexion avec Google n\'est pas encore disponible')}*/}
+                                        {/*status='danger'>Google</Button>*/}
+                                {/*</View>*/}
+                            {/*</View>*/}
                             <Button title="S'INSCRIRE"
                                     style={[{zIndex: 0}, styles.backgroundSecondary]}
                                     disabled={this.state.waitingForConnect}
@@ -174,5 +179,9 @@ export default class LoginScreen extends Component {
 
     _goToRegister() {
         this.props.navigation.navigate(ROUTE_REGISTER)
+    }
+
+    _resetPassword() {
+        this.props.navigation.navigate(ROUTE_RESET_PASSWORD)
     }
 }

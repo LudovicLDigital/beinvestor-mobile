@@ -19,6 +19,7 @@ export const ROUTE_SETTING = 'Settings';
 export const ROUTE_INFO = 'AppInfo';
 export const ROUTE_LOGIN = 'Login';
 export const ROUTE_REGISTER = 'Register';
+export const ROUTE_RESET_PASSWORD = 'ResetPassword';
 
 // utilitary
 export const SECOND = 1000;

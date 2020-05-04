@@ -125,5 +125,10 @@ const styles = StyleSheet.create({
         zIndex: 5000,
         backgroundColor: Colors.white,
     },
+    textAsLink: {
+        color: appColors.primary,
+        fontWeight: 'bold',
+        textDecorationLine: 'underline'
+    }
 });
 module.exports = {styles: styles, appColors: appColors, deviceWidth: width, deviceHeigth: height};
