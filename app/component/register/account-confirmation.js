@@ -31,6 +31,12 @@ export default class AccountConfirmation extends Component {
 
     componentDidMount(): void {
         this.setState({mail: this.props.mail});
+        if (this.props.navigationSys.state) {
+            const {activationCode} = this.props.navigationSys.state.params;
+            if (activationCode) {
+                this.setState({activationCode: activationCode});
+            }
+        }
     }
 
     componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {

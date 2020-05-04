@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {
-    View
+    View,
+    Linking
 } from "react-native";
 import {styles, appColors, deviceWidth, deviceHeigth} from "../shared/styles/global";
 import { Text, Button} from '@ui-kitten/components';
@@ -15,11 +16,11 @@ export default class ResetPassScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            mail: 'test@local.fr',
+            mail: null,
             haveClickForSend: false,
             keyReset: null,
-            newPassWord: 'Test1234',
-            confirmPassword: 'Test1234',
+            newPassWord: null,
+            confirmPassword: null,
             _passwordError: false,
             _keyError: false,
             confirmIsValid: null,
@@ -30,6 +31,16 @@ export default class ResetPassScreen extends Component {
             loaderHeight: null
         }
     }
+
+    componentDidMount(): void {
+        if (this.props.navigation.state) {
+            const { resetKey } = this.props.navigation.state.params;
+            if(resetKey) {
+                this.setState({keyReset: resetKey});
+            }
+        }
+    }
+
     _setEndViewForLoader(layout) {
         const {height} = layout;
         this.setState({
