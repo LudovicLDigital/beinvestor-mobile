@@ -105,13 +105,13 @@ export default class LoginScreen extends Component {
                                     <Button
                                         disabled={this.state.waitingForConnect}
                                         icon={FacebookIcon}
-                                        onPress={() => showInfoAlert('Facebook non disponible')}
+                                        onPress={() => showInfoAlert('La connexion avec Facebook n\'est pas encore disponible')}
                                         style={{backgroundColor: '#365899'}}>Facebook</Button>
                                     <Button
                                         disabled={this.state.waitingForConnect}
                                         icon={GoogleIcon}
                                         appearance='ghost'
-                                        onPress={() => showInfoAlert('Google non disponible')}
+                                        onPress={() => showInfoAlert('La connexion avec Google n\'est pas encore disponible')}
                                         status='danger'>Google</Button>
                                 </View>
                             </View>

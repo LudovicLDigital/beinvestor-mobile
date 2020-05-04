@@ -3,6 +3,7 @@ import DeviceStorage from '../util/device-storage';
 import {API_URL, USER_TOKEN_KEY, REFRESH_TOKEN_KEY} from '../util/constants';
 import HttpHeaderSetter from "../util/http-header-setter";
 import UsersService from "./entities/users-service";
+import {showInfoAlert} from "../util/ui-helpers";
 const auth = {
     currentUser: null,
     getCurrentUser() {
@@ -62,7 +63,7 @@ const auth = {
     },
     autoLogin() {
         return DeviceStorage.getKeyValue(REFRESH_TOKEN_KEY).then(async (refreshToken) => {
-            if (refreshToken &&  refreshToken !== null) {
+            if (refreshToken && refreshToken !== null) {
                 const options = {
                     method: 'POST',
                     headers: {
@@ -101,7 +102,7 @@ const auth = {
                 options.body = JSON.stringify({
                     token: tokenSaved
                 });
-                return fetch(`${API_URL}/logout`, options).then((response) => {
+                return fetch(`${API_URL}/logout`, options).then(async (response) => {
                     if (response.status === 204) {
                         return DeviceStorage.removeCurrentUserToken().then(() => {
                             DeviceStorage.removeKeyValue(REFRESH_TOKEN_KEY);
@@ -111,6 +112,7 @@ const auth = {
                             return Promise.resolve(false);
                         });
                     } else {
+                        showInfoAlert(await response.json().message);
                         return Promise.resolve(false);
                     }
                 }).catch((error) => {
@@ -129,14 +131,39 @@ const auth = {
             },
             body: JSON.stringify(userDatas)
         };
-        return fetch(`${API_URL}/subscribe`, options).then((response) => {
-            return response.json()
-        }).then((responseJson) => {
-            return Promise.resolve(responseJson);
-        }).catch((e) => {
-            console.error(e);
-            throw e;
-        });
+        return fetchUrl(`${API_URL}/subscribe`, options);
+    },
+    activate(code, mail) {
+        const options = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({activationCode: code, mail: mail})
+        };
+        return fetchUrl(`${API_URL}/activate`, options);
+    },
+    resendActivation(mail) {
+        const options = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ mail: mail})
+        };
+        return fetchUrl(`${API_URL}/resend-activate`, options)
     }
 };
+function fetchUrl(url, options) {
+    return fetch(url, options).then(async (response) => {
+            return response.status === 200 ? response.json() : response.status;
+    }).then((responseJson) => {
+        return Promise.resolve(responseJson);
+    }).catch((e) => {
+        console.error(e);
+        throw e;
+    });
+}
 module.exports = auth;

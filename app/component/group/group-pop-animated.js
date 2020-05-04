@@ -42,9 +42,11 @@ export default class GroupPopAnimated extends Component {
                 </View>
                 <Text style={{textAlign: 'center'}} category={'h3'}>{this.props.group.name}</Text>
                 <FieldWithIcon iconName={'pin-outline'}
+                               textCategory={'h6'}
                                colorIcon={appColors.secondary}
                                textDisplay={this.props.group.city ? this.props.group.city.name : 'Ville inconnue'} />
                 <FieldWithIcon iconName={'people-outline'}
+                               textCategory={'h6'}
                                colorIcon={appColors.secondary}
                                textDisplay={`${this.props.group.totalMembers ? this.props.group.totalMembers : 0} Membres`} />
                 <Button

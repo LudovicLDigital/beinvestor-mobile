@@ -13,7 +13,7 @@ const appColors = {
 
     white: Colors.white,
     dark: Colors.dark,
-    danger: '#CB070E',
+    danger: '#ff3d71',
     success: '#3ACB00'
 };
 const {height, width} = Dimensions.get('window');
@@ -81,6 +81,10 @@ const styles = StyleSheet.create({
         backgroundColor: appColors.secondary,
         borderColor: appColors.secondary,
         color: Colors.white
+    },
+    errorFormLabel: {
+      color: appColors.danger,
+      fontWeight: 'bold'
     },
     fabButton: {
         borderRadius: 100
