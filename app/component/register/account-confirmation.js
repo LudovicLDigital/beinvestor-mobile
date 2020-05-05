@@ -16,6 +16,7 @@ const RefreshIcon = (style) => (
  * PROPS :
  * - mail : the user email linked
  * - navigationSys : the parent navigation
+ * - route: the actual route with params
  */
 export default class AccountConfirmation extends Component {
     haveChange: false;
@@ -31,8 +32,8 @@ export default class AccountConfirmation extends Component {
 
     componentDidMount(): void {
         this.setState({mail: this.props.mail});
-        if (this.props.navigationSys.state) {
-            const {activationCode} = this.props.navigationSys.state.params;
+        if (this.props.route && this.props.route.params) {
+            const activationCode = this.props.route.params.activationCode;
             if (activationCode) {
                 this.setState({activationCode: activationCode});
             }

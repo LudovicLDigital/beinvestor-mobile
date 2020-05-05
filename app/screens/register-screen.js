@@ -31,6 +31,15 @@ export default class RegisterScreen extends Component {
         this.userToRegister = {};
         this.viewPager = React.createRef();
     }
+    componentDidMount(): void {
+        if (this.props.route && this.props.route.params) {
+            const mail = this.props.route.params.mail;
+            if (mail) {
+                this.setState({userMail: mail});
+                this.go(2)
+            }
+        }
+    }
     setErrorOnForm(stepError, value) {
         switch (stepError) {
             case 1:
@@ -62,7 +71,7 @@ export default class RegisterScreen extends Component {
                     showPageIndicator={true}>
                     <UserRegisterStep stepIsdone={this.state.step1} hasError={(hasError) => this.setErrorOnForm(1, hasError)} stepValue={(userValue) => this.setFirstStepValues(userValue)} key={"1"}/>
                     <UserInfoRegisterStep stepIsdone={this.state.step2} hasError={(hasError) => this.setErrorOnForm(2, hasError)} stepValue={(userData) => this.setSecondStepValues(userData)} key={"2"}/>
-                    <AccountConfirmation navigationSys={this.props.navigation} mail={this.state.userMail}  key={"3"}/>
+                    <AccountConfirmation navigationSys={this.props.navigation} route={this.props.route} mail={this.state.userMail}  key={"3"}/>
                 </ViewPager>
                 <View style={[{padding: 10}, styles.flexRowAlignCenter, styles.flexRowBetween]} >
                     <Button

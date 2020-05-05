@@ -3,10 +3,11 @@ import {
     View,
     Image,
     Text,
+    Platform,
     TouchableWithoutFeedback,
     BackHandler, Alert,
     KeyboardAvoidingView,
-    SafeAreaView
+    SafeAreaView, Linking
 } from "react-native";
 import { Button, Icon, Layout, Input } from '@ui-kitten/components';
 import Loader from "../component/subcomponent/loader";
@@ -35,6 +36,7 @@ export default class LoginScreen extends Component {
             credentialsViewHeight: null,
             citationForLoading: CITATIONS[citIndex]
         };
+        this.handleOpenURL = this.handleOpenURL.bind(this);
     }
     backAction() {
         Alert.alert(
@@ -51,13 +53,57 @@ export default class LoginScreen extends Component {
         return true;
     };
     componentDidMount(): void {
+        this._recoverDeepLink();
         this._autoConnect();
         BackHandler.addEventListener("hardwareBackPress", () => this.backAction());
     }
+    _recoverDeepLink() {
+        Linking.addEventListener('url', this.handleOpenURL);
+        if (Platform.OS === 'android') {
+            const NativeLinking = require('react-native/Libraries/Linking/NativeLinking').default;
+            NativeLinking.getInitialURL().then((initialUrl) => {
+                if (initialUrl) {
+                    this._deepNavigate(initialUrl);
+                }
+            });
+        } else {
+            Linking.getInitialURL().then((initialUrl) => {
+                if (initialUrl) {
+                    this._deepNavigate(initialUrl);
+                }
+            });
+        }
+
+
+    }
     componentWillUnmount() {
         BackHandler.removeEventListener("hardwareBackPress", () => this.backAction());
+        Linking.removeEventListener('url', this.handleOpenURL);
     }
-
+    handleOpenURL(event) {
+        this._deepNavigate(event.url);
+    }
+    _deepNavigate(url) {
+        const route = url.replace(/.*?:\/\//g, '');
+        if (route.includes('account/active')) {
+            const key = this._recoverKey(route);
+            const mail = this._recoverMail(route);
+            this.props.navigation.navigate(ROUTE_REGISTER, {activationCode: key, mail: mail});
+        } else if(route.includes('account/reset')) {
+            const key = this._recoverKey(route);
+            const mail = this._recoverMail(route);
+            this.props.navigation.navigate(ROUTE_RESET_PASSWORD, {resetKey: key, mail: mail});
+        }
+    }
+    _recoverKey(route) {
+        const uriArray = route.split('key=');
+        return uriArray[uriArray.length -1];
+    }
+    _recoverMail(route) {
+        const uriArray = route.split('mail=');
+        const params = uriArray[uriArray.length -1].split('&key=');
+        return params[0];
+    }
     _setEndViewForLoader(layout) {
         const {height} = layout;
         this.setState({
@@ -105,20 +151,20 @@ export default class LoginScreen extends Component {
                             </TouchableWithoutFeedback>
                             {/* todo: WILL BE ADDED WHEN IMPLEMENT SOCIAL CONNEXIONS*/}
                             {/*<View >*/}
-                                {/*<Text style={[styles.inputLabelSecondary, {alignSelf: 'center', marginBottom: 20}]}>Se connecter avec :</Text>*/}
-                                {/*<View style={[{flex: 1},styles.flexRowBetween]}>*/}
-                                    {/*<Button*/}
-                                        {/*disabled={this.state.waitingForConnect}*/}
-                                        {/*icon={FacebookIcon}*/}
-                                        {/*onPress={() => showInfoAlert('La connexion avec Facebook n\'est pas encore disponible')}*/}
-                                        {/*style={{backgroundColor: '#365899'}}>Facebook</Button>*/}
-                                    {/*<Button*/}
-                                        {/*disabled={this.state.waitingForConnect}*/}
-                                        {/*icon={GoogleIcon}*/}
-                                        {/*appearance='ghost'*/}
-                                        {/*onPress={() => showInfoAlert('La connexion avec Google n\'est pas encore disponible')}*/}
-                                        {/*status='danger'>Google</Button>*/}
-                                {/*</View>*/}
+                            {/*<Text style={[styles.inputLabelSecondary, {alignSelf: 'center', marginBottom: 20}]}>Se connecter avec :</Text>*/}
+                            {/*<View style={[{flex: 1},styles.flexRowBetween]}>*/}
+                            {/*<Button*/}
+                            {/*disabled={this.state.waitingForConnect}*/}
+                            {/*icon={FacebookIcon}*/}
+                            {/*onPress={() => showInfoAlert('La connexion avec Facebook n\'est pas encore disponible')}*/}
+                            {/*style={{backgroundColor: '#365899'}}>Facebook</Button>*/}
+                            {/*<Button*/}
+                            {/*disabled={this.state.waitingForConnect}*/}
+                            {/*icon={GoogleIcon}*/}
+                            {/*appearance='ghost'*/}
+                            {/*onPress={() => showInfoAlert('La connexion avec Google n\'est pas encore disponible')}*/}
+                            {/*status='danger'>Google</Button>*/}
+                            {/*</View>*/}
                             {/*</View>*/}
                             <Button title="S'INSCRIRE"
                                     style={[{zIndex: 0}, styles.backgroundSecondary]}

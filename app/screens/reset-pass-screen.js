@@ -33,10 +33,11 @@ export default class ResetPassScreen extends Component {
     }
 
     componentDidMount(): void {
-        if (this.props.navigation.state) {
-            const { resetKey } = this.props.navigation.state.params;
+        if (this.props.route && this.props.route.params) {
+            const resetKey = this.props.route.params.resetKey;
+            const mail = this.props.route.params.mail;
             if(resetKey) {
-                this.setState({keyReset: resetKey});
+                this.setState({keyReset: resetKey, mail: mail, haveClickForSend: true});
             }
         }
     }
