@@ -13,7 +13,7 @@ const appColors = {
 
     white: Colors.white,
     dark: Colors.dark,
-    danger: '#CB070E',
+    danger: '#ff3d71',
     success: '#3ACB00'
 };
 const {height, width} = Dimensions.get('window');
@@ -82,6 +82,10 @@ const styles = StyleSheet.create({
         borderColor: appColors.secondary,
         color: Colors.white
     },
+    errorFormLabel: {
+      color: appColors.danger,
+      fontWeight: 'bold'
+    },
     fabButton: {
         borderRadius: 100
     },
@@ -121,5 +125,10 @@ const styles = StyleSheet.create({
         zIndex: 5000,
         backgroundColor: Colors.white,
     },
+    textAsLink: {
+        color: appColors.primary,
+        fontWeight: 'bold',
+        textDecorationLine: 'underline'
+    }
 });
 module.exports = {styles: styles, appColors: appColors, deviceWidth: width, deviceHeigth: height};

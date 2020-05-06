@@ -14,6 +14,8 @@ import {styles, appColors, deviceWidth, deviceHeigth} from "../../shared/styles/
  * - textDisplay : the text to display
  * - iconName: the name for the icon
  * - colorIcon: the icon of the icon
+ * - textCategory: the category ('h4' ...) for the displayed text
+ *
  */
 export default class FieldWithIcon extends Component {
     constructor(props) {
@@ -24,7 +26,7 @@ export default class FieldWithIcon extends Component {
         return (
             <View style={styles.flexRowAlignCenter}>
                 <Icon width={deviceWidth/15} height={deviceWidth/15} fill={this.props.colorIcon} name={this.props.iconName}/>
-                <Text category={'h6'}>{this.props.textDisplay}</Text>
+                <Text category={this.props.textCategory}>{this.props.textDisplay}</Text>
             </View>
         )
     }

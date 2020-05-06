@@ -18,6 +18,8 @@ export const ROUTE_USERS_LIST = 'UsersList';
 export const ROUTE_SETTING = 'Settings';
 export const ROUTE_INFO = 'AppInfo';
 export const ROUTE_LOGIN = 'Login';
+export const ROUTE_REGISTER = 'Register';
+export const ROUTE_RESET_PASSWORD = 'ResetPassword';
 
 // utilitary
 export const SECOND = 1000;
@@ -35,3 +37,12 @@ export const PHONE = 'phone number';
 export const LOGIN = 'login';
 export const OLD_PASS = 'old password';
 export const NEW_PASS = 'new password';
+
+// citation array
+export const CITATIONS = [
+    "« Les propriétaires deviennent riche pendant leur sommeil » . John Stuart Mill.",
+    "« Personne n’est trop vieux pour se fixer un nouvel objectif ou réaliser de nouveaux rêves. » – Les Brown",
+    "« Pour réussir, votre désir de réussite doit être plus grand que votre peur de l’échec.  » Bill Cosby",
+    "« Un pessimiste voit la difficulté dans chaque opportunité, un optimiste voit l’opportunité dans chaque difficulté.  » Winston Churchill",
+    "« Celui qui attend que tout danger soir écarté pour mettre les voiles ne prendra jamais la mer.  » Thomas Fuller"
+];

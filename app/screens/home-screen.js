@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {SafeAreaView, View} from 'react-native';
+import {Linking, SafeAreaView, View, Platform} from 'react-native';
 import { Layout } from '@ui-kitten/components';
 import HeaderBar from '../component/subcomponent/header-bar';
 import {DismissKeyboard} from "../shared/util/ui-helpers";

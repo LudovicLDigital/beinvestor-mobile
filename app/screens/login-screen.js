@@ -3,15 +3,18 @@ import {
     View,
     Image,
     Text,
+    Platform,
+    TouchableWithoutFeedback,
     BackHandler, Alert,
     KeyboardAvoidingView,
-    SafeAreaView
+    SafeAreaView, Linking
 } from "react-native";
 import { Button, Icon, Layout, Input } from '@ui-kitten/components';
 import Loader from "../component/subcomponent/loader";
 import {styles, appColors} from "../shared/styles/global";
 import AuthService from "../shared/services/auth";
-import {DismissKeyboard} from "../shared/util/ui-helpers";
+import {DismissKeyboard, showInfoAlert} from "../shared/util/ui-helpers";
+import {CITATIONS, ROUTE_HOME, ROUTE_REGISTER, ROUTE_RESET_PASSWORD} from "../shared/util/constants";
 const LOGIN = "login";
 const PASS = "password";
 export const FacebookIcon = (style) => (
@@ -24,13 +27,16 @@ export default class LoginScreen extends Component {
     passwordTextInput;
     constructor(props) {
         super(props);
+        const citIndex = Math.floor(Math.random() * 5);
         this.state = {
             login: "",
             password: "",
             waitingForConnect: false,
             securizedText: true,
             credentialsViewHeight: null,
+            citationForLoading: CITATIONS[citIndex]
         };
+        this.handleOpenURL = this.handleOpenURL.bind(this);
     }
     backAction() {
         Alert.alert(
@@ -47,14 +53,58 @@ export default class LoginScreen extends Component {
         return true;
     };
     componentDidMount(): void {
-        this.autoConnect();
+        this._recoverDeepLink();
+        this._autoConnect();
         BackHandler.addEventListener("hardwareBackPress", () => this.backAction());
+    }
+    _recoverDeepLink() {
+        Linking.addEventListener('url', this.handleOpenURL);
+        if (Platform.OS === 'android') {
+            const NativeLinking = require('react-native/Libraries/Linking/NativeLinking').default;
+            NativeLinking.getInitialURL().then((initialUrl) => {
+                if (initialUrl) {
+                    this._deepNavigate(initialUrl);
+                }
+            });
+        } else {
+            Linking.getInitialURL().then((initialUrl) => {
+                if (initialUrl) {
+                    this._deepNavigate(initialUrl);
+                }
+            });
+        }
+
+
     }
     componentWillUnmount() {
         BackHandler.removeEventListener("hardwareBackPress", () => this.backAction());
+        Linking.removeEventListener('url', this.handleOpenURL);
     }
-
-    setEndViewForLoader(layout) {
+    handleOpenURL(event) {
+        this._deepNavigate(event.url);
+    }
+    _deepNavigate(url) {
+        const route = url.replace(/.*?:\/\//g, '');
+        if (route.includes('account/active')) {
+            const key = this._recoverKey(route);
+            const mail = this._recoverMail(route);
+            this.props.navigation.navigate(ROUTE_REGISTER, {activationCode: key, mail: mail});
+        } else if(route.includes('account/reset')) {
+            const key = this._recoverKey(route);
+            const mail = this._recoverMail(route);
+            this.props.navigation.navigate(ROUTE_RESET_PASSWORD, {resetKey: key, mail: mail});
+        }
+    }
+    _recoverKey(route) {
+        const uriArray = route.split('key=');
+        return uriArray[uriArray.length -1];
+    }
+    _recoverMail(route) {
+        const uriArray = route.split('mail=');
+        const params = uriArray[uriArray.length -1].split('&key=');
+        return params[0];
+    }
+    _setEndViewForLoader(layout) {
         const {height} = layout;
         this.setState({
             credentialsViewHeight: height
@@ -65,7 +115,7 @@ export default class LoginScreen extends Component {
             <SafeAreaView style={{ flex: 1 }}>
                 <DismissKeyboard>
                     <Layout style={[styles.fullScreen, styles.flexColumnBetween]}>
-                        <KeyboardAvoidingView style={[{flex:2, justifyContent: 'space-between', marginBottom: 20}]} onLayout={(event) => { this.setEndViewForLoader(event.nativeEvent.layout) }} behavior="position">
+                        <KeyboardAvoidingView style={[{flex:2, justifyContent: 'space-between', marginBottom: 20}]} onLayout={(event) => { this._setEndViewForLoader(event.nativeEvent.layout) }} behavior="position">
                             <Image style={[{alignSelf: 'center'}, styles.appIconLarge]} source={require('../assets/icon.png')}/>
                             <Input label="Login"
                                    labelStyle={styles.inputLabelPrimary}
@@ -85,37 +135,41 @@ export default class LoginScreen extends Component {
                                    }}
                                    onIconPress={() => this.setState({securizedText: !this.state.securizedText})}
                                    ref={(input) => this.passwordTextInput = input}
-                                   onSubmitEditing={() => this.submitCredentials()}
+                                   onSubmitEditing={() => this._submitCredentials()}
                                    blurOnSubmit={false}
                                    onChangeText={text => this.textEnterred(PASS, text)}/>
                             <Button style={[{zIndex: 0}, styles.backgroundPrimary]}
                                     disabled={this.state.waitingForConnect}
-                                    onPress={() => this.submitCredentials()}>
+                                    onPress={() => this._submitCredentials()}>
                                 CONNEXION
                             </Button>
-                            <Loader loadTitle={'Ravi de vous revoir !'} parentHeight={this.state.credentialsViewHeight} isDisplayed={this.state.waitingForConnect}/>
+                            <Loader loadTitle={this.state.citationForLoading} parentHeight={this.state.credentialsViewHeight} isDisplayed={this.state.waitingForConnect}/>
                         </KeyboardAvoidingView>
                         <View style={[{flex: 1}, styles.flexColumnBetween]}>
-                            <View >
-                                <Text style={[styles.inputLabelSecondary, {alignSelf: 'center', marginBottom: 20}]}>Se connecter avec :</Text>
-                                <View style={[{flex: 1},styles.flexRowBetween]}>
-                                    <Button
-                                        disabled={this.state.waitingForConnect}
-                                        icon={FacebookIcon}
-                                        onPress={() => alert('Facebook non disponible')}
-                                        style={{backgroundColor: '#365899'}}>Facebook</Button>
-                                    <Button
-                                        disabled={this.state.waitingForConnect}
-                                        icon={GoogleIcon}
-                                        appearance='ghost'
-                                        onPress={() => alert('Google non disponible')}
-                                        status='danger'>Google</Button>
-                                </View>
-                            </View>
+                            <TouchableWithoutFeedback onPress={() => this._resetPassword()}>
+                                <Text style={[styles.textAsLink, {textAlign: 'center'}]}>Mot de passe oublié ?</Text>
+                            </TouchableWithoutFeedback>
+                            {/* todo: WILL BE ADDED WHEN IMPLEMENT SOCIAL CONNEXIONS*/}
+                            {/*<View >*/}
+                            {/*<Text style={[styles.inputLabelSecondary, {alignSelf: 'center', marginBottom: 20}]}>Se connecter avec :</Text>*/}
+                            {/*<View style={[{flex: 1},styles.flexRowBetween]}>*/}
+                            {/*<Button*/}
+                            {/*disabled={this.state.waitingForConnect}*/}
+                            {/*icon={FacebookIcon}*/}
+                            {/*onPress={() => showInfoAlert('La connexion avec Facebook n\'est pas encore disponible')}*/}
+                            {/*style={{backgroundColor: '#365899'}}>Facebook</Button>*/}
+                            {/*<Button*/}
+                            {/*disabled={this.state.waitingForConnect}*/}
+                            {/*icon={GoogleIcon}*/}
+                            {/*appearance='ghost'*/}
+                            {/*onPress={() => showInfoAlert('La connexion avec Google n\'est pas encore disponible')}*/}
+                            {/*status='danger'>Google</Button>*/}
+                            {/*</View>*/}
+                            {/*</View>*/}
                             <Button title="S'INSCRIRE"
                                     style={[{zIndex: 0}, styles.backgroundSecondary]}
                                     disabled={this.state.waitingForConnect}
-                                    onPress={() => alert('Inscription non disponible')}>
+                                    onPress={() => this._goToRegister()}>
                                 S'INSCRIRE
                             </Button>
                         </View>
@@ -135,7 +189,7 @@ export default class LoginScreen extends Component {
             });
         }
     }
-    async autoConnect() {
+    async _autoConnect() {
         this.setState({
             waitingForConnect: true
         });
@@ -144,11 +198,11 @@ export default class LoginScreen extends Component {
                 waitingForConnect: false
             });
             if (isAutoLogged) {
-                this.props.navigation.navigate("Home");
+                this.props.navigation.navigate(ROUTE_HOME);
             }
         });
     }
-    async submitCredentials() {
+    async _submitCredentials() {
         this.setState({
             waitingForConnect: true
         });
@@ -157,7 +211,7 @@ export default class LoginScreen extends Component {
                 waitingForConnect: false
             });
             if (value) {
-                this.props.navigation.navigate("Home");
+                this.props.navigation.navigate(ROUTE_HOME);
             } else {
                 Alert.alert(
                     "Attention ! ",
@@ -167,5 +221,13 @@ export default class LoginScreen extends Component {
                     ]);
             }
         }).catch((error) => alert(`Une erreur est survenue : ${error.message}`));
+    }
+
+    _goToRegister() {
+        this.props.navigation.navigate(ROUTE_REGISTER)
+    }
+
+    _resetPassword() {
+        this.props.navigation.navigate(ROUTE_RESET_PASSWORD)
     }
 }

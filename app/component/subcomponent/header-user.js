@@ -34,7 +34,9 @@ export default class HeaderUser extends Component {
         return (
             <View style={[{flex: 1, marginBottom: 15, marginTop: 15}]}>
                 <ProfilPicturePicker isAbleToEdit={false}/>
-                <Text category={'h4'} style={{textAlign: 'center'}}>{this.state.currentUser.userInfo.firstName + ' ' + this.state.currentUser.userInfo.lastName}</Text>
+                <Text category={'h4'} style={{textAlign: 'center'}}>
+                    {this.state.currentUser.userInfo.firstName ? this.state.currentUser.userInfo.firstName : this.state.currentUser.login}
+                    </Text>
             </View>
         )
     }
