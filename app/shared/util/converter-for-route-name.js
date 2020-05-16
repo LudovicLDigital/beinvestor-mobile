@@ -9,7 +9,7 @@ import {
     ROUTE_USER_PROFIL,
     ROUTE_USER_PROFIL_INVEST,
     ROUTE_DETAIL_GRP,
-    ROUTE_MAP, ROUTE_MEMBERS_LIST, ROUTE_USERS_LIST
+    ROUTE_MAP, ROUTE_MEMBERS_LIST, ROUTE_USERS_LIST, ESTATE, FISCALITY, BANK
 } from "./constants";
 
 export function convertRouteNameToLisible(routeName) {
@@ -27,6 +27,9 @@ export function convertRouteNameToLisible(routeName) {
         case ROUTE_MEMBERS_LIST : return 'Liste des membres';
         case ROUTE_LOGIN : return 'Espace de connexion';
         case ROUTE_USER_PROFIL_INVEST : return 'Profil investisseur';
+        case ESTATE: return 'Bien analysé';
+        case FISCALITY: return 'Fiscalité';
+        case BANK: return 'Emprunt';
         default: return null;
     }
 }
