@@ -12,6 +12,7 @@ import {ROUTE_MAP} from "../../shared/util/constants";
  * - hideAriane : hide the "fil d'ariane" which show the actual position of the user
  * - navigation: pass the actual navigation system
  * - previousRoute: pass the previous route of navigation system
+ * - overrideBackPress: pass a method to override the behavior of back
  */
 export default class HeaderBar extends Component {
     constructor(props) {
@@ -62,10 +63,14 @@ export default class HeaderBar extends Component {
     }
 
     backPressed() {
-        if (this.previousRoute === ROUTE_MAP) {
-            this.navigationSytem.popToTop();
+        if (!this.props.overrideBackPress) {
+            if (this.previousRoute === ROUTE_MAP) {
+                this.navigationSytem.popToTop();
+            } else {
+                this.navigationSytem.goBack();
+            }
         } else {
-            this.navigationSytem.goBack();
+            this.props.overrideBackPress();
         }
     }
 }

@@ -37,7 +37,10 @@ export const PHONE = 'phone number';
 export const LOGIN = 'login';
 export const OLD_PASS = 'old password';
 export const NEW_PASS = 'new password';
-
+// SIMULATOR
+export const ESTATE = 'partie bien';
+export const FISCALITY = 'partie fiscalité';
+export const BANK = 'partie banque';
 // citation array
 export const CITATIONS = [
     "« Les propriétaires deviennent riche pendant leur sommeil » . John Stuart Mill.",

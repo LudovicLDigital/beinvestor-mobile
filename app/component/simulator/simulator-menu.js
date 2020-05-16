@@ -5,6 +5,7 @@ import {
 import { Text} from '@ui-kitten/components';
 import {styles, appColors} from "../../shared/styles/global";
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {BANK, ESTATE, FISCALITY} from "../../shared/util/constants";
 
 /**
  * PROPS :
@@ -18,19 +19,19 @@ export default class SimulatorMenu extends Component {
     render() {
         return (
             <View>
-                <TouchableWithoutFeedback>
+                <TouchableWithoutFeedback onPress={() => this.props.clickedMenu(ESTATE)}>
                     <View style={[styles.flexRowAlignCenter, {marginBottom: 20, marginLeft: 20}]}>
                         <Icon size={30} color={appColors.primary} name="home"/>
                         <Text style={{marginLeft: 10}}>Bien à analyser</Text>
                     </View>
                 </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback>
+                <TouchableWithoutFeedback  onPress={() => this.props.clickedMenu(FISCALITY)}>
                     <View style={[styles.flexRowAlignCenter, {marginBottom: 20, marginLeft: 20}]}>
                         <Icon size={30} color={appColors.primary} name="account-balance"/>
                         <Text style={{marginLeft: 10}}>Fiscalité</Text>
                     </View>
                 </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback>
+                <TouchableWithoutFeedback onPress={() => this.props.clickedMenu(BANK)}>
                     <View style={[styles.flexRowAlignCenter, {marginBottom: 20, marginLeft: 20}]}>
                         <Icon size={30} color={appColors.primary} name="euro-symbol"/>
                         <Text style={{marginLeft: 10}}>Emprunt bancaire</Text>
