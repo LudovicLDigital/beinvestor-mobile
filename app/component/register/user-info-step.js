@@ -65,14 +65,13 @@ export default class UserInfoRegisterStep extends Component {
                             value={this.state.firstName}
                             onTextChange={(text) => this.setState({firstName: text})}/>
                 <Datepicker
-                    label="Date de naissance"
+                    label={evaProps => <Text {...evaProps} style={styles.inputLabelPrimary}>"Date de naissance"</Text>}
                     size={'medium'}
-                    labelStyle={styles.inputLabelPrimary}
                     style={{borderColor: appColors.primary}}
                     date={this.state.birthDate}
                     max={new Date()}
                     min={new Date(1930,1,1)}
-                    icon={CalendarIcon}
+                    accessoryLeft={CalendarIcon}
                     onSelect={(date) => this.setState({birthDate: date})}
                 />
             </Layout>

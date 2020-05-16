@@ -206,7 +206,7 @@ export default class CustomMap extends Component {
                     style={[styles.absoluteBottomRight, styles.fabButton, {zIndex: 1000, backgroundColor: appColors.white, borderColor: appColors.secondary}]}
                     size={'large'}
                     onPress={() => this.goToCurrentUserPosition(true, this.state.currentLocation.latitude, this.state.currentLocation.longitude, true)}
-                    icon={CurrentPositionIcon}>
+                    accessoryLeft ={CurrentPositionIcon}>
                 </Button>
             </View>
         )

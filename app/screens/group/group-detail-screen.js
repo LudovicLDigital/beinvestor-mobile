@@ -110,21 +110,21 @@ export default class GroupDetailScreen extends Component {
                             <Button
                                 appearance='ghost'
                                 status='basic'
-                                onPress={() => this.seeMembers()} icon={MembersIcon}>
+                                onPress={() => this.seeMembers()} accessoryLeft ={MembersIcon}>
                                 Membres
                             </Button>
                             <Button
                                 appearance='ghost'
                                 status='basic'
                                 onPress={() => this.seeFiles()}
-                                icon={SharedFilesIcon}>
+                                accessoryLeft ={SharedFilesIcon}>
                                 Fichiers partagés
                             </Button>
                             <Button
                                 status='basic'
                                 appearance='ghost'
                                 onPress={() => this.seeEvents()}
-                                icon={(style) => <Icon {...style} fill={appColors.secondary}  name='bell-outline' />}
+                                accessoryLeft ={(style) => <Icon {...style} fill={appColors.secondary}  name='bell-outline' />}
                             >
                                 Evènements à venir
                             </Button>
@@ -143,7 +143,7 @@ export default class GroupDetailScreen extends Component {
                                 appearance='outline'
                                 onPress={() => this.addEvent()}
                                 disable={!this.state.userIsMember}
-                                icon={AddIcon}>
+                                accessoryLeft ={AddIcon}>
                             </Button>
                         </View>
                     </Layout>

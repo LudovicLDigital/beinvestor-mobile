@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {styles, appColors, deviceHeigth, deviceWidth} from "../../shared/styles/global";
 import { SafeAreaView, ScrollView, View } from 'react-native';
-import { Icon, Avatar, Button, Datepicker} from '@ui-kitten/components';
+import { Icon, Avatar, Button, Datepicker, Text} from '@ui-kitten/components';
 import HeaderBar from '../../component/subcomponent/header-bar';
 import SectionDivider from '../../component/subcomponent/form/section-divider';
 import InputField from '../../component/subcomponent/form/input-field';
@@ -145,7 +145,7 @@ export default class UserProfilScreen extends Component {
                         }]}
                         size={'medium'}
                         onPress={() => this._updateUserInfo()}
-                        icon={SaveIcon}>
+                        accessoryLeft ={SaveIcon}>
                         Sauvegarder
                     </Button>
                 }
@@ -161,14 +161,13 @@ export default class UserProfilScreen extends Component {
                                     onTextChange={(text) => this._fieldValueChange(LAST_NAME, text)}/>
                     </View>
                     <Datepicker
-                        label="Date de naissance"
+                        label={evaProps => <Text {...evaProps} style={styles.inputLabelPrimary}>Date de naissance</Text>}
                         size={'medium'}
-                        labelStyle={styles.inputLabelPrimary}
                         style={{borderColor: appColors.primary, width: deviceWidth/2}}
                         date={this.state.birth}
                         max={new Date()}
                         min={new Date(1930,1,1)}
-                        icon={CalendarIcon}
+                        accessoryLeft ={CalendarIcon}
                         onSelect={(date) => this._fieldValueChange(BIRTH, date)}
                     />
                     <SectionDivider sectionName={'Coordonnées'}/>
@@ -224,10 +223,10 @@ export default class UserProfilScreen extends Component {
                             </Button>
                         </View>
                     </View>
-                    <SectionDivider sectionName={'Profil investisseur'}/>
-                    <Button style={{backgroundColor: appColors.primary, borderColor: appColors.primary, marginBottom: deviceHeigth/this.state.marginBottomDivider, marginTop: 15}}>
-                        Editer mon profil investisseur
-                    </Button>
+                    {/*<SectionDivider sectionName={'Profil investisseur'}/> todo: next when implement save on simulator results*/}
+                    {/*<Button style={{backgroundColor: appColors.primary, borderColor: appColors.primary, marginBottom: deviceHeigth/this.state.marginBottomDivider, marginTop: 15}}>*/}
+                        {/*Editer mon profil investisseur*/}
+                    {/*</Button>*/}
                 </ScrollView>
             </SafeAreaView>
         );

@@ -53,7 +53,7 @@ export default class ChatRoom extends Component {
                     <Text category={'h4'} style={[styles.boldedTitle, {flex: 5, textAlign: 'center', marginTop: 35}]}>Aucun message pour le moment</Text>
                 }
                 <Input placeholder={'Dire quelque chose ...'}
-                       icon={SendIcon}
+                       accessoryLeft={SendIcon}
                        disabled={this.props.disableSendMessage}
                        onIconPress={() => this.sendMessage()}
                        value={this.state.textMessage}

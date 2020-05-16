@@ -65,7 +65,7 @@ export default class ResetPassScreen extends Component {
                                 messageErrors={[['required', 'L\'email est requis'], ['pattern', 'L\'email n\'est pas valide']]}
                                 formSubmitted={this.state.stepSendKey}
                                 onTextChange={(text) => this.setState({mail: text})}/>
-                    <Button appearance={'ghost'} textStyle={{color: appColors.primary}} icon={SendIcon} onPress={() => this.sendResetKey()}>Recevoir le code par mail</Button>
+                    <Button appearance={'ghost'} style={{color: appColors.primary}} accessoryLeft={SendIcon} onPress={() => this.sendResetKey()}>Recevoir le code par mail</Button>
                 </View>}
                 {this.state.haveClickForSend &&
                 <View style={{padding: 15}}>

@@ -37,7 +37,7 @@ export default class GroupPopAnimated extends Component {
                         size={'medium'}
                         onPress={() => this.emitClosePop()}
                         appearance='ghost'
-                        icon={CloseCircleIcon}>
+                        accessoryLeft ={CloseCircleIcon}>
                     </Button>
                 </View>
                 <Text style={{textAlign: 'center'}} category={'h3'}>{this.props.group.name}</Text>

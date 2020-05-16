@@ -1,13 +1,11 @@
 import React, {Component} from "react";
 import {
-    View
+    TouchableWithoutFeedback,
+    View,
 } from "react-native";
-import { Autocomplete, Icon} from '@ui-kitten/components';
-import {styles, appColors} from "../../shared/styles/global";
+import { Autocomplete, AutocompleteItem, Icon } from '@ui-kitten/components';
+import MatIcon from 'react-native-vector-icons/MaterialIcons';
 
-const ResetAutocompleteIcon = (style) => (
-    <Icon {...style} name='close' />
-);
 /**
  * PROPS :
  * - autocompleteList : the list of string to display in autocomplete
@@ -32,16 +30,26 @@ export default class BeInvestorAutoComplete extends Component {
         this.props.onTxtChange(text);
     }
     render() {
+        const ResetAutocompleteIcon = (props) => (
+            <TouchableWithoutFeedback onPress={() => this.emitText(null)}>
+                <Icon {...props} name='close' />
+            </TouchableWithoutFeedback>
+        );
         return (
             <View style={this.props.style}>
                 <Autocomplete
                     placeholder={this.props.placeholder}
                     value={this.state.searchTerm}
                     data={this.props.autocompleteList}
-                    icon={ResetAutocompleteIcon}
-                    onIconPress={() => this.emitText(null)}
+                    accessoryRight={ResetAutocompleteIcon}
+                    accessoryLeft={() => {return(<MatIcon size={20} name={'search'}/>)}}
                     onChangeText={(text) => this.emitText(text)}
                     onSelect={(item) => this.selectValue(item)}>
+                    {this.props.autocompleteList.map((item, index) => {
+                        return (
+                            <AutocompleteItem key={index} label={item.title}/>
+                        )
+                    })}
                 </Autocomplete>
             </View>
         )

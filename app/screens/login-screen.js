@@ -117,23 +117,24 @@ export default class LoginScreen extends Component {
                     <Layout style={[styles.fullScreen, styles.flexColumnBetween]}>
                         <KeyboardAvoidingView style={[{flex:2, justifyContent: 'space-between', marginBottom: 20}]} onLayout={(event) => { this._setEndViewForLoader(event.nativeEvent.layout) }} behavior="position">
                             <Image style={[{alignSelf: 'center'}, styles.appIconLarge]} source={require('../assets/icon.png')}/>
-                            <Input label="Login"
-                                   labelStyle={styles.inputLabelPrimary}
+                            <Input label={evaProps => <Text {...evaProps} style={styles.inputLabelPrimary}>Login</Text>}
                                    autoCapitalize="none"
                                    style={{borderColor: appColors.primary}}
                                    onSubmitEditing={() => this.passwordTextInput.focus()}
                                    blurOnSubmit={false}
                                    onChangeText={text => this.textEnterred(LOGIN, text)}/>
-                            <Input label="Mot de passe"
-                                   labelStyle={styles.inputLabelPrimary}
+                            <Input label={evaProps => <Text {...evaProps} style={styles.inputLabelPrimary}>Mot de passe</Text>}
                                    style={{borderColor: appColors.primary}}
                                    secureTextEntry={this.state.securizedText}
                                    autoCapitalize="none"
-                                   icon={(style) => {
+                                   accessoryRight={(props) => {
                                        const eyeOff = this.state.securizedText;
-                                       return (<Icon {...style} name={eyeOff ? 'eye-off':'eye'}/>)
+                                       return (
+                                           <TouchableWithoutFeedback  onPress={() => this.setState({securizedText: !this.state.securizedText})}>
+                                               <Icon {...props} name={eyeOff ? 'eye-off':'eye'}/>
+                                           </TouchableWithoutFeedback>
+                                       )
                                    }}
-                                   onIconPress={() => this.setState({securizedText: !this.state.securizedText})}
                                    ref={(input) => this.passwordTextInput = input}
                                    onSubmitEditing={() => this._submitCredentials()}
                                    blurOnSubmit={false}
@@ -155,12 +156,12 @@ export default class LoginScreen extends Component {
                             {/*<View style={[{flex: 1},styles.flexRowBetween]}>*/}
                             {/*<Button*/}
                             {/*disabled={this.state.waitingForConnect}*/}
-                            {/*icon={FacebookIcon}*/}
+                            {/*accessoryLeft ={FacebookIcon}*/}
                             {/*onPress={() => showInfoAlert('La connexion avec Facebook n\'est pas encore disponible')}*/}
                             {/*style={{backgroundColor: '#365899'}}>Facebook</Button>*/}
                             {/*<Button*/}
                             {/*disabled={this.state.waitingForConnect}*/}
-                            {/*icon={GoogleIcon}*/}
+                            {/*accessoryLeft ={GoogleIcon}*/}
                             {/*appearance='ghost'*/}
                             {/*onPress={() => showInfoAlert('La connexion avec Google n\'est pas encore disponible')}*/}
                             {/*status='danger'>Google</Button>*/}

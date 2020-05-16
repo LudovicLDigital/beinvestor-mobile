@@ -62,7 +62,7 @@ export default class AccountConfirmation extends Component {
                             label={'Code d\'activation'}
                             value={this.state.activationCode}
                             onTextChange={(text) => this.setState({activationCode: text})}/>
-                <Button style={{marginBottom: deviceHeigth/10}} appearance={'ghost'} status={'info'} icon={RefreshIcon} onPress={this._resendACode}>Je n'ai pas reçu de code, m'en renvoyer un</Button>
+                <Button style={{marginBottom: deviceHeigth/10}} appearance={'ghost'} status={'info'} accessoryLeft ={RefreshIcon} onPress={this._resendACode}>Je n'ai pas reçu de code, m'en renvoyer un</Button>
                 <Button style={styles.backgroundSecondary} onPress={this._activateAccount}>Activation du compte</Button>
             </Layout>
         )

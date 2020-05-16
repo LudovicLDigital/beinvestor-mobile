@@ -1,6 +1,7 @@
 import React, {Component} from "react";
-import { Input, Icon} from '@ui-kitten/components';
+import { Input, Icon, Text} from '@ui-kitten/components';
 import {styles, appColors} from "../../../shared/styles/global";
+import {TouchableWithoutFeedback} from "react-native";
 
 /**
  * PROPS :
@@ -43,36 +44,39 @@ export default class  extends Component {
         };
         if (this.props.type === 'password' || this.props.type === 'password-show') {
             return (
-                    <Input label={this.props.label}
-                           size={'small'}
-                           value={this.props.value}
-                           disabled={this.props.disabled}
-                           labelStyle={styles.inputLabelPrimary}
-                           style={[{borderColor: appColors.primary, flex: 1}, this.props.style]}
-                           status={(this.state.isValidated && (!this.state.receivedErrorByForm || this.state.receivedErrorByForm === null)) ? '' : 'danger'}
-                           secureTextEntry={this.state.showPassType === 'password'}
-                           caption={(this.state.isValidated && (!this.state.receivedErrorByForm || this.state.receivedErrorByForm === null)) ? '' : this._messageErrorToDisplay()}
-                           onIconPress={onIconPress}
-                           icon={(style) => {
-                               const eyeOff = this.state.showPassType === 'password';
-                               return (<Icon {...style} fill={appColors.primary} name={eyeOff ? 'eye-off' : 'eye'}/>)
-                           }}
-                           captionStyle={{fontWeight: 'bold', marginTop: 20}}
-                           onChangeText={text => this._textChange(text)}/>
+                <Input label={evaProps => <Text {...evaProps} style={styles.inputLabelPrimary}>{this.props.label}</Text>}
+                       size={'small'}
+                       value={this.props.value}
+                       disabled={this.props.disabled}
+                       style={[{borderColor: appColors.primary, flex: 1}, this.props.style]}
+                       status={(this.state.isValidated && (!this.state.receivedErrorByForm || this.state.receivedErrorByForm === null)) ? '' : 'danger'}
+                       secureTextEntry={this.state.showPassType === 'password'}
+                       caption={evaProps => <Text {...evaProps} style={styles.errorFormLabel}>
+                           {(this.state.isValidated && (!this.state.receivedErrorByForm || this.state.receivedErrorByForm === null)) ? '' : this._messageErrorToDisplay()}
+                       </Text>}
+                       accessoryRight={(style) => {
+                           const eyeOff = this.state.showPassType === 'password';
+                           return (
+                               <TouchableWithoutFeedback onPress={() => onIconPress()}>
+                                   <Icon {...style} fill={appColors.primary} name={eyeOff ? 'eye-off' : 'eye'}/>
+                               </TouchableWithoutFeedback>
+                           )
+                       }}
+                       onChangeText={text => this._textChange(text)}/>
             )
         } else {
             return (
-                    <Input label={this.props.label}
-                           size={'small'}
-                           value={this.props.value}
-                           disabled={this.props.disabled}
-                           labelStyle={styles.inputLabelPrimary}
-                           style={[{borderColor: appColors.primary, flex: 1}, this.props.style]}
-                           status={(this.state.isValidated && (!this.state.receivedErrorByForm || this.state.receivedErrorByForm === null)) ? '' : 'danger'}
-                           caption={(this.state.isValidated && (!this.state.receivedErrorByForm || this.state.receivedErrorByForm === null)) ? '' : this._messageErrorToDisplay()}
-                           keyboardType={this.props.type ? this.props.type : 'default'}
-                           captionStyle={{fontWeight: 'bold', marginTop: 20}}
-                           onChangeText={text => this._textChange(text)}/>
+                <Input label={evaProps => <Text {...evaProps} style={styles.inputLabelPrimary}>{this.props.label}</Text>}
+                       size={'small'}
+                       value={this.props.value}
+                       disabled={this.props.disabled}
+                       style={[{borderColor: appColors.primary, flex: 1}, this.props.style]}
+                       status={(this.state.isValidated && (!this.state.receivedErrorByForm || this.state.receivedErrorByForm === null)) ? '' : 'danger'}
+                       caption={evaProps => <Text {...evaProps} style={styles.errorFormLabel}>{
+                           (this.state.isValidated && (!this.state.receivedErrorByForm || this.state.receivedErrorByForm === null)) ? '' : this._messageErrorToDisplay()
+                       }</Text>}
+                       keyboardType={this.props.type ? this.props.type : 'default'}
+                       onChangeText={text => this._textChange(text)}/>
             )
         }
     }

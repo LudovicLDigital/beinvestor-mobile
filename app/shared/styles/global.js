@@ -83,8 +83,9 @@ const styles = StyleSheet.create({
         color: Colors.white
     },
     errorFormLabel: {
-      color: appColors.danger,
-      fontWeight: 'bold'
+        color: appColors.danger,
+        fontWeight: 'bold',
+        fontSize: 12,
     },
     fabButton: {
         borderRadius: 100
