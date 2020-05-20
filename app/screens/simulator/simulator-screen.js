@@ -35,12 +35,12 @@ export default class SimulatorScreen extends Component {
                     {this.state.partShowed === ESTATE && this.state.isEditingApart && <SimulatorEstateForm formValuesReturned={(datas) => this.fillDataFor(ESTATE, datas)} recoverredFormValues={this.state.formValues}/>}
                     {this.state.partShowed === FISCALITY && this.state.isEditingApart && <SimulatorFiscalityForm formValuesReturned={(datas) => this.fillDataFor(FISCALITY, datas)} recoverredFormValues={this.state.formValues}/>}
                     {this.state.partShowed === BANK && this.state.isEditingApart && <SimulatorBankForm formValuesReturned={(datas) => this.fillDataFor(BANK, datas)} recoverredFormValues={this.state.formValues}/>}
-                    <Icon.Button name="insert-chart"
+                    {!this.state.isEditingApart && <Icon.Button name="insert-chart"
                                  backgroundColor={appColors.success}
                                  onPress={() => this.runSimulator()}
                                  style={{justifyContent: 'center'}}>
                         Évaluer mon projet
-                    </Icon.Button>
+                    </Icon.Button>}
                 </Layout>
             </SafeAreaView>
         );
@@ -77,7 +77,6 @@ export default class SimulatorScreen extends Component {
         this.state.formValues.buyPrice = datas.buyPrice;
         this.state.formValues.surface = datas.surface;
         this.state.formValues.workCost = datas.workCost;
-        this.state.formValues.furnitureCost = datas.furnitureCost;
         this.state.formValues.monthlyRent = datas.monthlyRent;
         this.state.formValues.secureSaving = datas.secureSaving;
         this.state.formValues.taxeFonciere = datas.taxeFonciere;
@@ -85,6 +84,7 @@ export default class SimulatorScreen extends Component {
         this.state.formValues.chargeCopro = datas.chargeCopro;
     }
     _fillFiscality(datas) {
+        this.state.formValues.furnitureCost = datas.furnitureCost;
         this.state.formValues.percentRentManagement = datas.percentRentManagement;
         this.state.formValues.comptableCost = datas.comptableCost;
         this.state.formValues.pnoCost = datas.pnoCost;

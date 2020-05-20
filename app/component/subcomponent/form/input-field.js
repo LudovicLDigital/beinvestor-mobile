@@ -44,7 +44,7 @@ export default class  extends Component {
         };
         if (this.props.type === 'password' || this.props.type === 'password-show') {
             return (
-                <Input label={evaProps => <Text {...evaProps} style={styles.inputLabelPrimary}>{this.props.label}</Text>}
+                <Input label={evaProps => <Text {...evaProps} style={styles.inputLabelPrimary}>{this.props.label ? this.props.label :  ''}</Text>}
                        size={'small'}
                        value={this.props.value}
                        disabled={this.props.disabled}
@@ -66,7 +66,7 @@ export default class  extends Component {
             )
         } else {
             return (
-                <Input label={evaProps => <Text {...evaProps} style={styles.inputLabelPrimary}>{this.props.label}</Text>}
+                <Input label={evaProps => <Text {...evaProps} style={styles.inputLabelPrimary}>{this.props.label ? this.props.label :  ''}</Text>}
                        size={'small'}
                        value={this.props.value}
                        disabled={this.props.disabled}

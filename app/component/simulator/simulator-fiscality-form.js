@@ -7,7 +7,7 @@ import {styles, appColors} from "../../shared/styles/global";
 /**
  * PROPS :
  * - formValuesReturned : method sending data enterred in the form
- * - recoverredFormValues : method sending data enterred in the form
+ * - recoverredFormValues : préinputed values for the form
  */
 export default class SimulatorFiscalityForm extends Component {
     constructor(props) {
