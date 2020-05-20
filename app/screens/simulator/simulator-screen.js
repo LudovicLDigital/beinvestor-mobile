@@ -71,6 +71,7 @@ export default class SimulatorScreen extends Component {
         }
     }
     _fillEstate(datas) {
+        this.backPress();
         this.state.formValues.noFai = datas.noFai;
         this.state.formValues.faiPercent = datas.faiPercent;
         this.state.formValues.notarialCost = datas.notarialCost;
@@ -84,6 +85,7 @@ export default class SimulatorScreen extends Component {
         this.state.formValues.chargeCopro = datas.chargeCopro;
     }
     _fillFiscality(datas) {
+        this.backPress();
         this.state.formValues.furnitureCost = datas.furnitureCost;
         this.state.formValues.percentRentManagement = datas.percentRentManagement;
         this.state.formValues.comptableCost = datas.comptableCost;
@@ -95,6 +97,7 @@ export default class SimulatorScreen extends Component {
         this.state.formValues.annualRent = datas.annualRent;
     }
     _fillBank(datas) {
+        this.backPress();
         this.state.formValues.makeACredit = datas.makeACredit;
         this.state.formValues.includeFurnitureInCredit = datas.includeFurnitureInCredit;
         this.state.formValues.is110 = datas.is110;
