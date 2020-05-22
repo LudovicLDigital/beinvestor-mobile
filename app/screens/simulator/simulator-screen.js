@@ -87,6 +87,7 @@ export default class SimulatorScreen extends Component {
     _fillFiscality(datas) {
         this.backPress();
         this.state.formValues.percentRentManagement = datas.percentRentManagement;
+        this.state.formValues.inHandProject = datas.inHandProject;
         this.state.formValues.comptableCost = datas.comptableCost;
         this.state.formValues.pnoCost = datas.pnoCost;
         this.state.formValues.gliPercent = datas.gliPercent;

@@ -31,7 +31,7 @@ export default class SimulatorBankForm extends Component {
             bankRate: this.props.recoverredFormValues.bankRate ? this.props.recoverredFormValues.bankRate :TX_BANK,
             actualCreditMensualities: this.props.recoverredFormValues.actualCreditMensualities ? this.props.recoverredFormValues.actualCreditMensualities :null,
             furnitureCost: this.props.recoverredFormValues.furnitureCost ? this.props.recoverredFormValues.furnitureCost :null,
-            includeFurnitureInCredit: this.props.recoverredFormValues.includeFurnitureInCredit ? this.props.recoverredFormValues.includeFurnitureInCredit :null,
+            includeFurnitureInCredit: (typeof this.props.recoverredFormValues.includeFurnitureInCredit !== 'undefined' && this.props.recoverredFormValues.includeFurnitureInCredit !== null) ? this.props.recoverredFormValues.includeFurnitureInCredit :null,
         }
     }
 
@@ -49,7 +49,7 @@ export default class SimulatorBankForm extends Component {
                             </Toggle>
                             <TooltipsHelper messageInfo={'Un emprunt à 110% est une demande de financement de la totalité de votre projet en incluant aussi les frais de notaires, bancaires etc...'} />
                         </View>)}
-                    { !this.state.is110 &&
+                    { !this.state.is110 && this.state.makeACredit &&
                     <View style={styles.flexRowAlignCenter}>
                         <InputField label={'Apport (€)'}
                                     type={'numeric'}
