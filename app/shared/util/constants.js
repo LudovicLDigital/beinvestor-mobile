@@ -41,6 +41,9 @@ export const NEW_PASS = 'new password';
 export const ESTATE = 'formulaire bien';
 export const FISCALITY = 'formulaire fiscalité';
 export const BANK = 'formulaire banque';
+export const TX_BANK = '1.5';
+export const BANK_GARANTY_PERCENT = 0.013;
+export const BANK_FOLDER_COST = 500;
 // citation array
 export const CITATIONS = [
     "« Les propriétaires deviennent riche pendant leur sommeil » . John Stuart Mill.",

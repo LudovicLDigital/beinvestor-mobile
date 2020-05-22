@@ -65,7 +65,7 @@ export default class SimulatorEstateForm extends Component {
                     <Toggle style={{alignSelf: 'flex-start', marginBottom: 15}} checked={!this.state.noFai} onChange={() => this.setState({noFai: !this.state.noFai})}>
                         {evaProps => <Text {...evaProps} >{this.state.noFai ? 'Pas de frais d\'agence' : 'Il y a des frais d\'agence'}</Text>}
                     </Toggle>
-                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <View style={styles.flexRowAlignCenter}>
                         <InputField label={`Prix ${this.state.noFai ? '' : 'FAI'} (€)`}
                                     type={'numeric'}
                                     style={{marginRight: 15, flex: 2}}
@@ -78,7 +78,7 @@ export default class SimulatorEstateForm extends Component {
                                                           onTextChange={(text) => this.setState({faiPercent: text})}/>}
                         <TooltipsHelper messageInfo={'FAI correspond à "frais d\'agence inclus", soit le prix du bien comprenant les frais de l\'agence immobilière qui vend le bien.'} />
                     </View>
-                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <View style={styles.flexRowAlignCenter}>
                         <InputField label={'Surface totale (m²)'}
                                     type={'numeric'}
                                     value={this.state.surface}
@@ -91,7 +91,7 @@ export default class SimulatorEstateForm extends Component {
                     </View>
                     {this.state.surface > 0 && (
                         <View style={{flex: 1}}>
-                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                            <View style={styles.flexRowAlignCenter}>
                                 <Select
                                     style={{flex: 1}}
                                     label={evaProps => <Text {...evaProps} style={styles.inputLabelPrimary}>Choisir un type de travaux</Text>}
@@ -108,14 +108,14 @@ export default class SimulatorEstateForm extends Component {
                             <Text>Ou vous pouvez entrer directement le montant ci-dessous :</Text>
                         </View>)
                     }
-                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <View style={styles.flexRowAlignCenter}>
                         <InputField label={'Travaux estimés (€)'}
                                     type={'numeric'}
                                     style={{marginRight: 15}}
                                     value={this.state.workCost}
                                     onTextChange={(text) => this.setState({workCost: text})}/>
                     </View>
-                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <View style={styles.flexRowAlignCenter}>
                         <InputField label={'Frais de notaire (€)'}
                                     type={'numeric'}
                                     style={{marginRight: 15}}
@@ -124,7 +124,7 @@ export default class SimulatorEstateForm extends Component {
                         <TooltipsHelper messageInfo={'Les frais de notaire s\'élèvent en moyenne à 8.5% du prix du bien, si vous laissez ce champs vide, nous le calculerons pour vous'}/>
                     </View>
                     <SectionDivider sectionName={'Location'}/>
-                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <View style={styles.flexRowAlignCenter}>
                         <InputField label={'Loyer mensuel hors charges (€)'}
                                     type={'numeric'}
                                     style={{marginRight: 15}}
@@ -133,7 +133,7 @@ export default class SimulatorEstateForm extends Component {
                         <TooltipsHelper messageInfo={'S\'il y a plusieurs biens (cas d\'un immeuble par exemple), additionner tous les loyers HC'}/>
                     </View>
 
-                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <View style={styles.flexRowAlignCenter}>
                         <InputField label={'Charges locataires mensuelles (€)'}
                                     type={'numeric'}
                                     style={{marginRight: 15}}
@@ -142,7 +142,7 @@ export default class SimulatorEstateForm extends Component {
                         <TooltipsHelper messageInfo={'Le coût moyen des charges pour les locataires en france est de 54€/mois (Insee)'}/>
                     </View>
 
-                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <View style={styles.flexRowAlignCenter}>
                         <InputField label={'Charges de copropriété mensuelles (€)'}
                                     type={'numeric'}
                                     style={{marginRight: 15}}
@@ -151,7 +151,7 @@ export default class SimulatorEstateForm extends Component {
                         <TooltipsHelper messageInfo={'Les charges de copropriété sont les charges des utilisations communes à tous les copropriétaires (ascenseur, syndic etc...)'}/>
                     </View>
 
-                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <View style={styles.flexRowAlignCenter}>
                         <InputField label={'Epargne de sécurité mensuelle (€)'}
                                     type={'numeric'}
                                     style={{marginRight: 15}}

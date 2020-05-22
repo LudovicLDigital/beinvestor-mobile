@@ -19,7 +19,7 @@ export default class SimulatorScreen extends Component {
         this.state = {
             isEditingApart: false,
             partShowed: null,
-            formValues: SimulatorDataSendObject
+            formValues: SimulatorDataSendObject,
         }
     }
 
@@ -33,8 +33,8 @@ export default class SimulatorScreen extends Component {
                 <Layout style={styles.fullScreen}>
                     {!this.state.isEditingApart && <SimulatorMenu clickedMenu={(menuClicked) => this._showForm(menuClicked)}/>}
                     {this.state.partShowed === ESTATE && this.state.isEditingApart && <SimulatorEstateForm formValuesReturned={(datas) => this.fillDataFor(ESTATE, datas)} recoverredFormValues={this.state.formValues}/>}
-                    {this.state.partShowed === FISCALITY && this.state.isEditingApart && <SimulatorFiscalityForm formValuesReturned={(datas) => this.fillDataFor(FISCALITY, datas)} recoverredFormValues={this.state.formValues}/>}
                     {this.state.partShowed === BANK && this.state.isEditingApart && <SimulatorBankForm formValuesReturned={(datas) => this.fillDataFor(BANK, datas)} recoverredFormValues={this.state.formValues}/>}
+                    {this.state.partShowed === FISCALITY && this.state.isEditingApart && <SimulatorFiscalityForm formValuesReturned={(datas) => this.fillDataFor(FISCALITY, datas)} recoverredFormValues={this.state.formValues}/>}
                     {!this.state.isEditingApart && <Icon.Button name="insert-chart"
                                  backgroundColor={appColors.success}
                                  onPress={() => this.runSimulator()}
@@ -86,7 +86,6 @@ export default class SimulatorScreen extends Component {
     }
     _fillFiscality(datas) {
         this.backPress();
-        this.state.formValues.furnitureCost = datas.furnitureCost;
         this.state.formValues.percentRentManagement = datas.percentRentManagement;
         this.state.formValues.comptableCost = datas.comptableCost;
         this.state.formValues.pnoCost = datas.pnoCost;
@@ -99,9 +98,10 @@ export default class SimulatorScreen extends Component {
     _fillBank(datas) {
         this.backPress();
         this.state.formValues.makeACredit = datas.makeACredit;
-        this.state.formValues.includeFurnitureInCredit = datas.includeFurnitureInCredit;
         this.state.formValues.is110 = datas.is110;
         this.state.formValues.apport = datas.apport;
+        this.state.formValues.furnitureCost = datas.furnitureCost;
+        this.state.formValues.includeFurnitureInCredit = datas.includeFurnitureInCredit;
         this.state.formValues.creditWarrantyCost = datas.creditWarrantyCost;
         this.state.formValues.bankCharges = datas.bankCharges;
         this.state.formValues.creditTime = datas.creditTime;
