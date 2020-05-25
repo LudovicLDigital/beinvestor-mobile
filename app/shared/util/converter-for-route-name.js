@@ -9,7 +9,7 @@ import {
     ROUTE_USER_PROFIL,
     ROUTE_USER_PROFIL_INVEST,
     ROUTE_DETAIL_GRP,
-    ROUTE_MAP, ROUTE_MEMBERS_LIST, ROUTE_USERS_LIST, ESTATE, FISCALITY, BANK
+    ROUTE_MAP, ROUTE_MEMBERS_LIST, ROUTE_USERS_LIST, ESTATE, FISCALITY, BANK, ROUTE_SIMULATOR_RESULT
 } from "./constants";
 
 export function convertRouteNameToLisible(routeName) {
@@ -17,6 +17,7 @@ export function convertRouteNameToLisible(routeName) {
         case ROUTE_HOME : return 'Accueil';
         case ROUTE_MAP : return 'Carte';
         case ROUTE_SIMULATOR : return 'Simulateur immobilier';
+        case ROUTE_SIMULATOR_RESULT : return 'Simulateur immobilier - résultats';
         case ROUTE_USER_PROFIL : return 'Mon profil';
         case ROUTE_SEARCH_GRP : return 'Recherche de groupe';
         case ROUTE_FAV_GRP : return 'Mes groupes';

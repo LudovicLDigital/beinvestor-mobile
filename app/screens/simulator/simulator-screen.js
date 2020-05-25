@@ -5,7 +5,7 @@ import { Text, Layout} from '@ui-kitten/components';
 import HeaderBar from '../../component/subcomponent/header-bar';
 import SimulatorMenu from "../../component/simulator/simulator-menu";
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {BANK, ESTATE, FISCALITY} from "../../shared/util/constants";
+import {BANK, ESTATE, FISCALITY, ROUTE_SIMULATOR_RESULT} from "../../shared/util/constants";
 import SimulatorEstateForm from "../../component/simulator/simulator-estate-form";
 import SimulatorFiscalityForm from "../../component/simulator/simulator-fiscality-form";
 import SimulatorBankForm from "../../component/simulator/simulator-bank-form";
@@ -111,11 +111,9 @@ export default class SimulatorScreen extends Component {
     }
 
     runSimulator() {
+        console.log(this.state.formValues)
         this.simulatorService.calculateProject(this.state.formValues).then((response) => {
-            if (response && response !== null) {
-                console.log('============ RESULT ===========');
-                console.log(response);
-            }
+            this.props.navigation.navigate(ROUTE_SIMULATOR_RESULT, {resultDatas: response});
         }).catch((error) => {
             console.error('ERROR TO calculateProject : ');
             console.error(error);

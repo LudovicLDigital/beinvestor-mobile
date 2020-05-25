@@ -17,6 +17,8 @@ import {TouchableWithoutFeedback} from "react-native";
  * - disabled: if the input must be disable
  * - errorOnField: throwed when field is in error case return a boolean
  * - formSubmitted: a boolean to check errors case for value when form is submitted
+ * - onSubmitEditing: method same as INPUT Props
+ * - blurOnSubmit: boolean same as INPUT props
  */
 export default class  extends Component {
     constructor(props) {
@@ -48,9 +50,12 @@ export default class  extends Component {
                        size={'small'}
                        value={this.props.value}
                        disabled={this.props.disabled}
+                       blurOnSubmit={this.props.blurOnSubmit}
                        style={[{borderColor: appColors.primary, flex: 1}, this.props.style]}
                        status={(this.state.isValidated && (!this.state.receivedErrorByForm || this.state.receivedErrorByForm === null)) ? '' : 'danger'}
                        secureTextEntry={this.state.showPassType === 'password'}
+                       onSubmitEditing={() => this.props.onSubmitEditing ? this.props.onSubmitEditing() : null}
+                       ref={(input) => this.props.reference ? this.props.reference(input): null}
                        caption={evaProps => <Text {...evaProps} style={styles.errorFormLabel}>
                            {(this.state.isValidated && (!this.state.receivedErrorByForm || this.state.receivedErrorByForm === null)) ? '' : this._messageErrorToDisplay()}
                        </Text>}
@@ -69,7 +74,10 @@ export default class  extends Component {
                 <Input label={evaProps => <Text {...evaProps} style={styles.inputLabelPrimary}>{this.props.label ? this.props.label :  ''}</Text>}
                        size={'small'}
                        value={this.props.value}
+                       blurOnSubmit={this.props.blurOnSubmit}
                        disabled={this.props.disabled}
+                       ref={(input) =>  this.props.reference ? this.props.reference(input) : null}
+                       onSubmitEditing={() => this.props.onSubmitEditing ? this.props.onSubmitEditing() : null}
                        style={[{borderColor: appColors.primary, flex: 1}, this.props.style]}
                        status={(this.state.isValidated && (!this.state.receivedErrorByForm || this.state.receivedErrorByForm === null)) ? '' : 'danger'}
                        caption={evaProps => <Text {...evaProps} style={styles.errorFormLabel}>{

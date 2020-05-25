@@ -22,23 +22,25 @@ export default class SimulatorFiscalityForm extends Component {
         this.state = {
             inHandProject: (typeof this.props.recoverredFormValues.inHandProject !== 'undefined' && this.props.recoverredFormValues.inHandProject !== null)  ? this.props.recoverredFormValues.inHandProject : true,
             percentRentManagement: this.props.recoverredFormValues.percentRentManagement ? this.props.recoverredFormValues.percentRentManagement : null,
-            comptableCost: this.props.recoverredFormValues.comptableCost ? this.props.recoverredFormValues.comptableCost : null,
+            comptableCost: this.props.recoverredFormValues.comptableCost ? this.props.recoverredFormValues.comptableCost : '0',
+            pnoCost: this.props.recoverredFormValues.pnoCost ? this.props.recoverredFormValues.pnoCost : null,
             gliPercent: this.props.recoverredFormValues.gliPercent ? this.props.recoverredFormValues.gliPercent : null,
             vlInsurancePercent: this.props.recoverredFormValues.vlInsurancePercent ? this.props.recoverredFormValues.vlInsurancePercent : null,
             fiscalTypeId: this.props.recoverredFormValues.fiscalTypeId ? this.props.recoverredFormValues.fiscalTypeId : 1,
             professionnalSalary: this.props.recoverredFormValues.professionnalSalary ? this.props.recoverredFormValues.professionnalSalary : '0',
             annualRent: this.props.recoverredFormValues.annualRent ? this.props.recoverredFormValues.annualRent : '0',
 
-            fiscalityTypes: null,
+            fiscalTypes: null,
             selectedFiscalType: null
         }
     }
 
 
     componentDidMount(): void {
-        this.fiscalTypeService.getFiscalTypes().then((types) => {
-            console.log(types);
-            this.setState({fiscalTypes: types})
+        this.fiscalTypeService.getFiscalTypes().then(async (types) => {
+            this.setState({
+                fiscalTypes: types
+            });
         }).catch((error) => {
             console.error(error);
         });
@@ -73,6 +75,14 @@ export default class SimulatorFiscalityForm extends Component {
                                 <TooltipsHelper messageInfo={'En moyenne le pourcentage d\'une assurance loyer impayés est de 3% du loyer.'} />
                             </View>
                             <View style={styles.flexRowAlignCenter}>
+                                <InputField label={'Assurance PNO'}
+                                            type={'numeric'}
+                                            style={{marginRight: 15}}
+                                            value={this.state.pnoCost}
+                                            onTextChange={(text) => this.setState({pnoCost: text})}/>
+                                <TooltipsHelper messageInfo={'L\'assurance propriétaire non-occupant est obligatoire en tant que propriétaire bailleur.'} />
+                            </View>
+                            <View style={styles.flexRowAlignCenter}>
                                 <InputField label={'Pourcentage de l\'assurance vacance locative'}
                                             type={'numeric'}
                                             style={{marginRight: 15}}
@@ -88,18 +98,18 @@ export default class SimulatorFiscalityForm extends Component {
                                     style={{marginRight: 15}}
                                     value={this.state.comptableCost}
                                     onTextChange={(text) => this.setState({comptableCost: text})}/>
-                        <TooltipsHelper messageInfo={`Prendre un comptable est judicieux et vous apportera de nombreux avantage dans le cadre de régime au réel !`} />
+                        <TooltipsHelper messageInfo={`Prendre un comptable est judicieux et vous apportera de nombreux avantages dans le cadre de régime au réel !`} />
                     </View>
-                    { this.state.fiscalityTypes && this.state.fiscalityTypes !== null  && this.state.fiscalityTypes.length > 0 &&
+                    { this.state.fiscalTypes && this.state.fiscalTypes !== null  && this.state.fiscalTypes.length > 0 &&
                     <View style={styles.flexRowAlignCenter}>
                         <Select
                             style={{flex: 1}}
-                            label={evaProps => <Text {...evaProps} style={styles.inputLabelPrimary}>Régime fiscal choisi</Text>}
-                            value={evaProps =>
-                                <Text {...evaProps}>{this.state.selectedFiscalType ? this.state.selectedFiscalType.name : ''}</Text>}
-                            onSelect={(index) => this.selectWorkCost(index.row)}>
-                            {this.state.fiscalityTypes.map((type) => {
-                                return (<SelectItem title={evaProps => <Text {...evaProps}>{type.name}</Text>}/>)
+                            label={evaProps => <Text {...evaProps} style={styles.inputLabelPrimary}>Choisir un régime fiscal</Text>}
+                            placeholder={evaProps => <Text {...evaProps} style={[evaProps.style]}>Par défaut, Micro-foncier</Text>}
+                            value={evaProps => <Text {...evaProps} >{this.state.selectedFiscalType ? this.state.selectedFiscalType.name : ''}</Text>}
+                            onSelect={(index) => this.selectFiscalType(index.row)}>
+                            {this.state.fiscalTypes.map((type) => {
+                                return (<SelectItem key={type.id} title={evaProps => <Text {...evaProps} >{type.name}</Text>}/>)
                             })}
                         </Select>
                         {this.state.selectedFiscalType && <TooltipsHelper messageInfo={this.state.selectedFiscalType.description}/>}
@@ -142,5 +152,13 @@ export default class SimulatorFiscalityForm extends Component {
             gliPercent: inHand ? null : '0',
             vlInsurancePercent: inHand ? null : '0'
         })
+    }
+
+    selectFiscalType(row) {
+        const type = this.state.fiscalTypes[row];
+        this.setState({
+            selectedFiscalType: type,
+            fiscalTypeId: type.id
+        });
     }
 }

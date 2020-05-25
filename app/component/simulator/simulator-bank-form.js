@@ -24,14 +24,14 @@ export default class SimulatorBankForm extends Component {
         this.state = {
             makeACredit: (typeof this.props.recoverredFormValues.makeACredit !== 'undefined' && this.props.recoverredFormValues.makeACredit !== null) ? this.props.recoverredFormValues.makeACredit : true,
             is110: (typeof this.props.recoverredFormValues.is110 !== 'undefined' && this.props.recoverredFormValues.is110 !== null) ? this.props.recoverredFormValues.is110 : true,
-            apport: this.props.recoverredFormValues.apport ? this.props.recoverredFormValues.apport : null,
+            apport: this.props.recoverredFormValues.apport ? this.props.recoverredFormValues.apport : '0',
             creditWarrantyCost: this.props.recoverredFormValues.creditWarrantyCost ? this.props.recoverredFormValues.creditWarrantyCost : determinedWarrantyCost.toString(),
             bankCharges: this.props.recoverredFormValues.bankCharges ? this.props.recoverredFormValues.bankCharges : (BANK_FOLDER_COST).toString(),
             creditTime: this.props.recoverredFormValues.creditTime ? this.props.recoverredFormValues.creditTime : '20',
             bankRate: this.props.recoverredFormValues.bankRate ? this.props.recoverredFormValues.bankRate :TX_BANK,
-            actualCreditMensualities: this.props.recoverredFormValues.actualCreditMensualities ? this.props.recoverredFormValues.actualCreditMensualities :null,
-            furnitureCost: this.props.recoverredFormValues.furnitureCost ? this.props.recoverredFormValues.furnitureCost :null,
-            includeFurnitureInCredit: (typeof this.props.recoverredFormValues.includeFurnitureInCredit !== 'undefined' && this.props.recoverredFormValues.includeFurnitureInCredit !== null) ? this.props.recoverredFormValues.includeFurnitureInCredit :null,
+            actualCreditMensualities: this.props.recoverredFormValues.actualCreditMensualities ? this.props.recoverredFormValues.actualCreditMensualities : '0',
+            furnitureCost: this.props.recoverredFormValues.furnitureCost ? this.props.recoverredFormValues.furnitureCost : '0',
+            includeFurnitureInCredit: (typeof this.props.recoverredFormValues.includeFurnitureInCredit !== 'undefined' && this.props.recoverredFormValues.includeFurnitureInCredit !== null) ? this.props.recoverredFormValues.includeFurnitureInCredit : false,
         }
     }
 
@@ -64,12 +64,11 @@ export default class SimulatorBankForm extends Component {
                                     {evaProps => <Text {...evaProps} >{this.state.includeFurnitureInCredit ? 'J\'inclus les meubles dans le prêt' : 'Je n\'inclus pas les meubles dans le prêt'}</Text>}
                                 </Toggle>
                             </View>
-                            { this.state.includeFurnitureInCredit &&
                             <InputField label={'Montant des meubles (€)'}
                                         type={'numeric'}
                                         style={{marginRight: 15}}
                                         value={this.state.furnitureCost}
-                                        onTextChange={(text) => this.setState({furnitureCost: text})}/>}
+                                        onTextChange={(text) => this.setState({furnitureCost: text})}/>
                             <View style={styles.flexRowAlignCenter}>
                                 <InputField label={'Frais de garantie bancaire (€)'}
                                             type={'numeric'}

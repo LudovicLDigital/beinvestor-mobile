@@ -13,7 +13,13 @@ import {
     ROUTE_SETTING,
     ROUTE_SEARCH_GRP,
     ROUTE_SIMULATOR,
-    ROUTE_USER_PROFIL, ROUTE_DETAIL_GRP, ROUTE_MAP, ROUTE_MEMBERS_LIST, ROUTE_REGISTER, ROUTE_RESET_PASSWORD
+    ROUTE_USER_PROFIL,
+    ROUTE_DETAIL_GRP,
+    ROUTE_MAP,
+    ROUTE_MEMBERS_LIST,
+    ROUTE_REGISTER,
+    ROUTE_RESET_PASSWORD,
+    ROUTE_SIMULATOR_RESULT
 } from './constants'
 // screens
 import HomeScreen from "../../screens/home-screen";
@@ -30,6 +36,7 @@ import GroupDetailScreen from "../../screens/group/group-detail-screen";
 import UsersScreen from "../../screens/users-screen";
 import RegisterScreen from "../../screens/register-screen";
 import ResetPassScreen from "../../screens/reset-pass-screen";
+import SimulatorResultScreen from "../../screens/simulator/simulator-result-screen";
 const ProfilEditStack = createStackNavigator();
 function ProfilStackNavigator() {
     return (
@@ -117,6 +124,13 @@ function HomeDrawerNavigator() {
             <HomeDrawer.Screen
             name={ROUTE_SIMULATOR}
             component={SimulatorScreen}
+            options={{
+                headerShown: false
+            }}
+            />
+            <HomeDrawer.Screen
+            name={ROUTE_SIMULATOR_RESULT}
+            component={SimulatorResultScreen}
             options={{
                 headerShown: false
             }}

@@ -31,12 +31,12 @@ export default class SimulatorEstateForm extends Component {
             notarialCost: this.props.recoverredFormValues.notarialCost ? this.props.recoverredFormValues.notarialCost : null,
             buyPrice: this.props.recoverredFormValues.buyPrice ? this.props.recoverredFormValues.buyPrice : null,
             surface: this.props.recoverredFormValues.surface ? this.props.recoverredFormValues.surface : null,
-            workCost: this.props.recoverredFormValues.workCost ? this.props.recoverredFormValues.workCost : null,
+            workCost: this.props.recoverredFormValues.workCost ? this.props.recoverredFormValues.workCost : '0',
             monthlyRent: this.props.recoverredFormValues.monthlyRent ? this.props.recoverredFormValues.monthlyRent : null,
             secureSaving: this.props.recoverredFormValues.secureSaving ? this.props.recoverredFormValues.secureSaving : null,
-            taxeFonciere: this.props.recoverredFormValues.taxeFonciere ? this.props.recoverredFormValues.taxeFonciere : null,
-            previsionalRentCharge: this.props.recoverredFormValues.previsionalRentCharge ? this.props.recoverredFormValues.previsionalRentCharge : null,
-            chargeCopro: this.props.recoverredFormValues.chargeCopro ? this.props.recoverredFormValues.chargeCopro : null,
+            taxeFonciere: this.props.recoverredFormValues.taxeFonciere ? this.props.recoverredFormValues.taxeFonciere : '0',
+            previsionalRentCharge: this.props.recoverredFormValues.previsionalRentCharge ? this.props.recoverredFormValues.previsionalRentCharge : '0',
+            chargeCopro: this.props.recoverredFormValues.chargeCopro ? this.props.recoverredFormValues.chargeCopro : '0',
 
             selectWork: null,
         }
@@ -100,7 +100,7 @@ export default class SimulatorEstateForm extends Component {
                                         <Text {...evaProps}>{this.state.selectWork ? this.state.selectWork.type : ''}</Text>}
                                     onSelect={(index) => this.selectWorkCost(index.row)}>
                                     {workArray.map((work) => {
-                                        return (<SelectItem title={evaProps => <Text {...evaProps}>{work.type}</Text>}/>)
+                                        return (<SelectItem key={work.type} title={evaProps => <Text {...evaProps}>{work.type}</Text>}/>)
                                     })}
                                 </Select>
                                 {this.state.selectWork && <TooltipsHelper messageInfo={this.state.selectWork.helper}/>}
