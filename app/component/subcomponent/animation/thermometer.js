@@ -1,10 +1,7 @@
 import React, {Component} from "react";
-import {
-    Animated, Easing, StyleSheet,
-    View
-} from "react-native";
+import {Animated} from "react-native";
 import LottieView from 'lottie-react-native';
-import {styles, appColors, deviceWidth, deviceHeigth} from "../../../shared/styles/global";
+
 /**
  * Props
  *  - endFrame : must be between 0 and 12 , 12 will be the max

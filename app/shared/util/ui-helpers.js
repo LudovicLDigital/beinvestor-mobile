@@ -1,6 +1,7 @@
 import React from "react";
-import { TouchableWithoutFeedback, Keyboard, ToastAndroid, Alert} from 'react-native';
+import {Alert, Keyboard, ToastAndroid, TouchableWithoutFeedback} from 'react-native';
 import {DAY, HOUR, MINUTE} from "./constants";
+
 export const DismissKeyboard = ({children}) => (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         {children}

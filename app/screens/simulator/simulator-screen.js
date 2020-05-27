@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import {styles, appColors} from "../../shared/styles/global";
-import { SafeAreaView, View} from 'react-native';
-import { Text, Layout} from '@ui-kitten/components';
+import React, {Component} from 'react';
+import {appColors, styles} from "../../shared/styles/global";
+import {SafeAreaView} from 'react-native';
+import {Layout} from '@ui-kitten/components';
 import HeaderBar from '../../component/subcomponent/header-bar';
 import SimulatorMenu from "../../component/simulator/simulator-menu";
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -9,8 +9,9 @@ import {BANK, ESTATE, FISCALITY, ROUTE_SIMULATOR_RESULT} from "../../shared/util
 import SimulatorEstateForm from "../../component/simulator/simulator-estate-form";
 import SimulatorFiscalityForm from "../../component/simulator/simulator-fiscality-form";
 import SimulatorBankForm from "../../component/simulator/simulator-bank-form";
-import {SimulatorDataSendObject, SimulatorReturnObject} from "../../shared/util/simulator-objects";
+import {SimulatorDataSendObject} from "../../shared/util/simulator-objects";
 import SimulatorService from "../../shared/services/simulator-service";
+
 export default class SimulatorScreen extends Component {
     simulatorService;
     constructor(props) {

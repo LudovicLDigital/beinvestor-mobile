@@ -1,9 +1,6 @@
 import React, {Component} from "react";
-import {
-    View
-} from "react-native";
-import { Text, Avatar} from '@ui-kitten/components';
-import {styles, appColors} from "../../shared/styles/global";
+import {View} from "react-native";
+import {Text} from '@ui-kitten/components';
 import AuthService from "../../shared/services/auth";
 import ProfilPicturePicker from "./form/profil-picture-picker";
 

@@ -1,11 +1,8 @@
 import React, {Component} from "react";
-import {
-    View
-} from "react-native";
-import {styles, appColors, deviceHeigth, deviceWidth} from "../../shared/styles/global";
+import {appColors, deviceHeigth, deviceWidth, styles} from "../../shared/styles/global";
 import InputField from '../subcomponent/form/input-field';
 import {CalendarIcon} from "../subcomponent/basic-icons";
-import { Text, Datepicker, Layout} from '@ui-kitten/components';
+import {Datepicker, Layout, Text} from '@ui-kitten/components';
 import SectionDivider from '../../component/subcomponent/form/section-divider';
 
 /**

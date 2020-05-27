@@ -1,9 +1,6 @@
 import React, {Component} from "react";
-import {
-    TouchableWithoutFeedback,
-    View,
-} from "react-native";
-import { Autocomplete, AutocompleteItem, Icon } from '@ui-kitten/components';
+import {TouchableWithoutFeedback, View,} from "react-native";
+import {Autocomplete, AutocompleteItem, Icon} from '@ui-kitten/components';
 import MatIcon from 'react-native-vector-icons/MaterialIcons';
 
 /**

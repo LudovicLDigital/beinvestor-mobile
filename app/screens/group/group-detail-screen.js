@@ -1,15 +1,16 @@
-import React, { Component } from 'react';
-import {styles, appColors} from "../../shared/styles/global";
+import React, {Component} from 'react';
+import {appColors, styles} from "../../shared/styles/global";
 import GroupService from '../../shared/services/entities/groups-service';
 import GroupMessageService from '../../shared/services/entities/group-message-service';
-import { SafeAreaView, View, Alert} from 'react-native';
-import { Text, Layout, Button, Icon, Divider } from '@ui-kitten/components';
+import {Alert, SafeAreaView, View} from 'react-native';
+import {Button, Divider, Icon, Layout, Text} from '@ui-kitten/components';
 import HeaderBar from '../../component/subcomponent/header-bar';
 import {AddIcon, MembersIcon, SharedFilesIcon} from "../../component/subcomponent/basic-icons";
 import {showToast} from "../../shared/util/ui-helpers";
 import ChatRoom from "../../component/chat/chatroom";
-import { PAGINATION_SIZE, ROUTE_MEMBERS_LIST} from "../../shared/util/constants";
+import {PAGINATION_SIZE, ROUTE_MEMBERS_LIST} from "../../shared/util/constants";
 import SocketService from "../../shared/services/socket-service";
+
 /**
  * Passing in route params :
  * - isMember : boolean to know on component load if current user is member of the group

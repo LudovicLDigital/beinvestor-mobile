@@ -1,9 +1,7 @@
 import React, {Component} from "react";
-import {
-    TouchableWithoutFeedback
-} from "react-native";
-import { Icon, Tooltip } from '@ui-kitten/components';
-import {styles, appColors} from "../../shared/styles/global";
+import {TouchableWithoutFeedback} from "react-native";
+import {Icon, Tooltip} from '@ui-kitten/components';
+import {appColors} from "../../shared/styles/global";
 
 /**
  * PROPS :

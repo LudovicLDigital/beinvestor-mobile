@@ -1,4 +1,4 @@
-import {StyleSheet, Dimensions} from "react-native";
+import {Dimensions, StyleSheet} from "react-native";
 import {Colors} from "react-native/Libraries/NewAppScreen/index";
 
 const appColors = {

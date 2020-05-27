@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import {styles, appColors, deviceHeigth, deviceWidth} from "../../shared/styles/global";
-import { SafeAreaView, ScrollView, View } from 'react-native';
-import { Icon, Avatar, Button, Datepicker, Text} from '@ui-kitten/components';
+import React, {Component} from 'react';
+import {appColors, deviceWidth, styles} from "../../shared/styles/global";
+import {SafeAreaView, ScrollView, View} from 'react-native';
+import {Button, Datepicker, Icon, Text} from '@ui-kitten/components';
 import HeaderBar from '../../component/subcomponent/header-bar';
 import SectionDivider from '../../component/subcomponent/form/section-divider';
 import InputField from '../../component/subcomponent/form/input-field';
@@ -22,6 +22,7 @@ import UsersService from "../../shared/services/entities/users-service";
 import Loader from "../../component/subcomponent/loader";
 import DeviceStorage from "../../shared/util/device-storage";
 import ProfilPicturePicker from "../../component/subcomponent/form/profil-picture-picker";
+
 const requiredMessage = ' est un champs requis';
 const SaveIcon = (style) => (
     <Icon {...style} fill={appColors.white}  name='save' />

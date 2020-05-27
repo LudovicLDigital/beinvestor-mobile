@@ -1,13 +1,14 @@
-import React, { Component } from 'react';
-import {styles, appColors} from "../../shared/styles/global";
+import React, {Component} from 'react';
+import {styles} from "../../shared/styles/global";
 import GroupService from '../../shared/services/entities/groups-service';
 import GroupList from '../../component/group/group-list';
-import { SafeAreaView, View } from 'react-native';
-import { Layout, Text } from '@ui-kitten/components';
+import {SafeAreaView, View} from 'react-native';
+import {Layout, Text} from '@ui-kitten/components';
 import HeaderBar from '../../component/subcomponent/header-bar';
 import SearchBar from "../../component/subcomponent/search-bar";
 import {DismissKeyboard, showToast} from "../../shared/util/ui-helpers";
 import {PAGINATION_SIZE} from "../../shared/util/constants";
+
 export default class SearchGroupScreen extends Component {
     page = 0;
     constructor(props) {

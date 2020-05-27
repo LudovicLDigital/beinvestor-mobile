@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-community/async-storage';
-import {REFRESH_TOKEN_KEY, USER_TOKEN_KEY} from './constants';
+import {USER_TOKEN_KEY} from './constants';
+
 function logStorageError(e, method) {
     console.error(`ERROR WHEN USE STORAGE, TRIED TO ${method} : ${e}`);
 }

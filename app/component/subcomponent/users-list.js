@@ -1,11 +1,8 @@
 import React, {Component} from "react";
-import {
-    View,
-    FlatList,
-    StyleSheet
-} from "react-native";
-import { Text, Divider, Avatar } from '@ui-kitten/components';
-import {styles, appColors} from "../../shared/styles/global";
+import {FlatList, StyleSheet, View} from "react-native";
+import {Avatar, Text} from '@ui-kitten/components';
+import {appColors, styles} from "../../shared/styles/global";
+
 const usersListStyle = StyleSheet.create({
     userViewContainer: {flex: 1, marginBottom: 15, paddingBottom: 15, borderBottomColor: appColors.primaryLight, borderBottomWidth: 1}
 

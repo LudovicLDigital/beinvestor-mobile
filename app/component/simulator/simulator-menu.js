@@ -1,9 +1,7 @@
 import React, {Component} from "react";
-import {
-    View, TouchableWithoutFeedback
-} from "react-native";
-import { Text} from '@ui-kitten/components';
-import {styles, appColors} from "../../shared/styles/global";
+import {TouchableWithoutFeedback, View} from "react-native";
+import {Text} from '@ui-kitten/components';
+import {appColors, styles} from "../../shared/styles/global";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {BANK, ESTATE, FISCALITY} from "../../shared/util/constants";
 

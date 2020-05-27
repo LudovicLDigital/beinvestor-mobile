@@ -1,21 +1,23 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import {
-    View,
+    Alert,
+    BackHandler,
     Image,
-    Text,
+    Linking,
     Platform,
+    SafeAreaView,
+    Text,
     TouchableWithoutFeedback,
-    BackHandler, Alert,
-    KeyboardAvoidingView,
-    SafeAreaView, Linking
+    View
 } from "react-native";
-import { Button, Icon, Layout, Input } from '@ui-kitten/components';
+import {Button, Icon, Layout} from '@ui-kitten/components';
 import Loader from "../component/subcomponent/loader";
-import {styles, appColors, deviceWidth} from "../shared/styles/global";
+import {styles} from "../shared/styles/global";
 import AuthService from "../shared/services/auth";
-import {DismissKeyboard, showInfoAlert} from "../shared/util/ui-helpers";
-import {CITATIONS, OLD_PASS, ROUTE_HOME, ROUTE_REGISTER, ROUTE_RESET_PASSWORD} from "../shared/util/constants";
+import {DismissKeyboard} from "../shared/util/ui-helpers";
+import {CITATIONS, ROUTE_HOME, ROUTE_REGISTER, ROUTE_RESET_PASSWORD} from "../shared/util/constants";
 import InputField from '../component/subcomponent/form/input-field';
+
 const LOGIN = "login";
 const PASS = "password";
 export const FacebookIcon = (style) => (

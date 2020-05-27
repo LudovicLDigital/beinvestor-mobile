@@ -1,9 +1,9 @@
-
 import DeviceStorage from '../util/device-storage';
-import {API_URL, USER_TOKEN_KEY, REFRESH_TOKEN_KEY} from '../util/constants';
+import {API_URL, REFRESH_TOKEN_KEY} from '../util/constants';
 import HttpHeaderSetter from "../util/http-header-setter";
 import UsersService from "./entities/users-service";
 import {showInfoAlert} from "../util/ui-helpers";
+
 const auth = {
     currentUser: null,
     getCurrentUser() {

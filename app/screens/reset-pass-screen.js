@@ -1,10 +1,7 @@
 import React, {Component} from "react";
-import {
-    View,
-    Linking
-} from "react-native";
-import {styles, appColors, deviceWidth, deviceHeigth} from "../shared/styles/global";
-import { Text, Button} from '@ui-kitten/components';
+import {View} from "react-native";
+import {appColors, deviceHeigth, deviceWidth, styles} from "../shared/styles/global";
+import {Button, Text} from '@ui-kitten/components';
 import ResetService from "../shared/services/reset-pass-service";
 import {SendIcon} from "../component/subcomponent/basic-icons";
 import InputField from "../component/subcomponent/form/input-field";

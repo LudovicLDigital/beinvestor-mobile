@@ -7,7 +7,9 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "clean:build:android": "rm -rf android/app/build",
+    "prod:android": "npm run clean:build:android  && react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res"
   },
   "dependencies": {
     "@eva-design/eva": "^2.0.0",
@@ -36,7 +38,8 @@
     "react-redux": "^7.2.0",
     "redux": "^4.0.5",
     "rn-fetch-blob": "^0.12.0",
-    "socket.io-client": "^2.1.1"
+    "socket.io-client": "^2.1.1",
+    "victory-native": "^34.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",

@@ -1,14 +1,11 @@
 import React, {Component} from "react";
-import {
-    View,
-    TouchableWithoutFeedback
-} from "react-native";
-import {styles, appColors, deviceWidth, deviceHeigth} from "../../shared/styles/global";
+import {appColors, deviceHeigth, deviceWidth, styles} from "../../shared/styles/global";
 import InputField from '../subcomponent/form/input-field';
-import { Text, Layout, Button, Icon} from '@ui-kitten/components';
+import {Button, Icon, Layout, Text} from '@ui-kitten/components';
 import SectionDivider from '../../component/subcomponent/form/section-divider';
 import AuthService from "../../shared/services/auth";
 import {showInfoAlert, showToast} from "../../shared/util/ui-helpers";
+
 const RefreshIcon = (style) => (
     <Icon name='refresh' {...style} />
 );

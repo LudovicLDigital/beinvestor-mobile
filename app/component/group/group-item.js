@@ -1,12 +1,7 @@
 import React, {Component, Fragment} from "react";
-import {styles, appColors} from "../../shared/styles/global";
+import {appColors, styles} from "../../shared/styles/global";
 import {View} from 'react-native';
-import {
-    Button,
-    Card,
-    Text,
-    Icon
-} from '@ui-kitten/components';
+import {Button, Card, Icon, Text} from '@ui-kitten/components';
 import {calculDurationFromNow} from "../../shared/util/ui-helpers";
 
 function HeaderGroup({group, currentUserIsMember, joinGroupMethod}) {

@@ -1,10 +1,7 @@
 import React, {Component} from "react";
-import {
-    View,
-    TouchableWithoutFeedback
-} from "react-native";
-import {Text, Icon} from '@ui-kitten/components';
-import {styles, appColors, deviceWidth} from "../../../shared/styles/global";
+import {TouchableWithoutFeedback, View} from "react-native";
+import {Icon, Text} from '@ui-kitten/components';
+import {appColors, deviceWidth} from "../../../shared/styles/global";
 
 /**
  * PROPS :

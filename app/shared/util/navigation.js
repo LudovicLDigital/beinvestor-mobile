@@ -1,25 +1,24 @@
-
 import * as React from 'react';
-import { appColors} from '../../shared/styles/global';
+import {appColors} from '../../shared/styles/global';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {
-    ROUTE_USER_PROFIL_INVEST,
+    ROUTE_DETAIL_GRP,
     ROUTE_FAV_GRP,
     ROUTE_HOME,
     ROUTE_INFO,
     ROUTE_LOGIN,
-    ROUTE_SETTING,
-    ROUTE_SEARCH_GRP,
-    ROUTE_SIMULATOR,
-    ROUTE_USER_PROFIL,
-    ROUTE_DETAIL_GRP,
     ROUTE_MAP,
     ROUTE_MEMBERS_LIST,
     ROUTE_REGISTER,
     ROUTE_RESET_PASSWORD,
-    ROUTE_SIMULATOR_RESULT
+    ROUTE_SEARCH_GRP,
+    ROUTE_SETTING,
+    ROUTE_SIMULATOR,
+    ROUTE_SIMULATOR_RESULT,
+    ROUTE_USER_PROFIL,
+    ROUTE_USER_PROFIL_INVEST
 } from './constants'
 // screens
 import HomeScreen from "../../screens/home-screen";
@@ -37,6 +36,7 @@ import UsersScreen from "../../screens/users-screen";
 import RegisterScreen from "../../screens/register-screen";
 import ResetPassScreen from "../../screens/reset-pass-screen";
 import SimulatorResultScreen from "../../screens/simulator/simulator-result-screen";
+
 const ProfilEditStack = createStackNavigator();
 function ProfilStackNavigator() {
     return (

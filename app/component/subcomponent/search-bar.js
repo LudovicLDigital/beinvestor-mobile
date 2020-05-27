@@ -1,8 +1,6 @@
 import React, {Component} from "react";
-import {
-    View, TouchableWithoutFeedback
-} from "react-native";
-import { Input } from '@ui-kitten/components';
+import {TouchableWithoutFeedback, View} from "react-native";
+import {Input} from '@ui-kitten/components';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 /**

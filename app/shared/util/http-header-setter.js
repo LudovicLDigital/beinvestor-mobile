@@ -1,4 +1,5 @@
 import DeviceStorage from './device-storage';
+
 const httpHeaderSetter = {
     async setDefaultHeader(method) {
         const token = await DeviceStorage.getCurrentUserToken();

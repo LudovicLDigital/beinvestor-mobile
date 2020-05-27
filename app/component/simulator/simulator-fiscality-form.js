@@ -1,9 +1,7 @@
 import React, {Component} from "react";
-import {
-    View, ScrollView
-} from "react-native";
-import {styles, appColors} from "../../shared/styles/global";
-import {Text, Toggle, Select, SelectItem} from '@ui-kitten/components';
+import {ScrollView, View} from "react-native";
+import {appColors, styles} from "../../shared/styles/global";
+import {Select, SelectItem, Text, Toggle} from '@ui-kitten/components';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import TooltipsHelper from "../subcomponent/tooltips-helper";
 import InputField from "../subcomponent/form/input-field";

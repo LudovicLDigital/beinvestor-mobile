@@ -1,11 +1,11 @@
 import React, {Component} from "react";
-import {styles, appColors} from "../../shared/styles/global";
-import {FlatList, View, Alert} from 'react-native';
+import {Alert, FlatList} from 'react-native';
 import AuthService from "../../shared/services/auth";
 import GroupService from "../../shared/services/entities/groups-service";
 import {ROUTE_DETAIL_GRP} from "../../shared/util/constants";
 import SocketService from "../../shared/services/socket-service";
 import GroupItem from './group-item';
+
 /**
  * PROPS :
  * - groups: the list of group

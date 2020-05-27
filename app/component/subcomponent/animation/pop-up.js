@@ -1,9 +1,7 @@
 import React, {Component} from "react";
-import {
-    Animated, Easing, StyleSheet,
-    View
-} from "react-native";
-import {styles, appColors, deviceWidth, deviceHeigth} from "../../../shared/styles/global";
+import {Animated, Easing, StyleSheet, View} from "react-native";
+import {appColors, deviceHeigth, deviceWidth, styles} from "../../../shared/styles/global";
+
 const ownStyle = StyleSheet.create({
     animation_view: {
         backgroundColor: appColors.white,

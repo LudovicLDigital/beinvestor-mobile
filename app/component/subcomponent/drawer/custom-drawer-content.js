@@ -1,4 +1,3 @@
-
 import React, {Fragment, useEffect} from 'react';
 import {convertRouteNameToLisible} from "../../../shared/util/converter-for-route-name";
 import {
@@ -11,12 +10,9 @@ import {
     ROUTE_SIMULATOR,
     ROUTE_USER_PROFIL
 } from "../../../shared/util/constants";
-import {
-    DrawerContentScrollView,
-} from '@react-navigation/drawer';
+import {DrawerContentScrollView,} from '@react-navigation/drawer';
 import AuthService from "../../../shared/services/auth";
-import {Alert, BackHandler, View} from "react-native";
-import {appColors} from "../../../shared/styles/global";
+import {Alert, BackHandler} from "react-native";
 import MenuItem from "./MenuItem";
 import HeaderUser from "../header-user";
 
