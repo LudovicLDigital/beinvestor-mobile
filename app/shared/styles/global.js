@@ -14,7 +14,9 @@ const appColors = {
     white: Colors.white,
     dark: Colors.dark,
     danger: '#ff3d71',
-    success: '#3ACB00'
+    dangerDark: '#ff0000',
+    success: '#3ACB00',
+    warning: '#cb7a0d'
 };
 const {height, width} = Dimensions.get('window');
 //*** End app colors *** //

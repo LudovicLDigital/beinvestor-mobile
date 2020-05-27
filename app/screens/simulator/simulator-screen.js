@@ -111,7 +111,6 @@ export default class SimulatorScreen extends Component {
     }
 
     runSimulator() {
-        console.log(this.state.formValues)
         this.simulatorService.calculateProject(this.state.formValues).then((response) => {
             this.props.navigation.navigate(ROUTE_SIMULATOR_RESULT, {resultDatas: response});
         }).catch((error) => {

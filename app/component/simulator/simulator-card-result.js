@@ -3,6 +3,12 @@ import {
     Text,
     View
 } from "react-native";
+import {
+    Button,
+    Card,
+    Text,
+    Icon
+} from '@ui-kitten/components';
 import {styles, appColors} from "../../shared/styles/global";
 
 /**
