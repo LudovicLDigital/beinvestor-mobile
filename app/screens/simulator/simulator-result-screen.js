@@ -42,7 +42,7 @@ export default class SimulatorResultScreen extends Component {
                 <HeaderBar previousRoute={(this.state.isEditingApart ? this.props.route.name : null)} route={(this.props.route.name)} navigation={this.props.navigation}/>
                 {this.state.simulatorReturnObject && (
                     <ScrollView style={styles.fullScreen}>
-                        {!this.state.isLookingForDetails && <Button size={'small'} style={[styles.backgroundPrimary, {alignSelf: 'flex-end'}]}>Nouveau calcul</Button>}
+                        {!this.state.isLookingForDetails && <Button size={'tiny'} style={[styles.backgroundPrimary, {alignSelf: 'flex-end'}]}>Nouveau calcul</Button>}
                         <SimulatorPreviewResult isLookingDetails={this.state.isLookingForDetails} simulatorReturnObject={this.state.simulatorReturnObject}/>
                         {!this.state.isLookingForDetails && <Button
                             appearance='outline'
@@ -56,8 +56,12 @@ export default class SimulatorResultScreen extends Component {
                             accessoryLeft={ArrowDownIcon}>{evaProps => <Text {...evaProps} style={[evaProps.style, {color: appColors.dark}]}>Voir plus de détails</Text>}</Button>}
                         {this.state.isLookingForDetails &&
                         <View>
+                            <View style={[styles.flexRowAlignCenter, styles.flexRowBetween,{marginTop: 15}]}>
+                                <Button size={'tiny'} style={[styles.backgroundPrimary]} >Nouveau calcul</Button>
+                                <Button size={'tiny'} style={[styles.backgroundPrimary]} onPress={() => this._showDetails()}>Fermer</Button>
+                            </View>
                             <SimulatorCardResult title={'Cashflow'} containerStyle={{marginTop: 20}}>
-                                <SimulatorCashflowChart/>
+                                <SimulatorCashflowChart simulatorDatasReceived={this.state.simulatorReturnObject}/>
                             </SimulatorCardResult>
                             <SimulatorCardResult title={'Fiscalité'} containerStyle={{marginTop: 20}}>
                                 <Text>Régime choisi : {this.state.simulatorReturnObject.simulatorDatas.fiscalType.name}</Text>
@@ -74,6 +78,6 @@ export default class SimulatorResultScreen extends Component {
     }
 
     _showDetails() {
-        this.setState({isLookingForDetails: true});
+        this.setState({isLookingForDetails: !this.state.isLookingForDetails});
     }
 }

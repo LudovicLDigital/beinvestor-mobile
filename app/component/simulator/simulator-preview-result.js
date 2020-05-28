@@ -57,13 +57,13 @@ export default class SimulatorPreviewResult extends Component {
     }
 
     _checkRentaRating(renta) {
-        if (renta >= 9.5) {
+        if (renta >= 9) {
             this.setState({
                 brutRentaClass: simResultStyle.rentaIsGoodLabel,
                 projectSentence: PROJET_IS_AMAZING,
                 thermometerValue: 12
             });
-        } else if (renta >= 5 && renta < 9.5) {
+        } else if (renta >= 5 && renta < 9) {
             this.setState({
                 brutRentaClass: simResultStyle.rentaIsAcceptableLabel,
                 projectSentence: PROJET_IS_ACCEPTABLE,
