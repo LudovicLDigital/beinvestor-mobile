@@ -4,8 +4,9 @@ import {appColors, styles} from "../../shared/styles/global";
 import {Button, Icon, Text} from "@ui-kitten/components/ui/index";
 import HeaderBar from "../../component/subcomponent/header-bar";
 import SimulatorPreviewResult from "../../component/simulator/simulator-preview-result";
-import SimulatorCardResult from "../../component/simulator/simulator-card-result";
-import SimulatorCashflowChart from "../../component/simulator/simulator-cashflow-chart";
+import SimulatorCardResult from "../../component/simulator/cards/simulator-card-result";
+import SimulatorCashflowChart from "../../component/simulator/cards/simulator-cashflow-chart";
+import SimulatorFiscalityDetail from "../../component/simulator/cards/simulator-fiscality-detail";
 
 const ArrowDownIcon = (style) => (
     <Icon {...style}
@@ -64,8 +65,7 @@ export default class SimulatorResultScreen extends Component {
                                 <SimulatorCashflowChart simulatorDatasReceived={this.state.simulatorReturnObject}/>
                             </SimulatorCardResult>
                             <SimulatorCardResult title={'Fiscalité'} containerStyle={{marginTop: 20}}>
-                                <Text>Régime choisi : {this.state.simulatorReturnObject.simulatorDatas.fiscalType.name}</Text>
-                                <Text style={{fontSize: 12}}>{this.state.simulatorReturnObject.simulatorDatas.fiscalType.description}</Text>
+                                <SimulatorFiscalityDetail simulatorDatasReceived={this.state.simulatorReturnObject}/>
                             </SimulatorCardResult>
                             <SimulatorCardResult title={'Emprunt'} containerStyle={{marginTop: 20}}>
                                 <Text>Emprunt</Text>

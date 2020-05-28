@@ -1,8 +1,8 @@
 import React, {Component} from "react";
 import {TouchableWithoutFeedback, View} from "react-native";
 import {Card, Icon, Text} from '@ui-kitten/components';
-import {appColors, styles} from "../../shared/styles/global";
-import SectionDivider from "../subcomponent/form/section-divider";
+import {appColors, styles} from "../../../shared/styles/global";
+import SectionDivider from "../../subcomponent/form/section-divider";
 
 /**
  * PROPS :

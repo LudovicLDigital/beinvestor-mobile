@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {StyleSheet, Text, View} from "react-native";
 import {VictoryPie} from 'victory-native';
-import {appColors, styles} from "../../shared/styles/global";
+import {appColors, styles} from "../../../shared/styles/global";
 import MatIcon from 'react-native-vector-icons/MaterialIcons';
 const graphicColor = ['#665EFF', '#007AC1', '#3ACCE1'];
 
