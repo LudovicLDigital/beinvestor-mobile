@@ -22,26 +22,39 @@ export default class SimulatorResultScreen extends Component {
         super(props);
         this.state = {
             simulatorReturnObject: null,
-            isLookingForDetails: false
+            isLookingForDetails: false,
+            initialized: false
         };
     }
 
     componentDidMount(): void {
-        if (this.props.route && this.props.route.params) {
-            this._setSimulatorObject();
-        }
+            if (this.props.route && this.props.route.params) {
+                this._setSimulatorObject();
+                this._unsubscribe = this.props.navigation.addListener('focus', () => {
+                    this.setState({
+                        initialized: false,
+                    })
+                });
+            }
+
     }
     componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS): void {
-        if (this.state.simulatorReturnObject == null && this.props.route && this.props.route.params) {
+        if (this.props.route && this.props.route.params && !this.state.initialized) {
             this._setSimulatorObject();
         }
     }
+
+    componentWillUnmount(): void {
+        this._unsubscribe.remove();
+    }
+
     _setSimulatorObject() {
         const result = this.props.route.params.resultDatas;
         if (result) {
             if (result && result !== null) {
                 this.setState({
                     simulatorReturnObject: result,
+                    initialized: true
                 });
             }
         }
@@ -50,7 +63,7 @@ export default class SimulatorResultScreen extends Component {
         return (
             <SafeAreaView style={{ flex: 1 }}>
                 <HeaderBar previousRoute={(this.state.isEditingApart ? this.props.route.name : null)} route={(this.props.route.name)} navigation={this.props.navigation}/>
-                {this.state.simulatorReturnObject && (
+                {this.state.simulatorReturnObject && this.state.simulatorReturnObject !== null && (
                     <ScrollView contentContainerStyle={{paddingBottom: 20}} style={[styles.fullScreen ]}>
                         {!this.state.isLookingForDetails &&
                         <Button
@@ -98,7 +111,7 @@ export default class SimulatorResultScreen extends Component {
     async _newSimulation() {
         await this.setState({
             simulatorReturnObject: null,
-            isLookingForDetails: false
+            isLookingForDetails: false,
         });
         this.props.navigation.goBack();
     }

@@ -6,6 +6,7 @@ import InputField from "../subcomponent/form/input-field";
 import {Select, SelectItem, Text, Toggle} from '@ui-kitten/components';
 import SectionDivider from "../subcomponent/form/section-divider";
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {showInfoAlert} from "../../shared/util/ui-helpers";
 
 const workArray = [
     {type: 'Rénovation simple (300€/m²)', helper: 'Une rénovation simple consiste a rafraichir le bien (changement de peinture, sol, fenêtre) et dans une moindre mesure l\'électricité, la plomberie... sans toucher au gros oeuvre'},
@@ -58,12 +59,13 @@ export default class SimulatorEstateForm extends Component {
     render() {
         return (
             <>
-                <ScrollView style={[{flex: 1}]}>
+                <ScrollView contentContainerStyle={{paddingBottom: 20}} style={[{flex: 1}]}>
+                    <Text style={{fontWeight: 'bold', color: appColors.dangerDark, fontSize: 11, textAlign: 'center', marginBottom: 10}}>Les champs marqués avec une étoile " * " sont obligatoires</Text>
                     <Toggle style={{alignSelf: 'flex-start', marginBottom: 15}} checked={!this.state.noFai} onChange={() => this.setState({noFai: !this.state.noFai})}>
                         {evaProps => <Text {...evaProps} >{this.state.noFai ? 'Pas de frais d\'agence' : 'Il y a des frais d\'agence'}</Text>}
                     </Toggle>
                     <View style={styles.flexRowAlignCenter}>
-                        <InputField label={`Prix ${this.state.noFai ? '' : 'FAI'} (€)`}
+                        <InputField label={`Prix ${this.state.noFai ? '' : 'FAI'} (€) *`}
                                     type={'numeric'}
                                     style={{marginRight: 15, flex: 2}}
                                     value={this.state.buyPrice}
@@ -122,7 +124,7 @@ export default class SimulatorEstateForm extends Component {
                     </View>
                     <SectionDivider sectionName={'Location'}/>
                     <View style={styles.flexRowAlignCenter}>
-                        <InputField label={'Loyer mensuel hors charges (€)'}
+                        <InputField label={'Loyer mensuel hors charges (€) *'}
                                     type={'numeric'}
                                     style={{marginRight: 15}}
                                     value={this.state.monthlyRent}
@@ -167,10 +169,26 @@ export default class SimulatorEstateForm extends Component {
         )
     }
     save() {
-        this.props.formValuesReturned(this.state);
+        const messageError = this._checkFormValues();
+        if (messageError === '') {
+            this.props.formValuesReturned(this.state);
+        } else {
+            showInfoAlert(messageError, true)
+        }
     }
     changeSurface(text) {
         this.selectWorkCost(this.workIndex);
         this.setState({surface: text})
+    }
+
+    _checkFormValues() {
+        let messageError = '';
+        if (!this.state.buyPrice) {
+            messageError = messageError + '- Prix requis \n';
+        }
+        if (!this.state.monthlyRent) {
+            messageError = messageError + '- Loyer requis \n';
+        }
+        return messageError;
     }
 }

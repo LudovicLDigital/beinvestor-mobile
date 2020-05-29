@@ -93,7 +93,7 @@ export const SimulatorReturnObject = {
 };
 export const SimulatorDataSendObject = {
     noFai: false,
-    makeACredit: true,
+    makeACredit: false,
     includeFurnitureInCredit: true,
     faiPercent: null,
     notarialCost: null,

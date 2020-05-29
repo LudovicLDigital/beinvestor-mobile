@@ -47,7 +47,7 @@ export default class SimulatorFiscalityForm extends Component {
     render() {
         return (
             <>
-                <ScrollView style={[{flex: 1}]}>
+                <ScrollView contentContainerStyle={{paddingBottom: 20}} style={[{flex: 1}]}>
                     <View style={[styles.flexRowAlignCenter, {justifyContent: 'space-between', alignItems: 'center'}]}>
                         <Toggle style={{marginBottom: 15}} checked={this.state.inHandProject} onChange={() => this.toggleInHand()}>
                             {evaProps => <Text {...evaProps} >{this.state.inHandProject ? 'Projet clef en main' : 'J\'entre moi-même les montants'}</Text>}

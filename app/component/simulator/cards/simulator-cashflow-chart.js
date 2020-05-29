@@ -33,7 +33,7 @@ export default class SimulatorCashflowChart extends Component {
         const taxes = Math.round(((this.state.simData.fiscality.taxIR + this.state.simData.fiscality.taxPS + this.state.simData.simulatorDatas.userEstate.taxeFonciere) / 12)*100)/100;
         allCharges = (Math.round(((allCharges + sessionValues.comptableCost + sessionValues.pnoCost) / 12)*100))/100;
         const graphicData = [
-            { x: `-${taxes}€ Impôts et taxes`,y: taxes},
+            { x: `-${taxes}€\n Impôts\net taxes`,y: taxes},
             { x: `${this.state.simData.simulatorDatas.userEstate.monthlyRent}€\n Loyer`, y: this.state.simData.simulatorDatas.userEstate.monthlyRent },
             { x: `-${allCharges}€\n Charges`,y: allCharges},
         ];

@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import TooltipsHelper from "../subcomponent/tooltips-helper";
 import InputField from "../subcomponent/form/input-field";
 import {BANK_FOLDER_COST, BANK_GARANTY_PERCENT, TX_BANK} from "../../shared/util/constants";
+import {showInfoAlert} from "../../shared/util/ui-helpers";
 
 /**
  * PROPS :
@@ -26,7 +27,7 @@ export default class SimulatorBankForm extends Component {
             creditWarrantyCost: this.props.recoverredFormValues.creditWarrantyCost ? this.props.recoverredFormValues.creditWarrantyCost : determinedWarrantyCost.toString(),
             bankCharges: this.props.recoverredFormValues.bankCharges ? this.props.recoverredFormValues.bankCharges : (BANK_FOLDER_COST).toString(),
             creditTime: this.props.recoverredFormValues.creditTime ? this.props.recoverredFormValues.creditTime : '20',
-            bankRate: this.props.recoverredFormValues.bankRate ? this.props.recoverredFormValues.bankRate :TX_BANK,
+            bankRate: this.props.recoverredFormValues.bankRate ? this.props.recoverredFormValues.bankRate : TX_BANK,
             actualCreditMensualities: this.props.recoverredFormValues.actualCreditMensualities ? this.props.recoverredFormValues.actualCreditMensualities : '0',
             furnitureCost: this.props.recoverredFormValues.furnitureCost ? this.props.recoverredFormValues.furnitureCost : '0',
             includeFurnitureInCredit: (typeof this.props.recoverredFormValues.includeFurnitureInCredit !== 'undefined' && this.props.recoverredFormValues.includeFurnitureInCredit !== null) ? this.props.recoverredFormValues.includeFurnitureInCredit : false,
@@ -36,7 +37,9 @@ export default class SimulatorBankForm extends Component {
     render() {
         return (
             <>
-                <ScrollView style={[{flex: 1}]}>
+                <ScrollView contentContainerStyle={{paddingBottom: 20}} style={[{flex: 1}]}>
+                    <Text style={{fontWeight: 'bold', color: appColors.dangerDark, fontSize: 11, textAlign: 'center', marginBottom: 10}}>Les champs marqués avec une étoile " * " sont obligatoires</Text>
+
                     <Toggle style={{alignSelf: 'flex-start', marginBottom: 15}} checked={this.state.makeACredit} onChange={() => this.setState({makeACredit: !this.state.makeACredit})}>
                         {evaProps => <Text {...evaProps} >{this.state.makeACredit ? 'Je fais un emprunt' : 'Je ne fais pas d\'emprunt'}</Text>}
                     </Toggle>
@@ -84,7 +87,7 @@ export default class SimulatorBankForm extends Component {
                                 <TooltipsHelper  showAsAlert={true} messageInfo={`En moyenne les frais de dossier sont autour de ${BANK_FOLDER_COST}€`} />
                             </View>
                             <View style={styles.flexRowAlignCenter}>
-                                <InputField label={'Durée de crédit (nombre d\'années)'}
+                                <InputField label={'Durée de crédit (nombre d\'années) *'}
                                             type={'numeric'}
                                             style={{marginRight: 15}}
                                             value={this.state.creditTime}
@@ -92,7 +95,7 @@ export default class SimulatorBankForm extends Component {
                                 <TooltipsHelper showAsAlert={true} messageInfo={'En moyenne les banques n\'excèdent pas la durée de 20 ans pour un investissement locatif.'} />
                             </View>
                             <View style={styles.flexRowAlignCenter}>
-                                <InputField label={'Taux du crédit (%)'}
+                                <InputField label={'Taux du crédit (%) *'}
                                             type={'numeric'}
                                             style={{marginRight: 15}}
                                             value={this.state.bankRate}
@@ -100,7 +103,7 @@ export default class SimulatorBankForm extends Component {
                                 <TooltipsHelper showAsAlert={true} messageInfo={'Le taux donné ici n\'est qu\'indicatif, et sur une durée de 20 ans'} />
                             </View>
                             <View style={styles.flexRowAlignCenter}>
-                                <InputField label={'Mensualité de crédit actuelles (€)'}
+                                <InputField label={'Mensualité d\'autres emprunts (€)'}
                                             type={'numeric'}
                                             style={{marginRight: 15}}
                                             value={this.state.actualCreditMensualities}
@@ -118,8 +121,22 @@ export default class SimulatorBankForm extends Component {
             </>
         )
     }
-
     save() {
-        this.props.formValuesReturned(this.state);
+        const messageError = this._checkFormValues();
+        if (messageError === '') {
+            this.props.formValuesReturned(this.state);
+        } else {
+            showInfoAlert(messageError, true)
+        }
+    }
+    _checkFormValues() {
+        let messageError = '';
+        if (!this.state.creditTime) {
+            messageError = messageError + '- Durée du crédit requis \n';
+        }
+        if (!this.state.bankRate) {
+            messageError = messageError + '- Taux d\'emprunt requis \n';
+        }
+        return messageError;
     }
 }

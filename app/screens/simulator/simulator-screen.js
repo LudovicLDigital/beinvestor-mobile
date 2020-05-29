@@ -11,6 +11,7 @@ import SimulatorFiscalityForm from "../../component/simulator/simulator-fiscalit
 import SimulatorBankForm from "../../component/simulator/simulator-bank-form";
 import {SimulatorDataSendObject} from "../../shared/util/simulator-objects";
 import SimulatorService from "../../shared/services/simulator-service";
+import {showInfoAlert} from "../../shared/util/ui-helpers";
 
 export default class SimulatorScreen extends Component {
     simulatorService;
@@ -37,9 +38,9 @@ export default class SimulatorScreen extends Component {
                     {this.state.partShowed === BANK && this.state.isEditingApart && <SimulatorBankForm formValuesReturned={(datas) => this.fillDataFor(BANK, datas)} recoverredFormValues={this.state.formValues}/>}
                     {this.state.partShowed === FISCALITY && this.state.isEditingApart && <SimulatorFiscalityForm formValuesReturned={(datas) => this.fillDataFor(FISCALITY, datas)} recoverredFormValues={this.state.formValues}/>}
                     {!this.state.isEditingApart && <Icon.Button name="insert-chart"
-                                 backgroundColor={appColors.success}
-                                 onPress={() => this.runSimulator()}
-                                 style={{justifyContent: 'center'}}>
+                                                                backgroundColor={appColors.success}
+                                                                onPress={() => this.runSimulator()}
+                                                                style={{justifyContent: 'center'}}>
                         Évaluer mon projet
                     </Icon.Button>}
                 </Layout>
@@ -112,11 +113,38 @@ export default class SimulatorScreen extends Component {
     }
 
     runSimulator() {
-        this.simulatorService.calculateProject(this.state.formValues).then((response) => {
-            this.props.navigation.navigate(ROUTE_SIMULATOR_RESULT, {resultDatas: response});
-        }).catch((error) => {
-            console.error('ERROR TO calculateProject : ');
-            console.error(error);
-        })
+        const messageError = this._checkFormValues();
+        if (messageError === '') {
+            this.simulatorService.calculateProject(this.state.formValues).then((response) => {
+                this.props.navigation.navigate(ROUTE_SIMULATOR_RESULT, {resultDatas: response});
+            }).catch((error) => {
+                console.error('ERROR TO calculateProject : ');
+                console.error(error);
+            })
+        } else {
+            showInfoAlert(messageError, true)
+        }
+    }
+    _checkFormValues() {
+        let messageError = '';
+        if (!this.state.formValues.buyPrice || !this.state.formValues.monthlyRent) {
+            messageError = 'Partie "Bien à analyser" : \n';
+            if (!this.state.formValues.buyPrice) {
+                messageError = messageError + '- Prix requis \n';
+            }
+            if (!this.state.formValues.monthlyRent) {
+                messageError = messageError + '- Loyer requis \n';
+            }
+        }
+        if ((!this.state.formValues.buyPrice || !this.state.formValues.monthlyRent) && this.state.formValues.makeACredit) {
+            messageError = messageError + 'Partie "Emprunt bancaire : " \n';
+            if (!this.state.formValues.creditTime) {
+                messageError = messageError + '- Durée du crédit requis \n';
+            }
+            if (!this.state.formValues.bankRate) {
+                messageError = messageError + '- Taux d\'emprunt requis \n';
+            }
+        }
+        return messageError;
     }
 }

@@ -35,7 +35,7 @@ export default class SimulatorFiscalityDetail extends Component {
         }
         this.setState({
             deductiveChargeAmount: Math.round(allCharges*100)/100,
-            amortissements: isMeubleReal ? this.props.simulatorDatasReceived.fiscality.amortissementAmount.for5Year : 0,
+            amortissements: isMeubleReal ? Math.round(this.props.simulatorDatasReceived.fiscality.amortissementAmount.for5Year*100)/100 : 0,
             totalFiscalCount: (allCharges + this.state.amortissements + this.state.taxPS + this.state.taxIR + this.state.otherTaxes)
         });
     }
