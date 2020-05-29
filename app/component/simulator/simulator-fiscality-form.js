@@ -52,7 +52,7 @@ export default class SimulatorFiscalityForm extends Component {
                         <Toggle style={{marginBottom: 15}} checked={this.state.inHandProject} onChange={() => this.toggleInHand()}>
                             {evaProps => <Text {...evaProps} >{this.state.inHandProject ? 'Projet clef en main' : 'J\'entre moi-même les montants'}</Text>}
                         </Toggle>
-                        <TooltipsHelper messageInfo={'"Projet clef en main" laisse le simulateur determiner tous les frais annexes (délégation, pno...) pour vous'} />
+                        <TooltipsHelper  showAsAlert={true} messageInfo={'"Projet clef en main" laisse le simulateur determiner tous les frais annexes (délégation, pno...) pour vous'} />
                     </View>
                     { !this.state.inHandProject && (
                         <View>
@@ -62,7 +62,7 @@ export default class SimulatorFiscalityForm extends Component {
                                             style={{marginRight: 15}}
                                             value={this.state.percentRentManagement}
                                             onTextChange={(text) => this.setState({percentRentManagement: text})}/>
-                                <TooltipsHelper messageInfo={`En moyenne le pourcentage prélévé pour la gestion locative est de 7% du loyer.`} />
+                                <TooltipsHelper showAsAlert={true} messageInfo={`En moyenne le pourcentage prélévé pour la gestion locative est de 7% du loyer.`} />
                             </View>
                             <View style={styles.flexRowAlignCenter}>
                                 <InputField label={'Pourcentage de l\'assurance loyer impayés'}
@@ -70,7 +70,7 @@ export default class SimulatorFiscalityForm extends Component {
                                             style={{marginRight: 15}}
                                             value={this.state.gliPercent}
                                             onTextChange={(text) => this.setState({gliPercent: text})}/>
-                                <TooltipsHelper messageInfo={'En moyenne le pourcentage d\'une assurance loyer impayés est de 3% du loyer.'} />
+                                <TooltipsHelper showAsAlert={true} messageInfo={'En moyenne le pourcentage d\'une assurance loyer impayés est de 3% du loyer.'} />
                             </View>
                             <View style={styles.flexRowAlignCenter}>
                                 <InputField label={'Assurance PNO'}
@@ -78,7 +78,7 @@ export default class SimulatorFiscalityForm extends Component {
                                             style={{marginRight: 15}}
                                             value={this.state.pnoCost}
                                             onTextChange={(text) => this.setState({pnoCost: text})}/>
-                                <TooltipsHelper messageInfo={'L\'assurance propriétaire non-occupant est obligatoire en tant que propriétaire bailleur.'} />
+                                <TooltipsHelper showAsAlert={true} messageInfo={'L\'assurance propriétaire non-occupant est obligatoire en tant que propriétaire bailleur.'} />
                             </View>
                             <View style={styles.flexRowAlignCenter}>
                                 <InputField label={'Pourcentage de l\'assurance vacance locative'}
@@ -86,7 +86,7 @@ export default class SimulatorFiscalityForm extends Component {
                                             style={{marginRight: 15}}
                                             value={this.state.vlInsurancePercent}
                                             onTextChange={(text) => this.setState({vlInsurancePercent: text})}/>
-                                <TooltipsHelper messageInfo={'En moyenne le pourcentage d\'une assurance vacance locative (periode où le bien n\'est pas occupé) est de 1% du loyer.'} />
+                                <TooltipsHelper showAsAlert={true} messageInfo={'En moyenne le pourcentage d\'une assurance vacance locative (periode où le bien n\'est pas occupé) est de 1% du loyer.'} />
                             </View>
                         </View>
                     )}
@@ -96,7 +96,7 @@ export default class SimulatorFiscalityForm extends Component {
                                     style={{marginRight: 15}}
                                     value={this.state.comptableCost}
                                     onTextChange={(text) => this.setState({comptableCost: text})}/>
-                        <TooltipsHelper messageInfo={`Prendre un comptable est judicieux et vous apportera de nombreux avantages dans le cadre de régime au réel !`} />
+                        <TooltipsHelper showAsAlert={true} messageInfo={`Prendre un comptable est judicieux et vous apportera de nombreux avantages dans le cadre de régime au réel !`} />
                     </View>
                     { this.state.fiscalTypes && this.state.fiscalTypes !== null  && this.state.fiscalTypes.length > 0 &&
                     <View style={styles.flexRowAlignCenter}>

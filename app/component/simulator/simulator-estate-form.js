@@ -73,7 +73,7 @@ export default class SimulatorEstateForm extends Component {
                                                           style={{marginRight: 15, flex: 1}}
                                                           value={this.state.faiPercent}
                                                           onTextChange={(text) => this.setState({faiPercent: text})}/>}
-                        <TooltipsHelper messageInfo={'FAI correspond à "frais d\'agence inclus", soit le prix du bien comprenant les frais de l\'agence immobilière qui vend le bien.'} />
+                        <TooltipsHelper showAsAlert={true} messageInfo={'FAI correspond à "frais d\'agence inclus", soit le prix du bien comprenant les frais de l\'agence immobilière qui vend le bien.'} />
                     </View>
                     <View style={styles.flexRowAlignCenter}>
                         <InputField label={'Surface totale (m²)'}
@@ -118,7 +118,7 @@ export default class SimulatorEstateForm extends Component {
                                     style={{marginRight: 15}}
                                     value={this.state.notarialCost}
                                     onTextChange={(text) => this.setState({notarialCost: text})}/>
-                        <TooltipsHelper messageInfo={'Les frais de notaire s\'élèvent en moyenne à 8.5% du prix du bien, si vous laissez ce champs vide, nous le calculerons pour vous'}/>
+                        <TooltipsHelper showAsAlert={true} messageInfo={'Les frais de notaire s\'élèvent en moyenne à 8.5% du prix du bien, si vous laissez ce champs vide, nous le calculerons pour vous'}/>
                     </View>
                     <SectionDivider sectionName={'Location'}/>
                     <View style={styles.flexRowAlignCenter}>
@@ -127,7 +127,7 @@ export default class SimulatorEstateForm extends Component {
                                     style={{marginRight: 15}}
                                     value={this.state.monthlyRent}
                                     onTextChange={(text) => this.setState({monthlyRent: text})}/>
-                        <TooltipsHelper messageInfo={'S\'il y a plusieurs biens (cas d\'un immeuble par exemple), additionner tous les loyers HC'}/>
+                        <TooltipsHelper showAsAlert={true} messageInfo={'S\'il y a plusieurs biens (cas d\'un immeuble par exemple), additionner tous les loyers HC'}/>
                     </View>
 
                     <View style={styles.flexRowAlignCenter}>
@@ -136,7 +136,7 @@ export default class SimulatorEstateForm extends Component {
                                     style={{marginRight: 15}}
                                     value={this.state.previsionalRentCharge}
                                     onTextChange={(text) => this.setState({previsionalRentCharge: text})}/>
-                        <TooltipsHelper messageInfo={'Le coût moyen des charges pour les locataires en france est de 54€/mois (Insee)'}/>
+                        <TooltipsHelper showAsAlert={true} messageInfo={'Le coût moyen des charges pour les locataires en france est de 54€/mois (Insee)'}/>
                     </View>
 
                     <View style={styles.flexRowAlignCenter}>
@@ -145,7 +145,7 @@ export default class SimulatorEstateForm extends Component {
                                     style={{marginRight: 15}}
                                     value={this.state.chargeCopro}
                                     onTextChange={(text) => this.setState({chargeCopro: text})}/>
-                        <TooltipsHelper messageInfo={'Les charges de copropriété sont les charges des utilisations communes à tous les copropriétaires (ascenseur, syndic etc...)'}/>
+                        <TooltipsHelper showAsAlert={true} messageInfo={'Les charges de copropriété sont les charges des utilisations communes à tous les copropriétaires (ascenseur, syndic etc...)'}/>
                     </View>
 
                     <View style={styles.flexRowAlignCenter}>
@@ -154,7 +154,7 @@ export default class SimulatorEstateForm extends Component {
                                     style={{marginRight: 15}}
                                     value={this.state.secureSaving}
                                     onTextChange={(text) => this.setState({secureSaving: text})}/>
-                        <TooltipsHelper messageInfo={'Nous vous recommandons de prévoir 1% du prix du bien travaux inclus sur l\'année pour surmonter les imprévus (réparation, entretiens etc...)'}/>
+                        <TooltipsHelper showAsAlert={true} messageInfo={'Nous vous recommandons de prévoir 1% du prix du bien travaux inclus sur l\'année pour surmonter les imprévus (réparation, entretiens etc...)'}/>
                     </View>
                 </ScrollView>
                 <Icon.Button name="save"

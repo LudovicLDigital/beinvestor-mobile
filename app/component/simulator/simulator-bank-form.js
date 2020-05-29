@@ -45,7 +45,7 @@ export default class SimulatorBankForm extends Component {
                             <Toggle style={{marginBottom: 15}} checked={this.state.is110} onChange={() => this.setState({is110: !this.state.is110})}>
                                 {evaProps => <Text {...evaProps} >{this.state.is110 ? 'J\'emprunte à 110%' : 'Je n\'emprunte pas à 110%'}</Text>}
                             </Toggle>
-                            <TooltipsHelper messageInfo={'Un emprunt à 110% est une demande de financement de la totalité de votre projet en incluant aussi les frais de notaires, bancaires etc...'} />
+                            <TooltipsHelper showAsAlert={true} messageInfo={'Un emprunt à 110% est une demande de financement de la totalité de votre projet en incluant aussi les frais de notaires, bancaires etc...'} />
                         </View>)}
                     { !this.state.is110 && this.state.makeACredit &&
                     <View style={styles.flexRowAlignCenter}>
@@ -73,7 +73,7 @@ export default class SimulatorBankForm extends Component {
                                             style={{marginRight: 15}}
                                             value={this.state.creditWarrantyCost}
                                             onTextChange={(text) => this.setState({creditWarrantyCost: text})}/>
-                                <TooltipsHelper messageInfo={`C'est frais concernent les coûts d'hypothèque, ppd, caution par exemple. Ils s'élèvent en général à environ ${BANK_GARANTY_PERCENT * 100}% du montant du prêt.`} />
+                                <TooltipsHelper  showAsAlert={true} messageInfo={`C'est frais concernent les coûts d'hypothèque, ppd, caution par exemple. Ils s'élèvent en général à environ ${BANK_GARANTY_PERCENT * 100}% du montant du prêt.`} />
                             </View>
                             <View style={styles.flexRowAlignCenter}>
                                 <InputField label={'Frais de dossier (€)'}
@@ -81,7 +81,7 @@ export default class SimulatorBankForm extends Component {
                                             style={{marginRight: 15}}
                                             value={this.state.bankCharges}
                                             onTextChange={(text) => this.setState({bankCharges: text})}/>
-                                <TooltipsHelper messageInfo={`En moyenne les frais de dossier sont autour de ${BANK_FOLDER_COST}€`} />
+                                <TooltipsHelper  showAsAlert={true} messageInfo={`En moyenne les frais de dossier sont autour de ${BANK_FOLDER_COST}€`} />
                             </View>
                             <View style={styles.flexRowAlignCenter}>
                                 <InputField label={'Durée de crédit (nombre d\'années)'}
@@ -89,7 +89,7 @@ export default class SimulatorBankForm extends Component {
                                             style={{marginRight: 15}}
                                             value={this.state.creditTime}
                                             onTextChange={(text) => this.setState({creditTime: text})}/>
-                                <TooltipsHelper messageInfo={'En moyenne les banques n\'excèdent pas la durée de 20 ans pour un investissement locatif.'} />
+                                <TooltipsHelper showAsAlert={true} messageInfo={'En moyenne les banques n\'excèdent pas la durée de 20 ans pour un investissement locatif.'} />
                             </View>
                             <View style={styles.flexRowAlignCenter}>
                                 <InputField label={'Taux du crédit (%)'}
@@ -97,7 +97,7 @@ export default class SimulatorBankForm extends Component {
                                             style={{marginRight: 15}}
                                             value={this.state.bankRate}
                                             onTextChange={(text) => this.setState({bankRate: text})}/>
-                                <TooltipsHelper messageInfo={'Le taux donné ici n\'est qu\'indicatif, et sur une durée de 20 ans'} />
+                                <TooltipsHelper showAsAlert={true} messageInfo={'Le taux donné ici n\'est qu\'indicatif, et sur une durée de 20 ans'} />
                             </View>
                             <View style={styles.flexRowAlignCenter}>
                                 <InputField label={'Mensualité de crédit actuelles (€)'}

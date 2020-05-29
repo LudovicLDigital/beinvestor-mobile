@@ -2,11 +2,13 @@ import React, {Component} from "react";
 import {TouchableWithoutFeedback} from "react-native";
 import {Icon, Tooltip} from '@ui-kitten/components';
 import {appColors} from "../../shared/styles/global";
+import {showInfoAlert} from "../../shared/util/ui-helpers";
 
 /**
  * PROPS :
  * - messageInfo : the message to display on the tooltips
  * - sizeIcon: a number for width and height
+ * - showAsAlert
  */
 export default class TooltipsHelper extends Component {
     constructor(props) {
@@ -18,7 +20,7 @@ export default class TooltipsHelper extends Component {
 
     render() {
         const renderToggleButton = () => (
-            <TouchableWithoutFeedback onPress={() => this.setState({visible:true})}>
+            <TouchableWithoutFeedback onPress={() => this._showHelper()}>
                 <Icon style={{width: (this.props.sizeIcon ?  this.props.sizeIcon : 32), height: (this.props.sizeIcon ?  this.props.sizeIcon : 32) }} fill={appColors.primary} name={'info-outline'}/>
             </TouchableWithoutFeedback>
         );
@@ -32,5 +34,13 @@ export default class TooltipsHelper extends Component {
                 {this.props.messageInfo}
             </Tooltip>
         );
+    }
+
+    _showHelper() {
+        if (!this.props.showAsAlert) {
+            this.setState({visible: true})
+        } else {
+            showInfoAlert(this.props.messageInfo, true);
+        }
     }
 }

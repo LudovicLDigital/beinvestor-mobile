@@ -96,12 +96,12 @@ export default class SimulatorPreviewResult extends Component {
                         {this.state.simulatorReturnObject &&
                         <View style={[styles.flexRowAlignCenter]}>
                             <Text style={[this.state.brutRentaClass, {flex:1}]}>Rentabilité brute :{'\n'} {this.state.simulatorReturnObject.result.rentaBrutte}%</Text>
-                            <TooltipsHelper style={{flex:1}} messageInfo={'La rentabilité brute est calculée grâce aux loyers encaissés divisé par le coût d\'acquisition du bien (travaux compris).'}/>
+                            <TooltipsHelper  showAsAlert={true} style={{flex:1}} messageInfo={'La rentabilité brute est calculée grâce aux loyers encaissés divisé par le coût d\'acquisition du bien (travaux compris).'}/>
                         </View>}
                         {this.state.simulatorReturnObject && !this.props.isLookingDetails &&
                         <View style={[styles.flexRowAlignCenter]}>
                             <Text style={[styles.inputLabelPrimary, simResultStyle.rentaNette]}>Rentabilité nette : {'\n'} {this.state.simulatorReturnObject.result.rentaNet}%</Text>
-                            <TooltipsHelper style={{flex:1}} messageInfo={'La rentabilité nette se calcul de la même façon que la brute mais on déduis les charges (taxe foncière, gestion...) des loyers encaissés.'}/>
+                            <TooltipsHelper  showAsAlert={true} style={{flex:1}} messageInfo={'La rentabilité nette se calcul de la même façon que la brute mais on déduis les charges (taxe foncière, gestion...) des loyers encaissés.'}/>
                         </View>}
                     </Animated.View>
                 </View>
@@ -111,9 +111,9 @@ export default class SimulatorPreviewResult extends Component {
                     <Text style={[(this.state.simulatorReturnObject.result.cashflow.cashflowNetNet > 0
                         ? simResultStyle.rentaIsGoodLabel
                         : simResultStyle.rentaIsBadLabel), {flex:1}]}>Cashflow après impôts de : {'\n'} {this.state.simulatorReturnObject.result.cashflow.cashflowNetNet} € / mois</Text>
-                    <TooltipsHelper style={{flex:1}}  messageInfo={'Il s\'agit ici du cashflow net net, soit après déduction de toutes les charges et impôts de vos loyers. S\'il est négatif cela signifie qu\'un effort d\'épargne devra être fait.'}/>
+                    <TooltipsHelper  showAsAlert={true} style={{flex:1}}  messageInfo={'Il s\'agit ici du cashflow net net, soit après déduction de toutes les charges et impôts de vos loyers. S\'il est négatif cela signifie qu\'un effort d\'épargne devra être fait.'}/>
                 </View>)}
-                {!this.props.isLookingDetails && (
+                {!this.props.isLookingDetails && this.state.simulatorReturnObject.simulatorDatas.bankStats && this.state.simulatorReturnObject.simulatorDatas.bankStats !== null && (
                 <View style={[styles.flexRowAlignCenter, {marginTop: 10}]}>
                     <MatIcon size={30} color={appColors.primary} name={'event'}/>
                     <Text style={{flex:1, textAlign: 'center'}}>Mensualité d'emprunt de {this.state.simulatorReturnObject.simulatorDatas.bankStats.creditDetail.mensuality} €</Text>

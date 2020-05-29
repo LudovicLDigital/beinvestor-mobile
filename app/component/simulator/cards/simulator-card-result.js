@@ -21,7 +21,7 @@ export default class SimulatorCardResult extends Component {
 
     render() {
         return (
-            <Card style={[{flex: 1}, this.props.containerStyle]}>
+            <Card style={[{flex: 1, margin: 0}, this.props.containerStyle]}>
                 <TouchableWithoutFeedback onPress={() => this._togglePan()}>
                     <View style={[styles.flexRowAlignCenter, {justifyContent: 'space-between'}]}>
                         <Text category={'h5'}>{this.props.title}</Text>
