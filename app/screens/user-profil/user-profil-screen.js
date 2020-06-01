@@ -150,7 +150,7 @@ export default class UserProfilScreen extends Component {
                         Sauvegarder
                     </Button>
                 }
-                <ScrollView style={[{ flex:1},styles.fullScreen]}>
+                <ScrollView contentContainerStyle={{paddingBottom: 20}} style={[{ flex:1},styles.fullScreen]}>
                     <ProfilPicturePicker isAbleToEdit={true}/>
                     <View style={{flexDirection: 'row'}}>
                         <InputField label={'Prénom'}
