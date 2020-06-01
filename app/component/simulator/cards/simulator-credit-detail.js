@@ -30,16 +30,26 @@ export default class SimulatorCreditDetail extends Component {
         this._setMensualityDetail();
         this._setEndettementChart();
     }
+
+    /**
+     * Calculate all monthly values for mensuality details (interest, insurance, capital) and decompose it
+     * @private
+     */
     _setMensualityDetail() {
-        const montlyInterest = (this.state.simData.simulatorDatas.bankStats.creditDetail.totalInterest / this.state.simData.simulatorDatas.bankStats.creditTime) / 12;
-        const montlyInsurance = (this.state.simData.simulatorDatas.bankStats.creditDetail.totalBankInsuranceCost / this.state.simData.simulatorDatas.bankStats.creditTime) / 12;
-        const montlyCapitalized = this.state.simData.simulatorDatas.bankStats.creditDetail.mensualityWithInsurance - montlyInsurance - montlyInterest;
+        const monthlyInterest = (this.state.simData.simulatorDatas.bankStats.creditDetail.totalInterest / this.state.simData.simulatorDatas.bankStats.creditTime) / 12;
+        const monthlyInsurance = (this.state.simData.simulatorDatas.bankStats.creditDetail.totalBankInsuranceCost / this.state.simData.simulatorDatas.bankStats.creditTime) / 12;
+        const monthlyCapitalized = this.state.simData.simulatorDatas.bankStats.creditDetail.mensualityWithInsurance - monthlyInsurance - monthlyInterest;
         this.setState({
-            capitalized: Math.round(montlyCapitalized*100)/100,
-            interest: Math.round(montlyInterest*100)/100,
-            insurance: Math.round(montlyInsurance*100)/100,
+            capitalized: Math.round(monthlyCapitalized*100)/100,
+            interest: Math.round(monthlyInterest*100)/100,
+            insurance: Math.round(monthlyInsurance*100)/100,
         })
     }
+
+    /**
+     * Prepare values for the Victory Chart of the user's endettement
+     * @private
+     */
     _setEndettementChart() {
         const graphicData = [
             {

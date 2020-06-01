@@ -137,10 +137,16 @@ export default class SimulatorFiscalityForm extends Component {
         )
     }
 
+    /**
+     * Emit the new values to parent component
+     */
     save() {
         this.props.formValuesReturned(this.state);
     }
 
+    /**
+     * Change field visibility if user will more advanced field to fill
+     */
     toggleInHand() {
         const inHand = !this.state.inHandProject;
         this.setState({
@@ -152,6 +158,10 @@ export default class SimulatorFiscalityForm extends Component {
         })
     }
 
+    /**
+     * Change the fiscal type
+     * @param row is the index in the select which will be use to recover in the array of types
+     */
     selectFiscalType(row) {
         const type = this.state.fiscalTypes[row];
         this.setState({

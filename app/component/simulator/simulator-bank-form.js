@@ -121,6 +121,10 @@ export default class SimulatorBankForm extends Component {
             </>
         )
     }
+
+    /**
+     * Emit datas to parent if required field are  valid
+     */
     save() {
         const messageError = this._checkFormValues();
         if (messageError === '') {
@@ -129,6 +133,12 @@ export default class SimulatorBankForm extends Component {
             showInfoAlert(messageError, true)
         }
     }
+
+    /**
+     * Check if all required field are filled
+     * @returns {string}
+     * @private
+     */
     _checkFormValues() {
         let messageError = '';
         if (!this.state.creditTime) {

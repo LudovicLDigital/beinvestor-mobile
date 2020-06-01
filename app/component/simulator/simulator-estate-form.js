@@ -39,6 +39,11 @@ export default class SimulatorEstateForm extends Component {
             selectWork: null,
         }
     }
+
+    /**
+     * Calculate the work cost depending on the selected type of work
+     * @param index the index in the select and the work array
+     */
     selectWorkCost(index) {
         this.workIndex = index;
         switch (index) {
@@ -168,6 +173,10 @@ export default class SimulatorEstateForm extends Component {
             </>
         )
     }
+
+    /**
+     * Emit the datas to parent if all field required are good
+     */
     save() {
         const messageError = this._checkFormValues();
         if (messageError === '') {
@@ -176,11 +185,21 @@ export default class SimulatorEstateForm extends Component {
             showInfoAlert(messageError, true)
         }
     }
+
+    /**
+     * Recalculate the work cost when the surface change
+     * @param text
+     */
     changeSurface(text) {
         this.selectWorkCost(this.workIndex);
         this.setState({surface: text})
     }
 
+    /**
+     * Check the required field filled or not
+     * @returns {string} the message error with the field required
+     * @private
+     */
     _checkFormValues() {
         let messageError = '';
         if (!this.state.buyPrice) {

@@ -26,6 +26,11 @@ export default class SimulatorCashflowChart extends Component {
     componentDidMount(): void {
         this._setGraphicNetNet();
     }
+
+    /**
+     * Prepare the Victory Chart with the details of the net net cashflow
+     * @private
+     */
     _setGraphicNetNet() {
         const chargesObj = this.state.simData.fiscality.totalDeductiveCharges;
         let allCharges = chargesObj.creditInsurance + chargesObj.gliCost + chargesObj.rentGestionCost + chargesObj.secureCost + chargesObj.vlInsuranceCost;

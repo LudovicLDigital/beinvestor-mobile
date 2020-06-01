@@ -34,6 +34,10 @@ export default class SimulatorCardResult extends Component {
         )
     }
 
+    /**
+     * Hide or Show the content of the card
+     * @private
+     */
     _togglePan() {
         this.setState({
             haveOpenThePan: !this.state.haveOpenThePan,

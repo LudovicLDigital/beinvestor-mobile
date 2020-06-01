@@ -48,6 +48,10 @@ export default class SimulatorResultScreen extends Component {
         this._unsubscribe.remove();
     }
 
+    /**
+     * Set the state with the route param
+     * @private
+     */
     _setSimulatorObject() {
         const result = this.props.route.params.resultDatas;
         if (result) {
@@ -104,10 +108,18 @@ export default class SimulatorResultScreen extends Component {
         )
     }
 
+    /**
+     * Hide preview of result and open the details
+     * @private
+     */
     _showDetails() {
         this.setState({isLookingForDetails: !this.state.isLookingForDetails});
     }
 
+    /**
+     * Reset result to start a new simulator
+     * @private
+     */
     async _newSimulation() {
         await this.setState({
             simulatorReturnObject: null,

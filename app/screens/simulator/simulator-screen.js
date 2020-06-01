@@ -25,9 +25,6 @@ export default class SimulatorScreen extends Component {
         }
     }
 
-    componentDidMount(): void {
-    }
-
     render() {
         return (
             <SafeAreaView style={{ flex: 1 }}>
@@ -47,10 +44,19 @@ export default class SimulatorScreen extends Component {
             </SafeAreaView>
         );
     }
+
+    /**
+     * Display the corresponding sub form with the passed part
+     * @param formToShow can be estate, fiscality or bank
+     * @private
+     */
     _showForm(formToShow) {
         this.setState({isEditingApart: true, partShowed: formToShow})
     }
 
+    /**
+     * Override the headerbar back press to hide sub forms
+     */
     backPress() {
         if (this.state.isEditingApart) {
             this.setState({isEditingApart: false});
@@ -59,6 +65,11 @@ export default class SimulatorScreen extends Component {
         }
     }
 
+    /**
+     * Set data emitted by sub forms
+     * @param formChanged the form which have been filled
+     * @param datas the datas outputed by sub form
+     */
     fillDataFor(formChanged, datas) {
         switch (formChanged) {
             case ESTATE :
@@ -72,6 +83,12 @@ export default class SimulatorScreen extends Component {
                 break;
         }
     }
+
+    /**
+     * Fill the state.formValues with the new datas for the simulation, Here is concerned the estate form (buy price, notarial cost etc...)
+     * @param datas the new data enterred in form
+     * @private
+     */
     _fillEstate(datas) {
         this.backPress();
         this.state.formValues.noFai = datas.noFai;
@@ -86,6 +103,12 @@ export default class SimulatorScreen extends Component {
         this.state.formValues.previsionalRentCharge = datas.previsionalRentCharge;
         this.state.formValues.chargeCopro = datas.chargeCopro;
     }
+
+    /**
+     * Fill the state.formValues with the new datas for the simulation, Here is concerned the fiscality form (choosed fiscal type, insurances etc...)
+     * @param datas the new data enterred in form
+     * @private
+     */
     _fillFiscality(datas) {
         this.backPress();
         this.state.formValues.percentRentManagement = datas.percentRentManagement;
@@ -98,6 +121,12 @@ export default class SimulatorScreen extends Component {
         this.state.formValues.professionnalSalary = datas.professionnalSalary;
         this.state.formValues.annualRent = datas.annualRent;
     }
+
+    /**
+     * Fill the state.formValues with the new datas for the simulation, Here is concerned the bank form all thing relative to a credit
+     * @param datas the new data enterred in form
+     * @private
+     */
     _fillBank(datas) {
         this.backPress();
         this.state.formValues.makeACredit = datas.makeACredit;
@@ -112,6 +141,9 @@ export default class SimulatorScreen extends Component {
         this.state.formValues.actualCreditMensualities = datas.actualCreditMensualities;
     }
 
+    /**
+     * Send request to api to do the simulation with datas
+     */
     runSimulator() {
         const messageError = this._checkFormValues();
         if (messageError === '') {
@@ -125,6 +157,12 @@ export default class SimulatorScreen extends Component {
             showInfoAlert(messageError, true)
         }
     }
+
+    /**
+     * Check if required fields for simulator are completed
+     * @returns {string} will prepare a message error with all the field and the subform concerned
+     * @private
+     */
     _checkFormValues() {
         let messageError = '';
         if (!this.state.formValues.buyPrice || !this.state.formValues.monthlyRent) {

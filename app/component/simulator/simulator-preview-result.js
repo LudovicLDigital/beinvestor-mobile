@@ -56,6 +56,11 @@ export default class SimulatorPreviewResult extends Component {
         }
     }
 
+    /**
+     * Determine the end of the animation of the thermometer depending on the renta result
+     * @param renta the renta number in % which will determine the end of the animation
+     * @private
+     */
     _checkRentaRating(renta) {
         if (renta >= 9) {
             this.setState({
@@ -77,6 +82,12 @@ export default class SimulatorPreviewResult extends Component {
             });
         }
     }
+
+    /**
+     * Method to play an animation which reduce the size of the component to let more space and more lisible place with only essential information
+     * @param reversed if true, will play the animation in reverse (grow size)
+     * @private
+     */
     _reduceWithAnimation(reversed) {
             Animated.timing(
                 this.state.flexSize,
