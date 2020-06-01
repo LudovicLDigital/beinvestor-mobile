@@ -1,6 +1,6 @@
-import React  from 'react';
-import { TopNavigationAction } from '@ui-kitten/components';
-import {MenuIcon, BackIcon, SimulatorIcon} from "./basic-icons";
+import React from 'react';
+import {TopNavigationAction} from '@ui-kitten/components';
+import {BackIcon, MenuIcon, SimulatorIcon} from "./basic-icons";
 
 export const MenuAction = (props) => (
     <TopNavigationAction {...props} icon={MenuIcon}/>

@@ -10,6 +10,7 @@ export const ROUTE_USER_PROFIL_INVEST = 'UserProfilInvestor';
 export const ROUTE_HOME = 'Home';
 export const ROUTE_MAP = 'Map';
 export const ROUTE_SIMULATOR = 'Simulator';
+export const ROUTE_SIMULATOR_RESULT = 'SimulatorResult';
 export const ROUTE_FAV_GRP = 'FavoritesGroups';
 export const ROUTE_SEARCH_GRP = 'SearchGroups';
 export const ROUTE_DETAIL_GRP = 'DetailGroups';
@@ -37,7 +38,13 @@ export const PHONE = 'phone number';
 export const LOGIN = 'login';
 export const OLD_PASS = 'old password';
 export const NEW_PASS = 'new password';
-
+// SIMULATOR
+export const ESTATE = 'formulaire bien';
+export const FISCALITY = 'formulaire fiscalité';
+export const BANK = 'formulaire banque';
+export const TX_BANK = '1.5';
+export const BANK_GARANTY_PERCENT = 0.013;
+export const BANK_FOLDER_COST = 500;
 // citation array
 export const CITATIONS = [
     "« Les propriétaires deviennent riche pendant leur sommeil » . John Stuart Mill.",

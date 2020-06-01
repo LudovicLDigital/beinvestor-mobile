@@ -1,15 +1,12 @@
 import React, {Component} from "react";
-import {
-    View,
-    Alert,
-    TouchableWithoutFeedback
-} from "react-native";
-import {styles, appColors} from "../../../shared/styles/global";
+import {Alert, TouchableWithoutFeedback, View} from "react-native";
+import {appColors} from "../../../shared/styles/global";
 import ImagePicker from 'react-native-image-crop-picker';
 import {Avatar} from "@ui-kitten/components/ui/index";
 import AuthService from "../../../shared/services/auth";
 import UsersService from "../../../shared/services/entities/users-service";
 import {showInfoAlert, showToast} from "../../../shared/util/ui-helpers";
+
 /**
  * PROPS :
  * - isAbleToEdit : boolean to allow pic change on click

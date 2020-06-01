@@ -1,9 +1,7 @@
 import React, {Component} from "react";
-import {
-    View, Alert
-} from "react-native";
-import {styles, appColors} from "../shared/styles/global";
-import { Text, Button } from '@ui-kitten/components';
+import {Alert, View} from "react-native";
+import {appColors, styles} from "../shared/styles/global";
+import {Button, Text} from '@ui-kitten/components';
 import UsersList from "../component/subcomponent/users-list";
 import HeaderBar from "../component/subcomponent/header-bar";
 import GroupService from "../shared/services/entities/groups-service";

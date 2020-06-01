@@ -1,14 +1,11 @@
 import React, {Component} from "react";
-import {
-    View,
-    TouchableWithoutFeedback
-} from "react-native";
-import {styles, appColors, deviceWidth, deviceHeigth} from "../../shared/styles/global";
+import {appColors, deviceHeigth, deviceWidth, styles} from "../../shared/styles/global";
 import InputField from '../subcomponent/form/input-field';
-import { Text, Layout, Button, Icon} from '@ui-kitten/components';
+import {Button, Icon, Layout, Text} from '@ui-kitten/components';
 import SectionDivider from '../../component/subcomponent/form/section-divider';
 import AuthService from "../../shared/services/auth";
 import {showInfoAlert, showToast} from "../../shared/util/ui-helpers";
+
 const RefreshIcon = (style) => (
     <Icon name='refresh' {...style} />
 );
@@ -62,7 +59,7 @@ export default class AccountConfirmation extends Component {
                             label={'Code d\'activation'}
                             value={this.state.activationCode}
                             onTextChange={(text) => this.setState({activationCode: text})}/>
-                <Button style={{marginBottom: deviceHeigth/10}} appearance={'ghost'} status={'info'} icon={RefreshIcon} onPress={this._resendACode}>Je n'ai pas reçu de code, m'en renvoyer un</Button>
+                <Button style={{marginBottom: deviceHeigth/10}} appearance={'ghost'} status={'info'} accessoryLeft ={RefreshIcon} onPress={this._resendACode}>Je n'ai pas reçu de code, m'en renvoyer un</Button>
                 <Button style={styles.backgroundSecondary} onPress={this._activateAccount}>Activation du compte</Button>
             </Layout>
         )

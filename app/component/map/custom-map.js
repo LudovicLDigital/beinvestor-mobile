@@ -1,20 +1,15 @@
 import React, {Component} from "react";
-import {
-    PermissionsAndroid,
-    Text,
-    View
-} from "react-native";
-import {styles, appColors} from "../../shared/styles/global";
+import {PermissionsAndroid, Text, View} from "react-native";
+import {appColors, styles} from "../../shared/styles/global";
 import GroupService from "../../shared/services/entities/groups-service";
-import MapView from 'react-native-maps';
-import { Marker } from 'react-native-maps';
+import MapView, {Marker} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
-import {Icon, Button} from '@ui-kitten/components';
-import { ROUTE_DETAIL_GRP, ROUTE_MAP, ROUTE_SEARCH_GRP} from "../../shared/util/constants";
+import {Button, Icon} from '@ui-kitten/components';
 import {delimitACircleAround, showToast} from "../../shared/util/ui-helpers";
 import GouvAdressService from "../../shared/services/gouv-adresse-service";
 import BeInvestorAutoComplete from "../subcomponent/autocomplete";
 import GroupPopAnimated from '../group/group-pop-animated';
+
 const CurrentPositionIcon = (style) => (
     <Icon {...style} fill={appColors.secondary} name='compass-outline' />
 );
@@ -206,7 +201,7 @@ export default class CustomMap extends Component {
                     style={[styles.absoluteBottomRight, styles.fabButton, {zIndex: 1000, backgroundColor: appColors.white, borderColor: appColors.secondary}]}
                     size={'large'}
                     onPress={() => this.goToCurrentUserPosition(true, this.state.currentLocation.latitude, this.state.currentLocation.longitude, true)}
-                    icon={CurrentPositionIcon}>
+                    accessoryLeft ={CurrentPositionIcon}>
                 </Button>
             </View>
         )

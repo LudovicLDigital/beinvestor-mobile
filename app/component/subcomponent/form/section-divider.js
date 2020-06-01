@@ -1,10 +1,7 @@
 import React, {Component} from "react";
-import {
-    Text,
-    View,
-    StyleSheet
-} from "react-native";
-import {styles, appColors} from "../../../shared/styles/global";
+import {StyleSheet, Text, View} from "react-native";
+import {appColors} from "../../../shared/styles/global";
+
 const ownSectionDividerStyle = StyleSheet.create({
     line: {
         flex: 1,
@@ -25,6 +22,7 @@ const ownSectionDividerStyle = StyleSheet.create({
 /**
  * PROPS :
  * - sectionName : the string display for the section
+ * - containerStyle : the main container style (as margins)
  */
 export default class SectionDivider extends Component {
     constructor(props) {
@@ -33,13 +31,13 @@ export default class SectionDivider extends Component {
 
     render() {
         return (
-            <View style={[{flex: 1, flexDirection: 'row'}]}>
+            <View style={[{flex: 1, flexDirection: 'row'}, this.props.containerStyle]}>
                 <View style={ownSectionDividerStyle.line}>
 
                 </View>
-                <View style={ownSectionDividerStyle.textContainer}>
+                {this.props.sectionName && <View style={ownSectionDividerStyle.textContainer}>
                     <Text style={ownSectionDividerStyle.textTitle}>{this.props.sectionName}</Text>
-                </View>
+                </View>}
                 <View style={ownSectionDividerStyle.line}>
 
                 </View>

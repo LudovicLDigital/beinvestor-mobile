@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import {styles, appColors, deviceHeigth, deviceWidth} from "../../shared/styles/global";
-import { SafeAreaView, ScrollView, View } from 'react-native';
-import { Icon, Avatar, Button, Datepicker} from '@ui-kitten/components';
+import React, {Component} from 'react';
+import {appColors, deviceWidth, styles} from "../../shared/styles/global";
+import {SafeAreaView, ScrollView, View} from 'react-native';
+import {Button, Datepicker, Icon, Text} from '@ui-kitten/components';
 import HeaderBar from '../../component/subcomponent/header-bar';
 import SectionDivider from '../../component/subcomponent/form/section-divider';
 import InputField from '../../component/subcomponent/form/input-field';
@@ -22,6 +22,7 @@ import UsersService from "../../shared/services/entities/users-service";
 import Loader from "../../component/subcomponent/loader";
 import DeviceStorage from "../../shared/util/device-storage";
 import ProfilPicturePicker from "../../component/subcomponent/form/profil-picture-picker";
+
 const requiredMessage = ' est un champs requis';
 const SaveIcon = (style) => (
     <Icon {...style} fill={appColors.white}  name='save' />
@@ -145,11 +146,11 @@ export default class UserProfilScreen extends Component {
                         }]}
                         size={'medium'}
                         onPress={() => this._updateUserInfo()}
-                        icon={SaveIcon}>
+                        accessoryLeft ={SaveIcon}>
                         Sauvegarder
                     </Button>
                 }
-                <ScrollView style={[{ flex:1},styles.fullScreen]}>
+                <ScrollView contentContainerStyle={{paddingBottom: 20}} style={[{ flex:1},styles.fullScreen]}>
                     <ProfilPicturePicker isAbleToEdit={true}/>
                     <View style={{flexDirection: 'row'}}>
                         <InputField label={'Prénom'}
@@ -161,14 +162,13 @@ export default class UserProfilScreen extends Component {
                                     onTextChange={(text) => this._fieldValueChange(LAST_NAME, text)}/>
                     </View>
                     <Datepicker
-                        label="Date de naissance"
+                        label={evaProps => <Text {...evaProps} style={styles.inputLabelPrimary}>Date de naissance</Text>}
                         size={'medium'}
-                        labelStyle={styles.inputLabelPrimary}
                         style={{borderColor: appColors.primary, width: deviceWidth/2}}
                         date={this.state.birth}
                         max={new Date()}
                         min={new Date(1930,1,1)}
-                        icon={CalendarIcon}
+                        accessoryLeft ={CalendarIcon}
                         onSelect={(date) => this._fieldValueChange(BIRTH, date)}
                     />
                     <SectionDivider sectionName={'Coordonnées'}/>
@@ -224,10 +224,10 @@ export default class UserProfilScreen extends Component {
                             </Button>
                         </View>
                     </View>
-                    <SectionDivider sectionName={'Profil investisseur'}/>
-                    <Button style={{backgroundColor: appColors.primary, borderColor: appColors.primary, marginBottom: deviceHeigth/this.state.marginBottomDivider, marginTop: 15}}>
-                        Editer mon profil investisseur
-                    </Button>
+                    {/*<SectionDivider sectionName={'Profil investisseur'}/> todo: next when implement save on simulator results*/}
+                    {/*<Button style={{backgroundColor: appColors.primary, borderColor: appColors.primary, marginBottom: deviceHeigth/this.state.marginBottomDivider, marginTop: 15}}>*/}
+                        {/*Editer mon profil investisseur*/}
+                    {/*</Button>*/}
                 </ScrollView>
             </SafeAreaView>
         );

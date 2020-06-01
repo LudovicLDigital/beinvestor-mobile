@@ -1,6 +1,7 @@
 import SocketIoClient from 'socket.io-client';
 import {SOCKET_URL} from "../util/constants";
 import GroupService from "./entities/groups-service"
+
 class SocketService {
     static socketServer: null;
     static connectToBackEnd() {

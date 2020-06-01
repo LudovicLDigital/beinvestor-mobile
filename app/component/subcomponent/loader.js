@@ -1,10 +1,6 @@
-import React, { Component } from "react";
-import {
-    Text,
-    ActivityIndicator,
-    View, Animated, Easing
-} from "react-native";
-import {styles, appColors, deviceHeigth, deviceWidth} from "../../shared/styles/global";
+import React, {Component} from "react";
+import {Animated, Easing, Text, View} from "react-native";
+import {styles} from "../../shared/styles/global";
 
 /**
  * PROPS :

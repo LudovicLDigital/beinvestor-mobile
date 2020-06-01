@@ -1,9 +1,7 @@
 import React, {Component} from "react";
-import {
-    View
-} from "react-native";
-import { Button } from '@ui-kitten/components';
-import {styles, appColors} from "../shared/styles/global";
+import {View} from "react-native";
+import {Button} from '@ui-kitten/components';
+import {appColors, styles} from "../shared/styles/global";
 import ViewPager from '@react-native-community/viewpager';
 import UserRegisterStep from "../component/register/user-step";
 import UserInfoRegisterStep from "../component/register/user-info-step";

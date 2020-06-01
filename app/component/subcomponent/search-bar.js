@@ -1,8 +1,7 @@
 import React, {Component} from "react";
-import {
-    View
-} from "react-native";
-import { Icon, Input } from '@ui-kitten/components';
+import {TouchableWithoutFeedback, View} from "react-native";
+import {Input} from '@ui-kitten/components';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 /**
  * PROPS :
@@ -29,8 +28,11 @@ export default class SearchBar extends Component {
         return (
             <View style={[{flex: 1}, this.props.style]}>
                 <Input placeholder={this.props.placeholder}
-                       icon={(style) => {
-                           return (<Icon {...style} name='search-outline'/>)
+                       accessoryLeft={(props) => {
+                           return (
+                               <TouchableWithoutFeedback >
+                                   <Icon size={20} name={'search'}/>
+                               </TouchableWithoutFeedback>)
                        }}
                        onSubmitEditing={() => this.emitSubmitted()}
                        onChangeText={text => this.emitTextValue(text)}/>

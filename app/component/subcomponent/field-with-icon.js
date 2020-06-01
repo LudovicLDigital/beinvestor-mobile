@@ -1,14 +1,9 @@
 import React, {Component} from "react";
-import {
-    View,
-    Dimensions
-} from "react-native";
+import {View} from "react-native";
 
-import {
-    Text,
-    Icon
-} from '@ui-kitten/components';
-import {styles, appColors, deviceWidth, deviceHeigth} from "../../shared/styles/global";
+import {Icon, Text} from '@ui-kitten/components';
+import {deviceWidth, styles} from "../../shared/styles/global";
+
 /**
  * PROPS :
  * - textDisplay : the text to display

@@ -1,20 +1,23 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import {
-    View,
+    Alert,
+    BackHandler,
     Image,
-    Text,
+    Linking,
     Platform,
+    SafeAreaView,
+    Text,
     TouchableWithoutFeedback,
-    BackHandler, Alert,
-    KeyboardAvoidingView,
-    SafeAreaView, Linking
+    View
 } from "react-native";
-import { Button, Icon, Layout, Input } from '@ui-kitten/components';
+import {Button, Icon, Layout} from '@ui-kitten/components';
 import Loader from "../component/subcomponent/loader";
-import {styles, appColors} from "../shared/styles/global";
+import {styles} from "../shared/styles/global";
 import AuthService from "../shared/services/auth";
-import {DismissKeyboard, showInfoAlert} from "../shared/util/ui-helpers";
+import {DismissKeyboard} from "../shared/util/ui-helpers";
 import {CITATIONS, ROUTE_HOME, ROUTE_REGISTER, ROUTE_RESET_PASSWORD} from "../shared/util/constants";
+import InputField from '../component/subcomponent/form/input-field';
+
 const LOGIN = "login";
 const PASS = "password";
 export const FacebookIcon = (style) => (
@@ -115,36 +118,30 @@ export default class LoginScreen extends Component {
             <SafeAreaView style={{ flex: 1 }}>
                 <DismissKeyboard>
                     <Layout style={[styles.fullScreen, styles.flexColumnBetween]}>
-                        <KeyboardAvoidingView style={[{flex:2, justifyContent: 'space-between', marginBottom: 20}]} onLayout={(event) => { this._setEndViewForLoader(event.nativeEvent.layout) }} behavior="position">
-                            <Image style={[{alignSelf: 'center'}, styles.appIconLarge]} source={require('../assets/icon.png')}/>
-                            <Input label="Login"
-                                   labelStyle={styles.inputLabelPrimary}
-                                   autoCapitalize="none"
-                                   style={{borderColor: appColors.primary}}
-                                   onSubmitEditing={() => this.passwordTextInput.focus()}
-                                   blurOnSubmit={false}
-                                   onChangeText={text => this.textEnterred(LOGIN, text)}/>
-                            <Input label="Mot de passe"
-                                   labelStyle={styles.inputLabelPrimary}
-                                   style={{borderColor: appColors.primary}}
-                                   secureTextEntry={this.state.securizedText}
-                                   autoCapitalize="none"
-                                   icon={(style) => {
-                                       const eyeOff = this.state.securizedText;
-                                       return (<Icon {...style} name={eyeOff ? 'eye-off':'eye'}/>)
-                                   }}
-                                   onIconPress={() => this.setState({securizedText: !this.state.securizedText})}
-                                   ref={(input) => this.passwordTextInput = input}
-                                   onSubmitEditing={() => this._submitCredentials()}
-                                   blurOnSubmit={false}
-                                   onChangeText={text => this.textEnterred(PASS, text)}/>
-                            <Button style={[{zIndex: 0}, styles.backgroundPrimary]}
-                                    disabled={this.state.waitingForConnect}
-                                    onPress={() => this._submitCredentials()}>
-                                CONNEXION
-                            </Button>
+                        <View style={[{flex:2, flexDirection: 'column', justifyContent: 'space-between', marginBottom: 20}]} onLayout={(event) => { this._setEndViewForLoader(event.nativeEvent.layout) }} behavior="position">
+                                <Image style={[{alignSelf: 'center'}, styles.appIconLarge]} source={require('../assets/icon.png')}/>
+                                <InputField
+                                    label={'Login'}
+                                    onSubmitEditing={() => this.passwordTextInput.focus()}
+                                    blurOnSubmit={false}
+                                    onTextChange={text => this.textEnterred(LOGIN, text)}/>
+                                <InputField
+                                    label={'Mot de passe'}
+                                    type={'password'}
+                                    value={this.state.password}
+                                    messageErrors={[['invalid', 'Mot de passe incorrect']]}
+                                    receivedErrorByForm={this.state.oldPasswordError}
+                                    onTextChange={(text) => this.textEnterred(PASS, text)}
+                                    reference={(input) => this.setRefPass(input)}
+                                    onSubmitEditing={() => this._submitCredentials()}
+                                    blurOnSubmit={false}/>
+                                <Button style={[ styles.backgroundPrimary]}
+                                        disabled={this.state.waitingForConnect}
+                                        onPress={() => this._submitCredentials()}>
+                                    CONNEXION
+                                </Button>
                             <Loader loadTitle={this.state.citationForLoading} parentHeight={this.state.credentialsViewHeight} isDisplayed={this.state.waitingForConnect}/>
-                        </KeyboardAvoidingView>
+                        </View>
                         <View style={[{flex: 1}, styles.flexColumnBetween]}>
                             <TouchableWithoutFeedback onPress={() => this._resetPassword()}>
                                 <Text style={[styles.textAsLink, {textAlign: 'center'}]}>Mot de passe oublié ?</Text>
@@ -155,12 +152,12 @@ export default class LoginScreen extends Component {
                             {/*<View style={[{flex: 1},styles.flexRowBetween]}>*/}
                             {/*<Button*/}
                             {/*disabled={this.state.waitingForConnect}*/}
-                            {/*icon={FacebookIcon}*/}
+                            {/*accessoryLeft ={FacebookIcon}*/}
                             {/*onPress={() => showInfoAlert('La connexion avec Facebook n\'est pas encore disponible')}*/}
                             {/*style={{backgroundColor: '#365899'}}>Facebook</Button>*/}
                             {/*<Button*/}
                             {/*disabled={this.state.waitingForConnect}*/}
-                            {/*icon={GoogleIcon}*/}
+                            {/*accessoryLeft ={GoogleIcon}*/}
                             {/*appearance='ghost'*/}
                             {/*onPress={() => showInfoAlert('La connexion avec Google n\'est pas encore disponible')}*/}
                             {/*status='danger'>Google</Button>*/}
@@ -229,5 +226,9 @@ export default class LoginScreen extends Component {
 
     _resetPassword() {
         this.props.navigation.navigate(ROUTE_RESET_PASSWORD)
+    }
+
+    setRefPass(input) {
+        this.passwordTextInput = input;
     }
 }

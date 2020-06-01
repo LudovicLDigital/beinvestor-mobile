@@ -3,6 +3,7 @@ import HttpHeaderSetter from '../../util/http-header-setter';
 import {showToast} from "../../util/ui-helpers";
 import RNFetchBlob from 'rn-fetch-blob'
 import DeviceStorage from "../../util/device-storage";
+
 /**
  * Extends this base service to have minimum fetch method for your service
  * Don't forget to set the variable resourceURL to your endpoint value (Already contain Constant.API_URL)

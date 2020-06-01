@@ -1,11 +1,8 @@
 import React, {Component} from "react";
-import {
-    View
-} from "react-native";
-import {styles, appColors, deviceHeigth, deviceWidth} from "../../shared/styles/global";
+import {appColors, deviceHeigth, deviceWidth, styles} from "../../shared/styles/global";
 import InputField from '../subcomponent/form/input-field';
 import {CalendarIcon} from "../subcomponent/basic-icons";
-import { Text, Datepicker, Layout} from '@ui-kitten/components';
+import {Datepicker, Layout, Text} from '@ui-kitten/components';
 import SectionDivider from '../../component/subcomponent/form/section-divider';
 
 /**
@@ -65,14 +62,13 @@ export default class UserInfoRegisterStep extends Component {
                             value={this.state.firstName}
                             onTextChange={(text) => this.setState({firstName: text})}/>
                 <Datepicker
-                    label="Date de naissance"
+                    label={evaProps => <Text {...evaProps} style={styles.inputLabelPrimary}>"Date de naissance"</Text>}
                     size={'medium'}
-                    labelStyle={styles.inputLabelPrimary}
                     style={{borderColor: appColors.primary}}
                     date={this.state.birthDate}
                     max={new Date()}
                     min={new Date(1930,1,1)}
-                    icon={CalendarIcon}
+                    accessoryLeft={CalendarIcon}
                     onSelect={(date) => this.setState({birthDate: date})}
                 />
             </Layout>
