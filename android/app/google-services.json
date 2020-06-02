@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "687623042196",
+    "firebase_url": "https://beinvestor-dev.firebaseio.com",
+    "project_id": "beinvestor-dev",
+    "storage_bucket": "beinvestor-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:687623042196:android:32044d5a53345e611bb081",
+        "android_client_info": {
+          "package_name": "com.beinvestor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "687623042196-1lgf64viu31ni3abqee6us9tpks3oos7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgbQk_JbikqVQFy01-kAUi_TGeQY15nbA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "687623042196-1lgf64viu31ni3abqee6us9tpks3oos7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
