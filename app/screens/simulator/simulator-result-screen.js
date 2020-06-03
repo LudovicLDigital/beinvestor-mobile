@@ -9,6 +9,7 @@ import SimulatorCashflowChart from "../../component/simulator/cards/simulator-ca
 import SimulatorFiscalityDetail from "../../component/simulator/cards/simulator-fiscality-detail";
 import SimulatorCreditDetail from "../../component/simulator/cards/simulator-credit-detail";
 import { BannerAd, BannerAdSize, TestIds } from '@react-native-firebase/admob';
+import {BANNER_AD} from "../../shared/util/constants";
 
 const ArrowDownIcon = (style) => (
     <Icon {...style}
@@ -87,7 +88,7 @@ export default class SimulatorResultScreen extends Component {
                             onPress={() => this._showDetails()}
                             accessoryLeft={ArrowDownIcon}>{evaProps => <Text {...evaProps} style={[evaProps.style, {color: appColors.dark}]}>Voir plus de détails</Text>}</Button>}
                         <View style={{flex:1, justifyContent: 'flex-end', alignItems: 'center'}}>
-                            <BannerAd  size={BannerAdSize.LARGE_BANNER} unitId={TestIds.BANNER} />
+                            <BannerAd  size={BannerAdSize.LARGE_BANNER} unitId={BANNER_AD} />
                         </View>
                         {this.state.isLookingForDetails &&
                         <View>

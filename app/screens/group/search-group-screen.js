@@ -7,7 +7,7 @@ import {Layout, Text} from '@ui-kitten/components';
 import HeaderBar from '../../component/subcomponent/header-bar';
 import SearchBar from "../../component/subcomponent/search-bar";
 import {DismissKeyboard, showToast} from "../../shared/util/ui-helpers";
-import {PAGINATION_SIZE} from "../../shared/util/constants";
+import {BANNER_AD, PAGINATION_SIZE} from "../../shared/util/constants";
 import { BannerAd, BannerAdSize, TestIds } from '@react-native-firebase/admob';
 export default class SearchGroupScreen extends Component {
     page = 0;
@@ -106,7 +106,7 @@ export default class SearchGroupScreen extends Component {
                     </Layout>
                 </DismissKeyboard>
                 <View style={{justifyContent: 'flex-end', alignItems: 'center', backgroundColor: appColors.white }}>
-                    <BannerAd  size={BannerAdSize.LARGE_BANNER} unitId={TestIds.BANNER} />
+                    <BannerAd  size={BannerAdSize.LARGE_BANNER} unitId={BANNER_AD} />
                 </View>
             </SafeAreaView>
         );
