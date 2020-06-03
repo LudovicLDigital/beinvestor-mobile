@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {styles} from "../../shared/styles/global";
+import {styles, appColors} from "../../shared/styles/global";
 import GroupService from '../../shared/services/entities/groups-service';
 import GroupList from '../../component/group/group-list';
 import {SafeAreaView, View} from 'react-native';
@@ -8,7 +8,7 @@ import HeaderBar from '../../component/subcomponent/header-bar';
 import SearchBar from "../../component/subcomponent/search-bar";
 import {DismissKeyboard, showToast} from "../../shared/util/ui-helpers";
 import {PAGINATION_SIZE} from "../../shared/util/constants";
-
+import { BannerAd, BannerAdSize, TestIds } from '@react-native-firebase/admob';
 export default class SearchGroupScreen extends Component {
     page = 0;
     constructor(props) {
@@ -105,6 +105,9 @@ export default class SearchGroupScreen extends Component {
                         </View>
                     </Layout>
                 </DismissKeyboard>
+                <View style={{justifyContent: 'flex-end', alignItems: 'center', backgroundColor: appColors.white }}>
+                    <BannerAd  size={BannerAdSize.LARGE_BANNER} unitId={TestIds.BANNER} />
+                </View>
             </SafeAreaView>
         );
     }
