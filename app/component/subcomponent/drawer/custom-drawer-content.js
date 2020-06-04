@@ -1,6 +1,7 @@
 import React, {Fragment, useEffect} from 'react';
 import {convertRouteNameToLisible} from "../../../shared/util/converter-for-route-name";
 import {
+    BANNER_AD,
     ROUTE_FAV_GRP,
     ROUTE_INFO,
     ROUTE_LOGIN,
@@ -12,10 +13,10 @@ import {
 } from "../../../shared/util/constants";
 import {DrawerContentScrollView,} from '@react-navigation/drawer';
 import AuthService from "../../../shared/services/auth";
-import {Alert, BackHandler} from "react-native";
+import {Alert, BackHandler, View} from "react-native";
 import MenuItem from "./MenuItem";
 import HeaderUser from "../header-user";
-
+import { BannerAd, BannerAdSize, TestIds } from '@react-native-firebase/admob';
 const drawerMenuItems = [
     {
         title: convertRouteNameToLisible(ROUTE_MAP),
@@ -126,6 +127,9 @@ export const CustomDrawerContent = (props) => { //{ navigation, state }
                 )
             })}
             <MenuItem label={'Se déconnecter'} icon={'log-out'} onSelect={() => onSelect(LOGOUT)}/>
+            <View style={{flex:1, justifyContent: 'flex-end', alignItems: 'center', marginTop: 25}}>
+                <BannerAd  size={BannerAdSize.SMART_BANNER} unitId={BANNER_AD} />
+            </View>
         </DrawerContentScrollView>
     );
 };

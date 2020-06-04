@@ -8,6 +8,8 @@ import SimulatorCardResult from "../../component/simulator/cards/simulator-card-
 import SimulatorCashflowChart from "../../component/simulator/cards/simulator-cashflow-chart";
 import SimulatorFiscalityDetail from "../../component/simulator/cards/simulator-fiscality-detail";
 import SimulatorCreditDetail from "../../component/simulator/cards/simulator-credit-detail";
+import { BannerAd, BannerAdSize, TestIds } from '@react-native-firebase/admob';
+import {BANNER_AD} from "../../shared/util/constants";
 
 const ArrowDownIcon = (style) => (
     <Icon {...style}
@@ -28,14 +30,14 @@ export default class SimulatorResultScreen extends Component {
     }
 
     componentDidMount(): void {
-            if (this.props.route && this.props.route.params) {
-                this._setSimulatorObject();
-                this._unsubscribe = this.props.navigation.addListener('focus', () => {
-                    this.setState({
-                        initialized: false,
-                    })
-                });
-            }
+        if (this.props.route && this.props.route.params) {
+            this._setSimulatorObject();
+            this._unsubscribe = this.props.navigation.addListener('focus', () => {
+                this.setState({
+                    initialized: false,
+                })
+            });
+        }
 
     }
     componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS): void {
@@ -85,6 +87,9 @@ export default class SimulatorResultScreen extends Component {
                                 borderColor: appColors.dark}}
                             onPress={() => this._showDetails()}
                             accessoryLeft={ArrowDownIcon}>{evaProps => <Text {...evaProps} style={[evaProps.style, {color: appColors.dark}]}>Voir plus de détails</Text>}</Button>}
+                        {!this.state.isLookingForDetails && <View style={{flex:1, justifyContent: 'flex-end', alignItems: 'center'}}>
+                            <BannerAd  size={BannerAdSize.LARGE_BANNER} unitId={BANNER_AD} />
+                        </View>}
                         {this.state.isLookingForDetails &&
                         <View>
                             <View style={[styles.flexRowAlignCenter, styles.flexRowBetween,{marginTop: 15}]}>

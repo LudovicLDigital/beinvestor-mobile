@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {appColors, styles} from "../../shared/styles/global";
-import {SafeAreaView} from 'react-native';
+import {SafeAreaView, View} from 'react-native';
 import {Layout} from '@ui-kitten/components';
 import HeaderBar from '../../component/subcomponent/header-bar';
 import SimulatorMenu from "../../component/simulator/simulator-menu";
@@ -12,6 +12,9 @@ import SimulatorBankForm from "../../component/simulator/simulator-bank-form";
 import {SimulatorDataSendObject} from "../../shared/util/simulator-objects";
 import SimulatorService from "../../shared/services/simulator-service";
 import {showInfoAlert} from "../../shared/util/ui-helpers";
+import { BannerAd, BannerAdSize, TestIds } from '@react-native-firebase/admob';
+import {BANNER_AD} from '../../shared/util/constants';
+
 
 export default class SimulatorScreen extends Component {
     simulatorService;
@@ -40,6 +43,14 @@ export default class SimulatorScreen extends Component {
                                                                 style={{justifyContent: 'center'}}>
                         Évaluer mon projet
                     </Icon.Button>}
+                    {!this.state.isEditingApart &&
+                    <View style={{flex:1, justifyContent: 'flex-end', alignItems: 'center'}}>
+                        <BannerAd
+                            onAdFailedToLoad={(error) => this._bannerFailed(error)}
+                            size={BannerAdSize.LARGE_BANNER}
+                            unitId={BANNER_AD} />
+                    </View>
+                    }
                 </Layout>
             </SafeAreaView>
         );
@@ -184,5 +195,9 @@ export default class SimulatorScreen extends Component {
             }
         }
         return messageError;
+    }
+
+    _bannerFailed(error) {
+        console.log(error);
     }
 }
