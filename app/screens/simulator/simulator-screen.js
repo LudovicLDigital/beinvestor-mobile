@@ -43,12 +43,14 @@ export default class SimulatorScreen extends Component {
                                                                 style={{justifyContent: 'center'}}>
                         Évaluer mon projet
                     </Icon.Button>}
+                    {!this.state.isEditingApart &&
                     <View style={{flex:1, justifyContent: 'flex-end', alignItems: 'center'}}>
                         <BannerAd
                             onAdFailedToLoad={(error) => this._bannerFailed(error)}
                             size={BannerAdSize.LARGE_BANNER}
                             unitId={BANNER_AD} />
                     </View>
+                    }
                 </Layout>
             </SafeAreaView>
         );

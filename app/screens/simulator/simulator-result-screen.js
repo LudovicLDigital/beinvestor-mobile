@@ -87,9 +87,9 @@ export default class SimulatorResultScreen extends Component {
                                 borderColor: appColors.dark}}
                             onPress={() => this._showDetails()}
                             accessoryLeft={ArrowDownIcon}>{evaProps => <Text {...evaProps} style={[evaProps.style, {color: appColors.dark}]}>Voir plus de détails</Text>}</Button>}
-                        <View style={{flex:1, justifyContent: 'flex-end', alignItems: 'center'}}>
+                        {!this.state.isLookingForDetails && <View style={{flex:1, justifyContent: 'flex-end', alignItems: 'center'}}>
                             <BannerAd  size={BannerAdSize.LARGE_BANNER} unitId={BANNER_AD} />
-                        </View>
+                        </View>}
                         {this.state.isLookingForDetails &&
                         <View>
                             <View style={[styles.flexRowAlignCenter, styles.flexRowBetween,{marginTop: 15}]}>
