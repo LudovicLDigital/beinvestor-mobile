@@ -11,7 +11,7 @@ import SimulatorFiscalityForm from "../../component/simulator/simulator-fiscalit
 import SimulatorBankForm from "../../component/simulator/simulator-bank-form";
 import {SimulatorDataSendObject} from "../../shared/util/simulator-objects";
 import SimulatorService from "../../shared/services/simulator-service";
-import {showInfoAlert} from "../../shared/util/ui-helpers";
+import {showInfoAlert, showToast} from "../../shared/util/ui-helpers";
 import { BannerAd, BannerAdSize, TestIds } from '@react-native-firebase/admob';
 import {BANNER_AD} from '../../shared/util/constants';
 
@@ -44,7 +44,9 @@ export default class SimulatorScreen extends Component {
                         Évaluer mon projet
                     </Icon.Button>}
                     <View style={{flex:1, justifyContent: 'flex-end', alignItems: 'center'}}>
-                        <BannerAd  size={BannerAdSize.LARGE_BANNER} unitId={BANNER_AD} />
+                        <BannerAd
+                            size={BannerAdSize.LARGE_BANNER}
+                            unitId={BANNER_AD} />
                     </View>
                 </Layout>
             </SafeAreaView>

@@ -1,9 +1,9 @@
-import {DEV_API_URL, PROD_API_URL, PROD_BANNER_AD, DEV_SOCKET_URL, PROD_SOCKET_URL} from 'react-native-dotenv';
+import {DEV_API_URL, PROD_API_URL, DEV_SOCKET_URL, PROD_SOCKET_URL} from 'react-native-dotenv';
 import { TestIds } from '@react-native-firebase/admob';
 
 export const API_URL = __DEV__ ? DEV_API_URL : PROD_API_URL;
 export const SOCKET_URL = __DEV__ ? DEV_SOCKET_URL : PROD_SOCKET_URL;
-export const BANNER_AD = __DEV__ ? TestIds.BANNER : PROD_BANNER_AD;
+export const BANNER_AD = __DEV__ ? TestIds.BANNER : 'ca-app-pub-2958560476723238/5081525111';
 
 export const USER_TOKEN_KEY = "LOGGED_TOKEN";
 export const REFRESH_TOKEN_KEY = "REFRESH_TOKEN";
