@@ -18,18 +18,27 @@ export default class BeInvestorAutoComplete extends Component {
             searchTerm: ''
         }
     }
-    selectValue(item) {
-        this.setState({searchTerm: item.title});
-        this.props.onChoiceSelect(item);
-    }
-    emitText(text) {
-        this.setState({searchTerm: text});
-        this.props.onTxtChange(text);
-    }
     render() {
+        const renderOption = (item, index) => (
+            <AutocompleteItem
+                key={index}
+                title={item.title}
+            />
+        );
+        const rightIcon = (props) => (
+                <MatIcon size={20} name={'search'}/>
+        );
+        const onSelect = (index) => {
+            this.setState({searchTerm: this.props.autocompleteList[index].title});
+            this.props.onChoiceSelect(this.props.autocompleteList[index]);
+        };
+        const onChangeText = (query) => {
+            this.setState({searchTerm: query});
+            this.props.onTxtChange(query);
+        };
         const ResetAutocompleteIcon = (props) => (
-            <TouchableWithoutFeedback onPress={() => this.emitText(null)}>
-                <Icon {...props} name='close' />
+            <TouchableWithoutFeedback onPress={() => onChangeText(null)}>
+                <MatIcon size={20} name={'close'}/>
             </TouchableWithoutFeedback>
         );
         return (
@@ -37,16 +46,11 @@ export default class BeInvestorAutoComplete extends Component {
                 <Autocomplete
                     placeholder={this.props.placeholder}
                     value={this.state.searchTerm}
-                    data={this.props.autocompleteList}
                     accessoryRight={ResetAutocompleteIcon}
-                    accessoryLeft={() => {return(<MatIcon size={20} name={'search'}/>)}}
-                    onChangeText={(text) => this.emitText(text)}
-                    onSelect={(item) => this.selectValue(item)}>
-                    {this.props.autocompleteList.map((item, index) => {
-                        return (
-                            <AutocompleteItem key={index} label={item.title}/>
-                        )
-                    })}
+                    accessoryLeft={rightIcon}
+                    onChangeText={onChangeText}
+                    onSelect={onSelect}>
+                    {this.props.autocompleteList.map(renderOption)}
                 </Autocomplete>
             </View>
         )
