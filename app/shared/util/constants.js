@@ -33,6 +33,9 @@ export const MINUTE = 60 * SECOND;
 export const HOUR = 3600 * SECOND;
 export const DAY = 86400 * SECOND;
 export const PAGINATION_SIZE = 15;
+export const ML = 'Mention légales';
+export const CGU = 'CGU (condition générales d\'utilisation)';
+export const APP_INFO = 'Informations sur BeInvestor';
 
 // FIELD LIST
 export const FIRST_NAME = 'first name';
