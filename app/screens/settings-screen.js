@@ -17,7 +17,7 @@ export default class SettingsScreen extends Component {
             <SafeAreaView style={{ flex: 1 }}>
                 <HeaderBar route={this.props.route.name} navigation={this.props.navigation}/>
                 <Layout style={styles.fullScreen}>
-                    <Text>SIMULATOR</Text>
+                    <Text>Vous pourrez accèder à vos paramètres depuis cette page prochainement ( suppression de compte, désactiver les notifications, lier un réseau social...)</Text>
                 </Layout>
             </SafeAreaView>
         );

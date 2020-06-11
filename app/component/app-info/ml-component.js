@@ -4,7 +4,7 @@ import {
 } from "react-native";
 import {Text} from '@ui-kitten/components';
 import {styles, appColors} from "../../shared/styles/global";
-import { ML} from "../../shared/util/constants";
+import Pdf from 'react-native-pdf';
 
 /**
  * Component to display user's friendly the "mention légales" section
@@ -12,12 +12,18 @@ import { ML} from "../../shared/util/constants";
 export default class MLComponent extends Component {
     constructor(props) {
         super(props);
+        this.pdf = React.createRef();
     }
 
     render() {
+        let source = {uri:'bundle-assets://pdf/Mentions-Legales.pdf', cache: true};
         return (
             <View style={[{flex: 1}]}>
-                <Text category={'h1'}>{ML}</Text>
+                <Pdf
+                    ref={(pdf)=>{this.pdf = pdf;}}
+                    source={source}
+                    onError={(error)=>{console.log(error);}}
+                    style={styles.pdf}/>
             </View>
         )
     }

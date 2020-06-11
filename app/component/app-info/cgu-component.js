@@ -12,27 +12,18 @@ import Pdf from 'react-native-pdf';
 export default class CGUComponent extends Component {
     constructor(props) {
         super(props);
+        this.pdf = React.createRef();
     }
 
     render() {
-        const source = {uri:require('../../assets/CGU.pdf'),cache:true};
+        let source = {uri:'bundle-assets://pdf/CGU.pdf', cache: true};
         return (
             <View style={[{flex: 1}]}>
                 <Pdf
+                    ref={(pdf)=>{this.pdf = pdf;}}
                     source={source}
-                    onLoadComplete={(numberOfPages,filePath)=>{
-                        console.log(`number of pages: ${numberOfPages}`);
-                    }}
-                    onPageChanged={(page,numberOfPages)=>{
-                        console.log(`current page: ${page}`);
-                    }}
-                    onError={(error)=>{
-                        console.log(error);
-                    }}
-                    onPressLink={(uri)=>{
-                        console.log(`Link presse: ${uri}`)
-                    }}
-                    style={styles.fullScreen}/>
+                    onError={(error)=>{console.log(error);}}
+                    style={styles.pdf}/>
             </View>
         )
     }

@@ -122,7 +122,7 @@ export const CustomDrawerContent = (props) => { //{ navigation, state }
             {drawerMenuItems.map((item, index) => {
                 return (
                     <Fragment key={index}>
-                        <MenuItem label={item.title} icon={item.icon} isFocused={props.state.index === index} onSelect={() => onSelect(item.route)}/>
+                        <MenuItem label={item.title} icon={item.icon} isFocused={props.state.index -1 === index} onSelect={() => onSelect(item.route)}/>
                     </Fragment>
                 )
             })}
