@@ -1,9 +1,6 @@
 import React, {Component} from "react";
-import {
-    View
-} from "react-native";
-import {Text} from '@ui-kitten/components';
-import {styles, appColors} from "../../shared/styles/global";
+import {View} from "react-native";
+import {styles} from "../../shared/styles/global";
 import Pdf from 'react-native-pdf';
 
 /**

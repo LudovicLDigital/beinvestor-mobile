@@ -1,11 +1,6 @@
 import React, {Component} from "react";
-import {
-    ScrollView, View,
-    StyleSheet
-} from "react-native";
+import {ScrollView, StyleSheet} from "react-native";
 import {Text} from '@ui-kitten/components';
-import {styles, appColors} from "../../shared/styles/global";
-import {APP_INFO} from "../../shared/util/constants";
 
 const appInfoStyle = StyleSheet.create({
     headerTitle: {
