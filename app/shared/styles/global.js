@@ -128,6 +128,10 @@ const styles = StyleSheet.create({
         zIndex: 5000,
         backgroundColor: Colors.white,
     },
+    pdf: {
+            flex: 1,
+            backgroundColor: appColors.white
+    },
     textAsLink: {
         color: appColors.primary,
         fontWeight: 'bold',

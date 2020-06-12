@@ -10,6 +10,12 @@ export const DismissKeyboard = ({children}) => (
 export function showToast(message) {
     ToastAndroid.showWithGravity(message, ToastAndroid.LONG, ToastAndroid.BOTTOM);
 }
+
+/**
+ * Show an alert
+ * @param message the message as title (short recommended)
+ * @param isALongmessage if true, the message will be under an empty title
+ */
 export function showInfoAlert(message, isALongmessage) {
     if (!isALongmessage) {
     Alert.alert(

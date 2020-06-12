@@ -1,15 +1,16 @@
 import React, {Component} from "react";
-import {View} from "react-native";
-import {Button} from '@ui-kitten/components';
+import {TouchableWithoutFeedback,
+    Modal, View} from "react-native";
+import {Button, CheckBox, Text, Icon} from '@ui-kitten/components';
 import {appColors, styles} from "../shared/styles/global";
 import ViewPager from '@react-native-community/viewpager';
 import UserRegisterStep from "../component/register/user-step";
 import UserInfoRegisterStep from "../component/register/user-info-step";
 import AccountConfirmation from "../component/register/account-confirmation";
-import {PageSelectedEvent} from "@react-native-community/viewpager/js/types";
-import AuthService from "../shared/services/auth";
-import {showInfoAlert, showToast} from "../shared/util/ui-helpers";
 import Loader from "../component/subcomponent/loader";
+import CGUComponent from "../component/app-info/cgu-component";
+import * as AuthService from "../shared/services/auth";
+import {showInfoAlert} from "../shared/util/ui-helpers";
 
 export default class RegisterScreen extends Component {
     viewPager;
@@ -25,6 +26,8 @@ export default class RegisterScreen extends Component {
             awaitCreate: false,
             userMail: null,
             loaderHeight: null,
+            cguAccepted: false,
+            showCGU: false
         };
         this.userToRegister = {};
         this.viewPager = React.createRef();
@@ -58,6 +61,21 @@ export default class RegisterScreen extends Component {
         return (
             <View style={{flex: 1, backgroundColor: appColors.white}} onLayout={(event) => { this._setEndViewForLoader(event.nativeEvent.layout) }}>
                 <Loader isDisplayed={this.state.awaitCreate} parentHeight={this.state.loaderHeight} loadTitle={'Création de votre compte...'}/>
+                {this.state.showCGU &&
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={this.state.showCGU}
+                    onRequestClose={() => {
+                        this.setState({showCGU: false})
+                    }}>
+                    <Button
+                        style={styles.backgroundPrimary}
+                        accessoryRight={(props) => (
+                            <Icon {...props} fill={appColors.white}  name='close' />)}
+                        onPress={() => this.setState({showCGU: false})}>Retour à l'inscription</Button>
+                    <CGUComponent/>
+                </Modal>}
                 <ViewPager
                     ref={this.viewPager}
                     style={{flex: 1}}
@@ -71,6 +89,16 @@ export default class RegisterScreen extends Component {
                     <UserInfoRegisterStep stepIsdone={this.state.step2} hasError={(hasError) => this.setErrorOnForm(2, hasError)} stepValue={(userData) => this.setSecondStepValues(userData)} key={"2"}/>
                     <AccountConfirmation navigationSys={this.props.navigation} route={this.props.route} mail={this.state.userMail}  key={"3"}/>
                 </ViewPager>
+                {this.state.page === 1 &&
+                <CheckBox
+                    style={{padding: 5}}
+                    checked={this.state.cguAccepted}
+                    onChange={nextChecked => this.setState({cguAccepted: nextChecked})}>
+                    {`J'accepte les CGU (conditions générales d'utilisations) : \n`}
+                    <TouchableWithoutFeedback onPress={() => this.setState({showCGU: true})}>
+                        <Text style={{color: appColors.primary, textDecoration: 'underline'}}>Voir les CGU</Text>
+                    </TouchableWithoutFeedback>
+                </CheckBox>}
                 <View style={[{padding: 10}, styles.flexRowAlignCenter, styles.flexRowBetween]} >
                     <Button
                         style={(this.state.page > 0) ? styles.backgroundSecondary : null}
@@ -109,7 +137,7 @@ export default class RegisterScreen extends Component {
         if (this.state.page >= 2 && delta < 0) {
             this._ignoreConfirmationConnectUser()
         } else if (this.state.page > 0 && this.state.page < 2 && delta < 0) {
-                this.go(page);
+            this.go(page);
         }
     };
     setFirstStepValues(userV) {
@@ -119,18 +147,26 @@ export default class RegisterScreen extends Component {
         if (!this.formHasErrorStep1) {
             this.setState({step1: true, userMail: this.userToRegister.mail});
             this.go(1);
+        } else {
+            this.setState({step1: false});
         }
     }
     setSecondStepValues(userV) {
-        this.setState({step2: true, awaitCreate: true});
+        this.setState({step2: true});
         this.userToRegister.phone = userV.phone;
         this.userToRegister.userInfo = {};
         this.userToRegister.userInfo.firstName = userV.firstName;
         this.userToRegister.userInfo.lastName = userV.lastName;
         this.userToRegister.userInfo.birthDate = userV.birthDate;
-        if (!this.formHasErrorStep2) {
+        if (!this.formHasErrorStep2 && this.state.cguAccepted) {
+            this.setState({awaitCreate: true});
             this._validateAndSaveData();
             this.go(2);
+        } else if(!this.state.cguAccepted) {
+            this.setState({step2: false});
+            showInfoAlert('Vous devez accepter les CGU pour pouvoir vous inscrire sur l\'application', true);
+        } else {
+            this.setState({step2: false});
         }
     }
     _validateAndSaveData() {
