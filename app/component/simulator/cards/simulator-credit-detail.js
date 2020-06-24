@@ -100,7 +100,7 @@ export default class SimulatorCreditDetail extends Component {
                             fillingCoef={this.state.interest}
                             maxFill={this.state.simData.simulatorDatas.bankStats.creditDetail.mensualityWithInsurance}
                             fillingColor={'#3ACCE1'}/>
-                        <TooltipsHelper showAsAlert={true}  messageInfo={'Chaque mensualité comprends des intérêts que vous devez payer au près de la banque qui vous a prêté une somme d\'argent'}/>
+                        <TooltipsHelper showAsAlert={true}  messageInfo={'Chaque mensualité comprend des intérêts que vous devez payer au près de la banque qui vous a prêté une somme d\'argent'}/>
                     </View>
                     <View style={styles.flexRowAlignCenter}>
                         <FillingBar
@@ -109,7 +109,7 @@ export default class SimulatorCreditDetail extends Component {
                             fillingCoef={this.state.insurance}
                             maxFill={this.state.simData.simulatorDatas.bankStats.creditDetail.mensualityWithInsurance}
                             fillingColor={'#3497FD'}/>
-                        <TooltipsHelper showAsAlert={true}  messageInfo={'Ce montant est calculé grâce au montant moyen du marché actuel. La souscription à une assurance emprunteur est obligatoire lorsque vous faites un emprunt, le montant est déterminé selon votre profil et les risques existante (maladies etc...)'}/>
+                        <TooltipsHelper showAsAlert={true}  messageInfo={'Ce montant est calculé grâce au montant moyen du marché actuel. La souscription à une assurance emprunteur est obligatoire lorsque vous faites un emprunt, le montant est déterminé selon votre profil et les risques existants (maladies etc...)'}/>
                     </View>
 
                 </View>}

@@ -83,7 +83,7 @@ export default class SimulatorFiscalityDetail extends Component {
                             fillingCoef={this.state.taxPS}
                             maxFill={this.state.totalFiscalCount}
                             fillingColor={'#3497FD'}/>
-                        <TooltipsHelper showAsAlert={true}  messageInfo={'Les prélèvements sociaux sont payés uniquement sur vos revenus locatifs imposables.'}/>
+                        <TooltipsHelper showAsAlert={true}  messageInfo={'Les prélèvements sociaux sont payés uniquement sur vos revenus locatifs imposables. Ils s\'élèvent à 17.2% de vos revenus locatif imposable (en 2020).'}/>
                     </View>
                     {this.state.otherTaxes > 0 &&
                     <View style={styles.flexRowAlignCenter}>
@@ -92,7 +92,7 @@ export default class SimulatorFiscalityDetail extends Component {
                                     maxFill={this.state.totalFiscalCount}
                                     fillingCoef={this.state.otherTaxes}
                                     fillingColor={appColors.success}/>
-                        <TooltipsHelper showAsAlert={true}  messageInfo={'Les "autres taxes" sont en générales des charges déductible, les séparer permet de mieux les distinguer ici. On y inclut ici la taxe foncière ou encore la CFE.'}/>
+                        <TooltipsHelper showAsAlert={true}  messageInfo={'Les "autres taxes" sont en générales des charges déductibles, les séparer permet de mieux les distinguer ici. On y inclut ici la taxe foncière ou encore la CFE (Cotisation foncière des entreprises, obligatoire en meublé).'}/>
                     </View>}
 
                 </View>}

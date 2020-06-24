@@ -52,7 +52,7 @@ export default class SimulatorFiscalityForm extends Component {
                         <Toggle style={{marginBottom: 15}} checked={this.state.inHandProject} onChange={() => this.toggleInHand()}>
                             {evaProps => <Text {...evaProps} >{this.state.inHandProject ? 'Projet clef en main' : 'J\'entre moi-même les montants'}</Text>}
                         </Toggle>
-                        <TooltipsHelper  showAsAlert={true} messageInfo={'"Projet clef en main" laisse le simulateur determiner tous les frais annexes (délégation, pno...) pour vous'} />
+                        <TooltipsHelper  showAsAlert={true} messageInfo={'"Projet clef en main" laisse le simulateur déterminer tous les frais annexes (délégation, pno...) pour vous'} />
                     </View>
                     { !this.state.inHandProject && (
                         <View>
@@ -86,7 +86,7 @@ export default class SimulatorFiscalityForm extends Component {
                                             style={{marginRight: 15}}
                                             value={this.state.vlInsurancePercent}
                                             onTextChange={(text) => this.setState({vlInsurancePercent: text})}/>
-                                <TooltipsHelper showAsAlert={true} messageInfo={'En moyenne le pourcentage d\'une assurance vacance locative (periode où le bien n\'est pas occupé) est de 1% du loyer.'} />
+                                <TooltipsHelper showAsAlert={true} messageInfo={'En moyenne le pourcentage d\'une assurance vacance locative (période où le bien n\'est pas occupé) est de 1% du loyer.'} />
                             </View>
                         </View>
                     )}
@@ -96,7 +96,7 @@ export default class SimulatorFiscalityForm extends Component {
                                     style={{marginRight: 15}}
                                     value={this.state.comptableCost}
                                     onTextChange={(text) => this.setState({comptableCost: text})}/>
-                        <TooltipsHelper showAsAlert={true} messageInfo={`Prendre un comptable est judicieux et vous apportera de nombreux avantages dans le cadre de régime au réel !`} />
+                        <TooltipsHelper showAsAlert={true} messageInfo={`En moyenne, 500€ par bien, cela est très variable d'un comptable à l'autre et selon le régime fiscal choisi.`} />
                     </View>
                     { this.state.fiscalTypes && this.state.fiscalTypes !== null  && this.state.fiscalTypes.length > 0 &&
                     <View style={styles.flexRowAlignCenter}>

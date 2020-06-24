@@ -80,7 +80,7 @@ export default class SimulatorEstateForm extends Component {
                                                           style={{marginRight: 15, flex: 1}}
                                                           value={this.state.faiPercent}
                                                           onTextChange={(text) => this.setState({faiPercent: text})}/>}
-                        <TooltipsHelper showAsAlert={true} messageInfo={'FAI correspond à "frais d\'agence inclus", soit le prix du bien comprenant les frais de l\'agence immobilière qui vend le bien.'} />
+                        <TooltipsHelper showAsAlert={true} messageInfo={'FAI => "frais d\'agence inclus", soit le prix du bien comprenant les frais de l\'agence immobilière qui vend le bien.'} />
                     </View>
                     <View style={styles.flexRowAlignCenter}>
                         <InputField label={'Surface totale (m²)'}
@@ -152,7 +152,7 @@ export default class SimulatorEstateForm extends Component {
                                     style={{marginRight: 15}}
                                     value={this.state.chargeCopro}
                                     onTextChange={(text) => this.setState({chargeCopro: text})}/>
-                        <TooltipsHelper showAsAlert={true} messageInfo={'Les charges de copropriété sont les charges des utilisations communes à tous les copropriétaires (ascenseur, syndic etc...)'}/>
+                        <TooltipsHelper showAsAlert={true} messageInfo={'Les charges de copropriété sont les charges communes à tous les copropriétaires (ascenseur, syndic etc...)'}/>
                     </View>
 
                     <View style={styles.flexRowAlignCenter}>

@@ -76,7 +76,7 @@ export default class SimulatorBankForm extends Component {
                                             style={{marginRight: 15}}
                                             value={this.state.creditWarrantyCost}
                                             onTextChange={(text) => this.setState({creditWarrantyCost: text})}/>
-                                <TooltipsHelper  showAsAlert={true} messageInfo={`C'est frais concernent les coûts d'hypothèque, ppd, caution par exemple. Ils s'élèvent en général à environ ${BANK_GARANTY_PERCENT * 100}% du montant du prêt.`} />
+                                <TooltipsHelper  showAsAlert={true} messageInfo={`Ces frais concernent le coût d'une hypothèque, d'un ppd, ou d'une caution par exemple. Ils s'élèvent en général à environ ${BANK_GARANTY_PERCENT * 100}% du montant du prêt.`} />
                             </View>
                             <View style={styles.flexRowAlignCenter}>
                                 <InputField label={'Frais de dossier (€)'}
