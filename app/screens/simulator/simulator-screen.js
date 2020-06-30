@@ -41,7 +41,7 @@ export default class SimulatorScreen extends Component {
                                                                 backgroundColor={appColors.success}
                                                                 onPress={() => this.runSimulator()}
                                                                 style={{justifyContent: 'center'}}>
-                        Évaluer mon projet
+                        Lancer le simulateur
                     </Icon.Button>}
                     {!this.state.isEditingApart &&
                     <View style={{flex:1, justifyContent: 'flex-end', alignItems: 'center'}}>

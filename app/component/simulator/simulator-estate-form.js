@@ -14,6 +14,14 @@ const workArray = [
     {type:  'Grosse rénovation (1000€/m²)', helper: 'Une grosse rénovation implique de rénover la totalité du bien en incluant le gros oeuvre comme la charpente'},
     {type: 'Construction (1500€/m²)', helper: 'La construction est le fait de créer un bien de A à Z, ici le montant est très variable et dependra des matériaux, surface et de beaucoup d\'iconnues'},
 ];
+const faUnit = [
+    '%',
+    '€'
+];
+const NOTARIAL_PERCENT = 0.085;
+const BUYPRICE_FIELD = 'prix achat fai';
+const FA_FIELD = 'frais d\'agence';
+const WORK_FIELD = 'travaux';
 /**
  * PROPS :
  * - formValuesReturned : method sending data enterred in the form
@@ -37,6 +45,7 @@ export default class SimulatorEstateForm extends Component {
             chargeCopro: this.props.recoverredFormValues.chargeCopro ? this.props.recoverredFormValues.chargeCopro : '0',
 
             selectWork: null,
+            selectedUnitFA: faUnit[0]
         }
     }
 
@@ -61,6 +70,46 @@ export default class SimulatorEstateForm extends Component {
                 break;
         }
     }
+    setNotarialCost() {
+        let priceWithoutFA;
+        if (this.state.selectedUnitFA === faUnit[1]) {
+            priceWithoutFA = this.state.buyPrice - this.state.faiPercent;
+        } else {
+            priceWithoutFA = this.state.buyPrice - (this.state.buyPrice/(1+this.state.faiPercent));
+        }
+        const notarialcost = (NOTARIAL_PERCENT * priceWithoutFA).toFixed(2);
+        this.setState({notarialCost: notarialcost})
+    }
+    onGlobalPriceChange(field, value, isABlurEvent) {
+        switch (field) {
+            case BUYPRICE_FIELD :
+                if (isABlurEvent) {
+                    this.setNotarialCost();
+                    this.setSafeCost();
+                } else {
+                    this.setState({buyPrice: value});
+                }
+                break;
+            case FA_FIELD :
+                if (isABlurEvent) {
+                    this.setNotarialCost();
+                } else {
+                    this.setState({faiPercent: value});
+                }
+                break;
+            case WORK_FIELD :
+                if (isABlurEvent) {
+                    this.setSafeCost();
+                } else {
+                    this.setState({workCost: value});
+                }
+                break;
+        }
+    }
+    setSafeCost() {
+        const safed = (((Number.parseFloat(this.state.buyPrice) + Number.parseFloat(this.state.workCost)) * 0.01)/12).toFixed(1);
+        this.setState({secureSaving: safed});
+    }
     render() {
         return (
             <>
@@ -70,18 +119,29 @@ export default class SimulatorEstateForm extends Component {
                         {evaProps => <Text {...evaProps} >{this.state.noFai ? 'Pas de frais d\'agence' : 'Il y a des frais d\'agence'}</Text>}
                     </Toggle>
                     <View style={styles.flexRowAlignCenter}>
-                        <InputField label={`Prix ${this.state.noFai ? '' : 'FAI'} (€) *`}
+                        <InputField label={<Text style={styles.inputLabelPrimary}>Prix {this.state.noFai ? '' : 'frais d\'agence inclus'} (€) <Text style={styles.formStarRequired}>*</Text></Text>}
                                     type={'numeric'}
                                     style={{marginRight: 15, flex: 2}}
                                     value={this.state.buyPrice}
-                                    onTextChange={(text) => this.setState({buyPrice: text})}/>
-                        {!this.state.noFai && <InputField label={`FA en %`}
-                                                          type={'numeric'}
-                                                          style={{marginRight: 15, flex: 1}}
-                                                          value={this.state.faiPercent}
-                                                          onTextChange={(text) => this.setState({faiPercent: text})}/>}
-                        <TooltipsHelper showAsAlert={true} messageInfo={'FAI correspond à "frais d\'agence inclus", soit le prix du bien comprenant les frais de l\'agence immobilière qui vend le bien.'} />
+                                    onBlur={() => this.onGlobalPriceChange(BUYPRICE_FIELD, null, true)}
+                                    onTextChange={(text) => this.onGlobalPriceChange(BUYPRICE_FIELD, text, false)}/>
                     </View>
+                    {!this.state.noFai &&
+                    <View style={styles.flexRowAlignCenter}>
+                        <InputField label={`Frais d'agence`}
+                                    type={'numeric'}
+                                    style={{marginRight: 15, flex: 2}}
+                                    value={this.state.faiPercent}
+                                    onBlur={() =>this.onGlobalPriceChange(FA_FIELD, null, true)}
+                                    onTextChange={(text) => this.onGlobalPriceChange(FA_FIELD, text, false)}/>
+                        <Select
+                            style={{flex: 1}}
+                            value={evaProps => <Text {...evaProps} >{this.state.selectedUnitFA}</Text>}
+                            onSelect={(index) => this.faUnitChange(index.row)}>
+                            <SelectItem title={evaProps => <Text {...evaProps} >{faUnit[0]}</Text>}/>
+                            <SelectItem title={evaProps => <Text {...evaProps} >{faUnit[1]}</Text>}/>
+                        </Select>
+                    </View>}
                     <View style={styles.flexRowAlignCenter}>
                         <InputField label={'Surface totale (m²)'}
                                     type={'numeric'}
@@ -117,7 +177,8 @@ export default class SimulatorEstateForm extends Component {
                                     type={'numeric'}
                                     style={{marginRight: 15}}
                                     value={this.state.workCost}
-                                    onTextChange={(text) => this.setState({workCost: text})}/>
+                                    onBlur={() =>this.onGlobalPriceChange(WORK_FIELD, null, true)}
+                                    onTextChange={(text) => this.onGlobalPriceChange(WORK_FIELD, text, false)}/>
                     </View>
                     <View style={styles.flexRowAlignCenter}>
                         <InputField label={'Frais de notaire (€)'}
@@ -129,7 +190,7 @@ export default class SimulatorEstateForm extends Component {
                     </View>
                     <SectionDivider sectionName={'Location'}/>
                     <View style={styles.flexRowAlignCenter}>
-                        <InputField label={'Loyer mensuel hors charges (€) *'}
+                        <InputField label={<Text style={styles.inputLabelPrimary}>Loyer mensuel hors charges (€) <Text style={styles.formStarRequired}>*</Text></Text>}
                                     type={'numeric'}
                                     style={{marginRight: 15}}
                                     value={this.state.monthlyRent}
@@ -152,7 +213,7 @@ export default class SimulatorEstateForm extends Component {
                                     style={{marginRight: 15}}
                                     value={this.state.chargeCopro}
                                     onTextChange={(text) => this.setState({chargeCopro: text})}/>
-                        <TooltipsHelper showAsAlert={true} messageInfo={'Les charges de copropriété sont les charges des utilisations communes à tous les copropriétaires (ascenseur, syndic etc...)'}/>
+                        <TooltipsHelper showAsAlert={true} messageInfo={'Les charges de copropriété sont les charges communes à tous les copropriétaires (ascenseur, syndic etc...)'}/>
                     </View>
 
                     <View style={styles.flexRowAlignCenter}>
@@ -180,7 +241,14 @@ export default class SimulatorEstateForm extends Component {
     save() {
         const messageError = this._checkFormValues();
         if (messageError === '') {
-            this.props.formValuesReturned(this.state);
+            if (this.state.selectedUnitFA === faUnit[1]) {
+                const priceWithoutFa = this.state.buyPrice - this.state.faiPercent;
+                const faPercent = ((this.state.faiPercent / priceWithoutFa) * 100).toFixed(2);
+                this.setState({faiPercent: faPercent});
+                this.props.formValuesReturned(this.state);
+            } else {
+                this.props.formValuesReturned(this.state);
+            }
         } else {
             showInfoAlert(messageError, true)
         }
@@ -209,5 +277,10 @@ export default class SimulatorEstateForm extends Component {
             messageError = messageError + '- Loyer requis \n';
         }
         return messageError;
+    }
+
+    faUnitChange(row) {
+        this.setState({selectedUnitFA: faUnit[row]});
+        this.setNotarialCost();
     }
 }

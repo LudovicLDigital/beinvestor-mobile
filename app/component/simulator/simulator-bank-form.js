@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, {Component, Fragment} from "react";
 import {ScrollView, View} from "react-native";
 import {appColors, styles} from "../../shared/styles/global";
 import {Text, Toggle} from '@ui-kitten/components';
@@ -6,7 +6,6 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import TooltipsHelper from "../subcomponent/tooltips-helper";
 import InputField from "../subcomponent/form/input-field";
 import {BANK_FOLDER_COST, BANK_GARANTY_PERCENT, TX_BANK} from "../../shared/util/constants";
-import {showInfoAlert} from "../../shared/util/ui-helpers";
 
 /**
  * PROPS :
@@ -19,7 +18,7 @@ export default class SimulatorBankForm extends Component {
         const work = this.props.recoverredFormValues.workCost ? parseFloat(this.props.recoverredFormValues.workCost) : 0;
         const buyPrice = this.props.recoverredFormValues.buyPrice ? parseFloat(this.props.recoverredFormValues.buyPrice) : 0;
         const notarialCost = this.props.recoverredFormValues.notarialCost ? parseFloat(this.props.recoverredFormValues.notarialCost) : 0;
-        const determinedWarrantyCost = (BANK_GARANTY_PERCENT * (work + buyPrice + notarialCost));
+        const determinedWarrantyCost = (BANK_GARANTY_PERCENT * (work + buyPrice + notarialCost)).toFixed(2);
         this.state = {
             makeACredit: (typeof this.props.recoverredFormValues.makeACredit !== 'undefined' && this.props.recoverredFormValues.makeACredit !== null) ? this.props.recoverredFormValues.makeACredit : true,
             is110: (typeof this.props.recoverredFormValues.is110 !== 'undefined' && this.props.recoverredFormValues.is110 !== null) ? this.props.recoverredFormValues.is110 : true,
@@ -36,7 +35,7 @@ export default class SimulatorBankForm extends Component {
 
     render() {
         return (
-            <>
+            <Fragment>
                 <ScrollView contentContainerStyle={{paddingBottom: 20}} style={[{flex: 1}]}>
                     <Text style={{fontWeight: 'bold', color: appColors.dangerDark, fontSize: 11, textAlign: 'center', marginBottom: 10}}>Les champs marqués avec une étoile " * " sont obligatoires</Text>
 
@@ -76,7 +75,7 @@ export default class SimulatorBankForm extends Component {
                                             style={{marginRight: 15}}
                                             value={this.state.creditWarrantyCost}
                                             onTextChange={(text) => this.setState({creditWarrantyCost: text})}/>
-                                <TooltipsHelper  showAsAlert={true} messageInfo={`C'est frais concernent les coûts d'hypothèque, ppd, caution par exemple. Ils s'élèvent en général à environ ${BANK_GARANTY_PERCENT * 100}% du montant du prêt.`} />
+                                <TooltipsHelper  showAsAlert={true} messageInfo={`Ces frais concernent le coût d'une hypothèque, d'un ppd, ou d'une caution par exemple. Ils s'élèvent en général à environ ${BANK_GARANTY_PERCENT * 100}% du montant du prêt.`} />
                             </View>
                             <View style={styles.flexRowAlignCenter}>
                                 <InputField label={'Frais de dossier (€)'}
@@ -87,7 +86,7 @@ export default class SimulatorBankForm extends Component {
                                 <TooltipsHelper  showAsAlert={true} messageInfo={`En moyenne les frais de dossier sont autour de ${BANK_FOLDER_COST}€`} />
                             </View>
                             <View style={styles.flexRowAlignCenter}>
-                                <InputField label={'Durée de crédit (nombre d\'années) *'}
+                                <InputField label={<Text style={styles.inputLabelPrimary}>Durée de crédit (nombre d\'années) <Text style={styles.formStarRequired}>*</Text></Text>}
                                             type={'numeric'}
                                             style={{marginRight: 15}}
                                             value={this.state.creditTime}
@@ -95,7 +94,7 @@ export default class SimulatorBankForm extends Component {
                                 <TooltipsHelper showAsAlert={true} messageInfo={'En moyenne les banques n\'excèdent pas la durée de 20 ans pour un investissement locatif.'} />
                             </View>
                             <View style={styles.flexRowAlignCenter}>
-                                <InputField label={'Taux du crédit (%) *'}
+                                <InputField label={<Text style={styles.inputLabelPrimary}>Taux du crédit (%) <Text style={styles.formStarRequired}>*</Text></Text>}
                                             type={'numeric'}
                                             style={{marginRight: 15}}
                                             value={this.state.bankRate}
@@ -118,7 +117,7 @@ export default class SimulatorBankForm extends Component {
                              style={{justifyContent: 'center'}}>
                     Sauvegarder
                 </Icon.Button>
-            </>
+            </Fragment>
         )
     }
 

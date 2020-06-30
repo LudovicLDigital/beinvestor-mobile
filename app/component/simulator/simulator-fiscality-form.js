@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import TooltipsHelper from "../subcomponent/tooltips-helper";
 import InputField from "../subcomponent/form/input-field";
 import FiscalTypeService from "../../shared/services/entities/fiscal-type-service";
+import {MICRO_FONCIER} from "../../shared/util/constants";
 
 /**
  * PROPS :
@@ -36,8 +37,10 @@ export default class SimulatorFiscalityForm extends Component {
 
     componentDidMount(): void {
         this.fiscalTypeService.getFiscalTypes().then(async (types) => {
+            const defaultType = types.find((t) => t.name === MICRO_FONCIER);
             this.setState({
-                fiscalTypes: types
+                fiscalTypes: types,
+                selectedFiscalType: defaultType
             });
         }).catch((error) => {
             console.error(error);
@@ -52,7 +55,7 @@ export default class SimulatorFiscalityForm extends Component {
                         <Toggle style={{marginBottom: 15}} checked={this.state.inHandProject} onChange={() => this.toggleInHand()}>
                             {evaProps => <Text {...evaProps} >{this.state.inHandProject ? 'Projet clef en main' : 'J\'entre moi-même les montants'}</Text>}
                         </Toggle>
-                        <TooltipsHelper  showAsAlert={true} messageInfo={'"Projet clef en main" laisse le simulateur determiner tous les frais annexes (délégation, pno...) pour vous'} />
+                        <TooltipsHelper  showAsAlert={true} messageInfo={'"Projet clef en main" laisse le simulateur déterminer tous les frais annexes (délégation, pno...) pour vous'} />
                     </View>
                     { !this.state.inHandProject && (
                         <View>
@@ -86,7 +89,7 @@ export default class SimulatorFiscalityForm extends Component {
                                             style={{marginRight: 15}}
                                             value={this.state.vlInsurancePercent}
                                             onTextChange={(text) => this.setState({vlInsurancePercent: text})}/>
-                                <TooltipsHelper showAsAlert={true} messageInfo={'En moyenne le pourcentage d\'une assurance vacance locative (periode où le bien n\'est pas occupé) est de 1% du loyer.'} />
+                                <TooltipsHelper showAsAlert={true} messageInfo={'En moyenne le pourcentage d\'une assurance vacance locative (période où le bien n\'est pas occupé) est de 1% du loyer.'} />
                             </View>
                         </View>
                     )}
@@ -96,21 +99,20 @@ export default class SimulatorFiscalityForm extends Component {
                                     style={{marginRight: 15}}
                                     value={this.state.comptableCost}
                                     onTextChange={(text) => this.setState({comptableCost: text})}/>
-                        <TooltipsHelper showAsAlert={true} messageInfo={`Prendre un comptable est judicieux et vous apportera de nombreux avantages dans le cadre de régime au réel !`} />
+                        <TooltipsHelper showAsAlert={true} messageInfo={`En moyenne, 500€ par bien, cela est très variable d'un comptable à l'autre et selon le régime fiscal choisi.`} />
                     </View>
                     { this.state.fiscalTypes && this.state.fiscalTypes !== null  && this.state.fiscalTypes.length > 0 &&
                     <View style={styles.flexRowAlignCenter}>
                         <Select
                             style={{flex: 1}}
                             label={evaProps => <Text {...evaProps} style={styles.inputLabelPrimary}>Choisir un régime fiscal</Text>}
-                            placeholder={evaProps => <Text {...evaProps} style={[evaProps.style]}>Par défaut, Micro-foncier</Text>}
                             value={evaProps => <Text {...evaProps} >{this.state.selectedFiscalType ? this.state.selectedFiscalType.name : ''}</Text>}
                             onSelect={(index) => this.selectFiscalType(index.row)}>
                             {this.state.fiscalTypes.map((type) => {
                                 return (<SelectItem key={type.id} title={evaProps => <Text {...evaProps} >{type.name}</Text>}/>)
                             })}
                         </Select>
-                        {this.state.selectedFiscalType && <TooltipsHelper messageInfo={this.state.selectedFiscalType.description}/>}
+                        {this.state.selectedFiscalType && <TooltipsHelper showAsAlert={true}  messageInfo={this.state.selectedFiscalType.description}/>}
                     </View>}
                     <View style={styles.flexRowAlignCenter}>
                         <InputField label={'Salaire professionnel annuel (€)'}

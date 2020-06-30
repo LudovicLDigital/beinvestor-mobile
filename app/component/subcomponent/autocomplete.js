@@ -1,8 +1,30 @@
 import React, {Component} from "react";
 import {TouchableWithoutFeedback, View,} from "react-native";
-import {Autocomplete, AutocompleteItem, Icon} from '@ui-kitten/components';
+import {Autocomplete as UIKittenAutocomplete, AutocompleteItem, Icon} from '@ui-kitten/components';
 import MatIcon from 'react-native-vector-icons/MaterialIcons';
 
+/**
+ * Use to resolve a bug when user enter terms the list isn't showed until the user blur and refocus the autocomplete component
+ */
+export const Autocomplete = React.forwardRef((props, ref) => {
+
+    const autocompleteRef = React.useMemo(() => ref || React.createRef(), [ref]);
+    const { length: dataLength } = props.data;
+
+    React.useEffect(() => {
+        const shouldBecomeVisible = (autocompleteRef.current?.isFocused() || false) && (dataLength || 0) > 0;
+        if (autocompleteRef.current?.state.listVisible !== shouldBecomeVisible) {
+            autocompleteRef.current?.setState({ listVisible: shouldBecomeVisible });
+        }
+    }, [dataLength]);
+
+    return (
+        <UIKittenAutocomplete
+            ref={autocompleteRef}
+            {...props}
+        />
+    );
+});
 /**
  * PROPS :
  * - autocompleteList : the list of string to display in autocomplete
@@ -46,6 +68,7 @@ export default class BeInvestorAutoComplete extends Component {
                 <Autocomplete
                     placeholder={this.props.placeholder}
                     value={this.state.searchTerm}
+                    data={this.props.autocompleteList}
                     accessoryRight={ResetAutocompleteIcon}
                     accessoryLeft={rightIcon}
                     onChangeText={onChangeText}

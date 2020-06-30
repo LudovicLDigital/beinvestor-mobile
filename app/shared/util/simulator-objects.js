@@ -93,7 +93,7 @@ export const SimulatorReturnObject = {
 };
 export const SimulatorDataSendObject = {
     noFai: false,
-    makeACredit: false,
+    makeACredit: true,
     includeFurnitureInCredit: true,
     faiPercent: null,
     notarialCost: null,
@@ -108,7 +108,7 @@ export const SimulatorDataSendObject = {
     previsionalRentCharge: null,
     chargeCopro: null,
 
-    is110: false,
+    is110: true,
     apport: null,
     creditWarrantyCost: null,
     bankCharges: null,

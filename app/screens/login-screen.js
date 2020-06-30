@@ -121,7 +121,7 @@ export default class LoginScreen extends Component {
                         <View style={[{flex:2, flexDirection: 'column', justifyContent: 'space-between', marginBottom: 20}]} onLayout={(event) => { this._setEndViewForLoader(event.nativeEvent.layout) }} behavior="position">
                                 <Image style={[{alignSelf: 'center'}, styles.appIconLarge]} source={require('../assets/icon.png')}/>
                                 <InputField
-                                    label={'Login'}
+                                    label={'Login ou email'}
                                     onSubmitEditing={() => this.passwordTextInput.focus()}
                                     blurOnSubmit={false}
                                     onTextChange={text => this.textEnterred(LOGIN, text)}/>

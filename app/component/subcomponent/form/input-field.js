@@ -18,6 +18,7 @@ import {TouchableWithoutFeedback} from "react-native";
  * - errorOnField: throwed when field is in error case return a boolean
  * - formSubmitted: a boolean to check errors case for value when form is submitted
  * - onSubmitEditing: method same as INPUT Props
+ * - onBlur: method same as INPUT Props
  * - blurOnSubmit: boolean same as INPUT props
  */
 export default class  extends Component {
@@ -52,6 +53,7 @@ export default class  extends Component {
                        disabled={this.props.disabled}
                        blurOnSubmit={this.props.blurOnSubmit}
                        style={[{borderColor: appColors.primary, flex: 1}, this.props.style]}
+                       onBlur={() => this.props.onBlur ? this.props.onBlur() : null}
                        status={(this.state.isValidated && (!this.state.receivedErrorByForm || this.state.receivedErrorByForm === null)) ? '' : 'danger'}
                        secureTextEntry={this.state.showPassType === 'password'}
                        onSubmitEditing={() => this.props.onSubmitEditing ? this.props.onSubmitEditing() : null}
@@ -76,6 +78,7 @@ export default class  extends Component {
                        value={this.props.value}
                        blurOnSubmit={this.props.blurOnSubmit}
                        disabled={this.props.disabled}
+                       onBlur={() => this.props.onBlur ? this.props.onBlur() : null}
                        ref={(input) =>  this.props.reference ? this.props.reference(input) : null}
                        onSubmitEditing={() => this.props.onSubmitEditing ? this.props.onSubmitEditing() : null}
                        style={[{borderColor: appColors.primary, flex: 1}, this.props.style]}

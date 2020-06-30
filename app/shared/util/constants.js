@@ -53,6 +53,11 @@ export const BANK = 'formulaire banque';
 export const TX_BANK = '1.5';
 export const BANK_GARANTY_PERCENT = 0.013;
 export const BANK_FOLDER_COST = 500;
+export const MICRO_FONCIER = 'MICRO-FONCIER';
+export const NUE_REEL = 'FONCIER RÉEL';
+export const MICRO_BIC = 'LMNP FORFAIT / MICRO-BIC';
+export const LMNP = 'LMNP RÉEL';
+export const LMP = 'LMP';
 // citation array
 export const CITATIONS = [
     "« Les propriétaires deviennent riche pendant leur sommeil » . John Stuart Mill.",

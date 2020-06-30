@@ -112,7 +112,7 @@ export default class SimulatorPreviewResult extends Component {
                         {this.state.simulatorReturnObject && !this.props.isLookingDetails &&
                         <View style={[styles.flexRowAlignCenter]}>
                             <Text style={[styles.inputLabelPrimary, simResultStyle.rentaNette]}>Rentabilité nette : {'\n'} {this.state.simulatorReturnObject.result.rentaNet}%</Text>
-                            <TooltipsHelper  showAsAlert={true} style={{flex:1}} messageInfo={'La rentabilité nette se calcul de la même façon que la brute mais on déduis les charges (taxe foncière, gestion...) des loyers encaissés.'}/>
+                            <TooltipsHelper  showAsAlert={true} style={{flex:1}} messageInfo={'La rentabilité nette se calcul de la même façon que la brute mais on déduit les charges (taxe foncière, gestion...) des loyers encaissés.'}/>
                         </View>}
                     </Animated.View>
                 </View>
