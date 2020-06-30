@@ -113,6 +113,9 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'space-between'
     },
+    formStarRequired: {
+        color: appColors.dangerDark, fontWeight: 'bold', fontSize: 20
+    },
     inputLabelPrimary: {
         color: appColors.primary,
         fontWeight: 'bold'

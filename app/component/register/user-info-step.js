@@ -69,7 +69,9 @@ export default class UserInfoRegisterStep extends Component {
                     max={new Date()}
                     min={new Date(1930,1,1)}
                     accessoryLeft={CalendarIcon}
-                    onSelect={(date) => this.setState({birthDate: date})}
+                    onSelect={(date) => {
+                        this.setState({birthDate: date})
+                    }}
                 />
             </Layout>
         )

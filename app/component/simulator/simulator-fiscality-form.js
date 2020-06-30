@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import TooltipsHelper from "../subcomponent/tooltips-helper";
 import InputField from "../subcomponent/form/input-field";
 import FiscalTypeService from "../../shared/services/entities/fiscal-type-service";
+import {MICRO_FONCIER} from "../../shared/util/constants";
 
 /**
  * PROPS :
@@ -36,8 +37,10 @@ export default class SimulatorFiscalityForm extends Component {
 
     componentDidMount(): void {
         this.fiscalTypeService.getFiscalTypes().then(async (types) => {
+            const defaultType = types.find((t) => t.name === MICRO_FONCIER);
             this.setState({
-                fiscalTypes: types
+                fiscalTypes: types,
+                selectedFiscalType: defaultType
             });
         }).catch((error) => {
             console.error(error);
@@ -103,14 +106,13 @@ export default class SimulatorFiscalityForm extends Component {
                         <Select
                             style={{flex: 1}}
                             label={evaProps => <Text {...evaProps} style={styles.inputLabelPrimary}>Choisir un régime fiscal</Text>}
-                            placeholder={evaProps => <Text {...evaProps} style={[evaProps.style]}>Par défaut, Micro-foncier</Text>}
                             value={evaProps => <Text {...evaProps} >{this.state.selectedFiscalType ? this.state.selectedFiscalType.name : ''}</Text>}
                             onSelect={(index) => this.selectFiscalType(index.row)}>
                             {this.state.fiscalTypes.map((type) => {
                                 return (<SelectItem key={type.id} title={evaProps => <Text {...evaProps} >{type.name}</Text>}/>)
                             })}
                         </Select>
-                        {this.state.selectedFiscalType && <TooltipsHelper messageInfo={this.state.selectedFiscalType.description}/>}
+                        {this.state.selectedFiscalType && <TooltipsHelper showAsAlert={true}  messageInfo={this.state.selectedFiscalType.description}/>}
                     </View>}
                     <View style={styles.flexRowAlignCenter}>
                         <InputField label={'Salaire professionnel annuel (€)'}
