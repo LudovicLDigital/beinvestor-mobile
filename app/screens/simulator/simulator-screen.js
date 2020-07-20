@@ -14,12 +14,14 @@ import SimulatorService from "../../shared/services/simulator-service";
 import {showInfoAlert} from "../../shared/util/ui-helpers";
 import { BannerAd, BannerAdSize, TestIds } from '@react-native-firebase/admob';
 import {BANNER_AD} from '../../shared/util/constants';
+import SocketService from "../../shared/services/socket-service";
 
 
 export default class SimulatorScreen extends Component {
     simulatorService;
     constructor(props) {
         super(props);
+        SocketService.connectToBackEnd();
         this.simulatorService = new SimulatorService();
         this.state = {
             isEditingApart: false,

@@ -3,7 +3,6 @@ import {SafeAreaView, View} from 'react-native';
 import {Layout} from '@ui-kitten/components';
 import HeaderBar from '../component/subcomponent/header-bar';
 import {DismissKeyboard} from "../shared/util/ui-helpers";
-import SocketService from '../shared/services/socket-service';
 import CustomMap from '../component/map/custom-map';
 
 export default class HomeScreen extends Component {
@@ -13,7 +12,6 @@ export default class HomeScreen extends Component {
         this.isMainScreen = true;
     }
     componentDidMount(): void {
-        SocketService.connectToBackEnd();
     }
     render() {
         return (

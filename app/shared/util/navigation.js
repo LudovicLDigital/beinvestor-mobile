@@ -113,7 +113,7 @@ function GroupSearchStackNavigator() {
 const HomeDrawer = createDrawerNavigator();
 function HomeDrawerNavigator() {
     return (
-        <HomeDrawer.Navigator initialRouteName={ROUTE_MAP} drawerContent={props => <CustomDrawerContent {...props}/>} >
+        <HomeDrawer.Navigator initialRouteName={ROUTE_SIMULATOR} drawerContent={props => <CustomDrawerContent {...props}/>} >
             <HomeDrawer.Screen
             name={ROUTE_MAP}
             component={HomeScreen}
