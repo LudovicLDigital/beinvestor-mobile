@@ -5,7 +5,7 @@ import {Layout, Text} from '@ui-kitten/components';
 import HeaderBar from '../../component/subcomponent/header-bar';
 import SimulatorMenu from "../../component/simulator/simulator-menu";
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {BANK, ESTATE, FISCALITY, ROUTE_SIMULATOR_RESULT} from "../../shared/util/constants";
+import {BANK, ESTATE, FISCALITY, RENT, ROUTE_SIMULATOR_RESULT, SITUATION} from "../../shared/util/constants";
 import SimulatorEstateForm from "../../component/simulator/simulator-estate-form";
 import SimulatorFiscalityForm from "../../component/simulator/simulator-fiscality-form";
 import SimulatorBankForm from "../../component/simulator/simulator-bank-form";
@@ -16,6 +16,8 @@ import { BannerAd, BannerAdSize, TestIds } from '@react-native-firebase/admob';
 import {BANNER_AD} from '../../shared/util/constants';
 import SocketService from "../../shared/services/socket-service";
 import {convertRouteNameToLisible} from "../../shared/util/converter-for-route-name";
+import SimulatorRentForm from "../../component/simulator/simulator-rent-form";
+import SimulatorSituationForm from "../../component/simulator/simulator-situation-form";
 
 
 export default class SimulatorScreen extends Component {
@@ -35,12 +37,17 @@ export default class SimulatorScreen extends Component {
         return (
             <SafeAreaView style={{ flex: 1 }}>
                 <HeaderBar hideAriane={!this.state.isEditingApart} overrideBackPress={() => this.backPress()} previousRoute={(this.state.isEditingApart ? this.props.route.name : null)} route={(this.state.isEditingApart ? this.state.partShowed : this.props.route.name)} navigation={this.props.navigation}/>
-                {!this.state.isEditingApart && <View style={[styles.flexCenter, {backgroundColor: appColors.white}]}><Text category={"h6"} style={{fontWeight: "bold"}}>{convertRouteNameToLisible(this.props.route.name)}</Text></View>}
+                {!this.state.isEditingApart && <View style={[styles.flexCenter, {backgroundColor: appColors.white}]}>
+                    <Text category={"h6"} style={{fontWeight: "bold"}}>{convertRouteNameToLisible(this.props.route.name)}</Text>
+                    <Text style={{fontWeight: 'bold', color: appColors.dangerDark, fontSize: 11, textAlign: 'center', marginBottom: 10}}>Les champs marqués avec une étoile " * " sont obligatoires</Text>
+                </View>}
                 <Layout style={styles.fullScreen}>
                     {!this.state.isEditingApart && <SimulatorMenu clickedMenu={(menuClicked) => this._showForm(menuClicked)}/>}
                     {this.state.partShowed === ESTATE && this.state.isEditingApart && <SimulatorEstateForm formValuesReturned={(datas) => this.fillDataFor(ESTATE, datas)} recoverredFormValues={this.state.formValues}/>}
                     {this.state.partShowed === BANK && this.state.isEditingApart && <SimulatorBankForm formValuesReturned={(datas) => this.fillDataFor(BANK, datas)} recoverredFormValues={this.state.formValues}/>}
                     {this.state.partShowed === FISCALITY && this.state.isEditingApart && <SimulatorFiscalityForm formValuesReturned={(datas) => this.fillDataFor(FISCALITY, datas)} recoverredFormValues={this.state.formValues}/>}
+                    {this.state.partShowed === RENT && this.state.isEditingApart && <SimulatorRentForm formValuesReturned={(datas) => this.fillDataFor(RENT, datas)} recoverredFormValues={this.state.formValues}/>}
+                    {this.state.partShowed === SITUATION && this.state.isEditingApart && <SimulatorSituationForm formValuesReturned={(datas) => this.fillDataFor(SITUATION, datas)} recoverredFormValues={this.state.formValues}/>}
                     {!this.state.isEditingApart && <Icon.Button name="insert-chart"
                                                                 backgroundColor={appColors.success}
                                                                 onPress={() => this.runSimulator()}
@@ -96,6 +103,12 @@ export default class SimulatorScreen extends Component {
             case BANK:
                 this._fillBank(datas);
                 break;
+            case RENT:
+                this._fillRent(datas);
+                break;
+            case SITUATION:
+                this._fillSituation(datas);
+                break;
         }
     }
 
@@ -112,11 +125,8 @@ export default class SimulatorScreen extends Component {
         this.state.formValues.buyPrice = datas.buyPrice;
         this.state.formValues.surface = datas.surface;
         this.state.formValues.workCost = datas.workCost;
-        this.state.formValues.monthlyRent = datas.monthlyRent;
         this.state.formValues.secureSaving = datas.secureSaving;
         this.state.formValues.taxeFonciere = datas.taxeFonciere;
-        this.state.formValues.previsionalRentCharge = datas.previsionalRentCharge;
-        this.state.formValues.chargeCopro = datas.chargeCopro;
     }
 
     /**
@@ -132,9 +142,8 @@ export default class SimulatorScreen extends Component {
         this.state.formValues.pnoCost = datas.pnoCost;
         this.state.formValues.gliPercent = datas.gliPercent;
         this.state.formValues.vlInsurancePercent = datas.vlInsurancePercent;
-        this.state.formValues.fiscalTypeId = datas.fiscalTypeId;
-        this.state.formValues.professionnalSalary = datas.professionnalSalary;
-        this.state.formValues.annualRent = datas.annualRent;
+        this.state.formValues.chargeCopro = datas.chargeCopro;
+        this.state.formValues.previsionalRentCharge = datas.previsionalRentCharge;
     }
 
     /**
@@ -154,6 +163,28 @@ export default class SimulatorScreen extends Component {
         this.state.formValues.creditTime = datas.creditTime;
         this.state.formValues.bankRate = datas.bankRate;
         this.state.formValues.actualCreditMensualities = datas.actualCreditMensualities;
+    }
+
+    /**
+     * Fill the state.formValues with the new datas for the simulation, Here is concerned the rent form as fiscal type
+     * @param datas the new data enterred in form
+     * @private
+     */
+    _fillRent(datas) {
+        this.backPress();
+        this.state.formValues.fiscalTypeId = datas.fiscalTypeId;
+        this.state.formValues.monthlyRent = datas.monthlyRent;
+    }
+
+    /**
+     * Fill the state.formValues with the new datas for the simulation, Here is concerned the situation of the user
+     * @param datas the new data enterred in form
+     * @private
+     */
+    _fillSituation(datas) {
+        this.backPress();
+        this.state.formValues.professionnalSalary = datas.professionnalSalary;
+        this.state.formValues.annualRent = datas.annualRent;
     }
 
     /**

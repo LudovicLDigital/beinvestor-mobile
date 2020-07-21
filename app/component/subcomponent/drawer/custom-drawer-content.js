@@ -1,7 +1,7 @@
 import React, {Fragment, useEffect} from 'react';
 import {convertRouteNameToLisible} from "../../../shared/util/converter-for-route-name";
 import {
-    ROUTE_FAV_GRP,
+    ROUTE_FAV_GRP, ROUTE_HOME,
     ROUTE_INFO,
     ROUTE_LOGIN,
     ROUTE_MAP,
@@ -18,14 +18,14 @@ import HeaderUser from "../header-user";
 
 const drawerMenuItems = [
     {
-        title: convertRouteNameToLisible(ROUTE_MAP),
-        icon: 'globe-2-outline',
-        route: ROUTE_MAP
-    },
-    {
         title: convertRouteNameToLisible(ROUTE_SIMULATOR),
         icon: 'pie-chart-2',
         route: ROUTE_SIMULATOR
+    },
+    {
+        title: convertRouteNameToLisible(ROUTE_MAP),
+        icon: 'globe-2-outline',
+        route: ROUTE_MAP
     },
     {
         title: convertRouteNameToLisible(ROUTE_USER_PROFIL),
@@ -82,7 +82,7 @@ export const CustomDrawerContent = (props) => { //{ navigation, state }
     useEffect(() => {
         const backAction = () =>
         {
-            if (props.state.routeNames[props.state.index] === ROUTE_MAP) {
+            if (props.state.routeNames[props.state.index] === ROUTE_SIMULATOR) {
                 Alert.alert(
                     "Attention ! ",
                     "Voulez vous quitter l'application ?",
@@ -121,7 +121,7 @@ export const CustomDrawerContent = (props) => { //{ navigation, state }
             {drawerMenuItems.map((item, index) => {
                 return (
                     <Fragment key={index}>
-                        <MenuItem label={item.title} icon={item.icon} isFocused={props.state.index -1 === index} onSelect={() => onSelect(item.route)}/>
+                        <MenuItem label={item.title} icon={item.icon} isFocused={props.state.index === index} onSelect={() => onSelect(item.route)}/>
                     </Fragment>
                 )
             })}

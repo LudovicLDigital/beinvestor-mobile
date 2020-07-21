@@ -5,7 +5,7 @@ import {appColors, styles} from "../../shared/styles/global";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {MenuAction, SimulatorAction} from "./basic-top-action";
 import {convertRouteNameToLisible} from "../../shared/util/converter-for-route-name";
-import {ROUTE_MAP} from "../../shared/util/constants";
+import {ROUTE_HOME, ROUTE_MAP, ROUTE_SIMULATOR} from "../../shared/util/constants";
 
 /**
  * PROPS :
@@ -64,7 +64,7 @@ export default class HeaderBar extends Component {
 
     backPressed() {
         if (!this.props.overrideBackPress) {
-            if (this.previousRoute === ROUTE_MAP) {
+            if (this.previousRoute === ROUTE_SIMULATOR) {
                 this.navigationSytem.popToTop();
             } else {
                 this.navigationSytem.goBack();

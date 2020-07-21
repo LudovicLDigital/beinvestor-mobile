@@ -38,11 +38,8 @@ export default class SimulatorEstateForm extends Component {
             buyPrice: this.props.recoverredFormValues.buyPrice ? this.props.recoverredFormValues.buyPrice : null,
             surface: this.props.recoverredFormValues.surface ? this.props.recoverredFormValues.surface : null,
             workCost: this.props.recoverredFormValues.workCost ? this.props.recoverredFormValues.workCost : '0',
-            monthlyRent: this.props.recoverredFormValues.monthlyRent ? this.props.recoverredFormValues.monthlyRent : null,
             secureSaving: this.props.recoverredFormValues.secureSaving ? this.props.recoverredFormValues.secureSaving : null,
             taxeFonciere: this.props.recoverredFormValues.taxeFonciere ? this.props.recoverredFormValues.taxeFonciere : '0',
-            previsionalRentCharge: this.props.recoverredFormValues.previsionalRentCharge ? this.props.recoverredFormValues.previsionalRentCharge : '0',
-            chargeCopro: this.props.recoverredFormValues.chargeCopro ? this.props.recoverredFormValues.chargeCopro : '0',
 
             selectWork: null,
             selectedUnitFA: faUnit[0]
@@ -114,7 +111,7 @@ export default class SimulatorEstateForm extends Component {
         return (
             <>
                 <ScrollView contentContainerStyle={{paddingBottom: 20}} style={[{flex: 1}]}>
-                    <Text style={{fontWeight: 'bold', color: appColors.dangerDark, fontSize: 11, textAlign: 'center', marginBottom: 10}}>Les champs marqués avec une étoile " * " sont obligatoires</Text>
+                    <SectionDivider sectionName={'Le bien'}/>
                     <Toggle style={{alignSelf: 'flex-start', marginBottom: 15}} checked={!this.state.noFai} onChange={() => this.setState({noFai: !this.state.noFai})}>
                         {evaProps => <Text {...evaProps} >{this.state.noFai ? 'Pas de frais d\'agence' : 'Il y a des frais d\'agence'}</Text>}
                     </Toggle>
@@ -188,33 +185,6 @@ export default class SimulatorEstateForm extends Component {
                                     onTextChange={(text) => this.setState({notarialCost: text})}/>
                         <TooltipsHelper showAsAlert={true} messageInfo={'Les frais de notaire s\'élèvent en moyenne à 8.5% du prix du bien, si vous laissez ce champs vide, nous le calculerons pour vous'}/>
                     </View>
-                    <SectionDivider sectionName={'Location'}/>
-                    <View style={styles.flexRowAlignCenter}>
-                        <InputField label={<Text style={styles.inputLabelPrimary}>Loyer mensuel hors charges (€) <Text style={styles.formStarRequired}>*</Text></Text>}
-                                    type={'numeric'}
-                                    style={{marginRight: 15}}
-                                    value={this.state.monthlyRent}
-                                    onTextChange={(text) => this.setState({monthlyRent: text})}/>
-                        <TooltipsHelper showAsAlert={true} messageInfo={'S\'il y a plusieurs biens (cas d\'un immeuble par exemple), additionner tous les loyers HC'}/>
-                    </View>
-
-                    <View style={styles.flexRowAlignCenter}>
-                        <InputField label={'Charges locataires mensuelles (€)'}
-                                    type={'numeric'}
-                                    style={{marginRight: 15}}
-                                    value={this.state.previsionalRentCharge}
-                                    onTextChange={(text) => this.setState({previsionalRentCharge: text})}/>
-                        <TooltipsHelper showAsAlert={true} messageInfo={'Le coût moyen des charges pour les locataires en france est de 54€/mois (Insee)'}/>
-                    </View>
-
-                    <View style={styles.flexRowAlignCenter}>
-                        <InputField label={'Charges de copropriété mensuelles (€)'}
-                                    type={'numeric'}
-                                    style={{marginRight: 15}}
-                                    value={this.state.chargeCopro}
-                                    onTextChange={(text) => this.setState({chargeCopro: text})}/>
-                        <TooltipsHelper showAsAlert={true} messageInfo={'Les charges de copropriété sont les charges communes à tous les copropriétaires (ascenseur, syndic etc...)'}/>
-                    </View>
 
                     <View style={styles.flexRowAlignCenter}>
                         <InputField label={'Epargne de sécurité mensuelle (€)'}
@@ -272,9 +242,6 @@ export default class SimulatorEstateForm extends Component {
         let messageError = '';
         if (!this.state.buyPrice) {
             messageError = messageError + '- Prix requis \n';
-        }
-        if (!this.state.monthlyRent) {
-            messageError = messageError + '- Loyer requis \n';
         }
         return messageError;
     }

@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import TooltipsHelper from "../subcomponent/tooltips-helper";
 import InputField from "../subcomponent/form/input-field";
 import {BANK_FOLDER_COST, BANK_GARANTY_PERCENT, TX_BANK} from "../../shared/util/constants";
+import SectionDivider from "../subcomponent/form/section-divider";
 
 /**
  * PROPS :
@@ -37,8 +38,8 @@ export default class SimulatorBankForm extends Component {
         return (
             <Fragment>
                 <ScrollView contentContainerStyle={{paddingBottom: 20}} style={[{flex: 1}]}>
+                    <SectionDivider sectionName={'L\'emprunt bancaire'}/>
                     <Text style={{fontWeight: 'bold', color: appColors.dangerDark, fontSize: 11, textAlign: 'center', marginBottom: 10}}>Les champs marqués avec une étoile " * " sont obligatoires</Text>
-
                     <Toggle style={{alignSelf: 'flex-start', marginBottom: 15}} checked={this.state.makeACredit} onChange={() => this.setState({makeACredit: !this.state.makeACredit})}>
                         {evaProps => <Text {...evaProps} >{this.state.makeACredit ? 'Je fais un emprunt' : 'Je ne fais pas d\'emprunt'}</Text>}
                     </Toggle>
