@@ -113,34 +113,34 @@ function GroupSearchStackNavigator() {
 const HomeDrawer = createDrawerNavigator();
 function HomeDrawerNavigator() {
     return (
-        <HomeDrawer.Navigator initialRouteName={ROUTE_MAP} drawerContent={props => <CustomDrawerContent {...props}/>} >
+        <HomeDrawer.Navigator initialRouteName={ROUTE_SIMULATOR} drawerContent={props => <CustomDrawerContent {...props}/>} >
             <HomeDrawer.Screen
-            name={ROUTE_MAP}
-            component={HomeScreen}
-            options={{
-                headerShown: false
-            }}
+                name={ROUTE_SIMULATOR}
+                component={SimulatorScreen}
+                options={{
+                    headerShown: false
+                }}
             />
             <HomeDrawer.Screen
-            name={ROUTE_SIMULATOR}
-            component={SimulatorScreen}
-            options={{
-                headerShown: false
-            }}
+                name={ROUTE_MAP}
+                component={HomeScreen}
+                options={{
+                    headerShown: false
+                }}
             />
             <HomeDrawer.Screen
-            name={ROUTE_SIMULATOR_RESULT}
-            component={SimulatorResultScreen}
-            options={{
-                headerShown: false
-            }}
+                name={ROUTE_SIMULATOR_RESULT}
+                component={SimulatorResultScreen}
+                options={{
+                    headerShown: false
+                }}
             />
             <HomeDrawer.Screen
-            name={ROUTE_USER_PROFIL}
-            component={ProfilStackNavigator}
-            options={{
-                headerShown: false
-            }}
+                name={ROUTE_USER_PROFIL}
+                component={ProfilStackNavigator}
+                options={{
+                    headerShown: false
+                }}
             />
             <HomeDrawer.Screen
                 name={ROUTE_SEARCH_GRP}
@@ -150,25 +150,25 @@ function HomeDrawerNavigator() {
                 }}
             />
             <HomeDrawer.Screen
-            name={ROUTE_FAV_GRP}
-            component={GroupFavStackNavigator}
-            options={{
-                headerShown: false
-            }}
+                name={ROUTE_FAV_GRP}
+                component={GroupFavStackNavigator}
+                options={{
+                    headerShown: false
+                }}
             />
             <HomeDrawer.Screen
-            name={ROUTE_SETTING}
-            component={SettingsScreen}
-            options={{
-                headerShown: false
-            }}
+                name={ROUTE_SETTING}
+                component={SettingsScreen}
+                options={{
+                    headerShown: false
+                }}
             />
             <HomeDrawer.Screen
-            name={ROUTE_INFO}
-            component={AppInfoScreen}
-            options={{
-                headerShown: false
-            }}
+                name={ROUTE_INFO}
+                component={AppInfoScreen}
+                options={{
+                    headerShown: false
+                }}
             />
         </HomeDrawer.Navigator>
     )

@@ -48,8 +48,10 @@ export const OLD_PASS = 'old password';
 export const NEW_PASS = 'new password';
 // SIMULATOR
 export const ESTATE = 'formulaire bien';
-export const FISCALITY = 'formulaire fiscalité';
+export const FISCALITY = 'formulaire charges';
 export const BANK = 'formulaire banque';
+export const RENT = 'formulaire locatif';
+export const SITUATION = 'formulaire situation perso';
 export const TX_BANK = '1.5';
 export const BANK_GARANTY_PERCENT = 0.013;
 export const BANK_FOLDER_COST = 500;

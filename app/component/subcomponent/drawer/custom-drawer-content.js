@@ -1,8 +1,7 @@
 import React, {Fragment, useEffect} from 'react';
 import {convertRouteNameToLisible} from "../../../shared/util/converter-for-route-name";
 import {
-    BANNER_AD,
-    ROUTE_FAV_GRP,
+    ROUTE_FAV_GRP, ROUTE_HOME,
     ROUTE_INFO,
     ROUTE_LOGIN,
     ROUTE_MAP,
@@ -13,20 +12,20 @@ import {
 } from "../../../shared/util/constants";
 import {DrawerContentScrollView,} from '@react-navigation/drawer';
 import AuthService from "../../../shared/services/auth";
-import {Alert, BackHandler, View} from "react-native";
+import {Alert, BackHandler} from "react-native";
 import MenuItem from "./MenuItem";
 import HeaderUser from "../header-user";
-import { BannerAd, BannerAdSize, TestIds } from '@react-native-firebase/admob';
+
 const drawerMenuItems = [
-    {
-        title: convertRouteNameToLisible(ROUTE_MAP),
-        icon: 'globe-2-outline',
-        route: ROUTE_MAP
-    },
     {
         title: convertRouteNameToLisible(ROUTE_SIMULATOR),
         icon: 'pie-chart-2',
         route: ROUTE_SIMULATOR
+    },
+    {
+        title: convertRouteNameToLisible(ROUTE_MAP),
+        icon: 'globe-2-outline',
+        route: ROUTE_MAP
     },
     {
         title: convertRouteNameToLisible(ROUTE_USER_PROFIL),
@@ -83,7 +82,7 @@ export const CustomDrawerContent = (props) => { //{ navigation, state }
     useEffect(() => {
         const backAction = () =>
         {
-            if (props.state.routeNames[props.state.index] === ROUTE_MAP) {
+            if (props.state.routeNames[props.state.index] === ROUTE_SIMULATOR) {
                 Alert.alert(
                     "Attention ! ",
                     "Voulez vous quitter l'application ?",
@@ -122,14 +121,11 @@ export const CustomDrawerContent = (props) => { //{ navigation, state }
             {drawerMenuItems.map((item, index) => {
                 return (
                     <Fragment key={index}>
-                        <MenuItem label={item.title} icon={item.icon} isFocused={props.state.index -1 === index} onSelect={() => onSelect(item.route)}/>
+                        <MenuItem label={item.title} icon={item.icon} isFocused={props.state.index === index} onSelect={() => onSelect(item.route)}/>
                     </Fragment>
                 )
             })}
             <MenuItem label={'Se déconnecter'} icon={'log-out'} onSelect={() => onSelect(LOGOUT)}/>
-            <View style={{flex:1, justifyContent: 'flex-end', alignItems: 'center', marginTop: 25}}>
-                <BannerAd  size={BannerAdSize.SMART_BANNER} unitId={BANNER_AD} />
-            </View>
         </DrawerContentScrollView>
     );
 };

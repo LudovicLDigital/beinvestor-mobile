@@ -7,6 +7,7 @@ import TooltipsHelper from "../subcomponent/tooltips-helper";
 import InputField from "../subcomponent/form/input-field";
 import FiscalTypeService from "../../shared/services/entities/fiscal-type-service";
 import {MICRO_FONCIER} from "../../shared/util/constants";
+import SectionDivider from "../subcomponent/form/section-divider";
 
 /**
  * PROPS :
@@ -14,10 +15,8 @@ import {MICRO_FONCIER} from "../../shared/util/constants";
  * - recoverredFormValues : préinputed values for the form
  */
 export default class SimulatorFiscalityForm extends Component {
-    fiscalTypeService;
     constructor(props) {
         super(props);
-        this.fiscalTypeService = new FiscalTypeService();
         this.state = {
             inHandProject: (typeof this.props.recoverredFormValues.inHandProject !== 'undefined' && this.props.recoverredFormValues.inHandProject !== null)  ? this.props.recoverredFormValues.inHandProject : true,
             percentRentManagement: this.props.recoverredFormValues.percentRentManagement ? this.props.recoverredFormValues.percentRentManagement : null,
@@ -25,32 +24,20 @@ export default class SimulatorFiscalityForm extends Component {
             pnoCost: this.props.recoverredFormValues.pnoCost ? this.props.recoverredFormValues.pnoCost : null,
             gliPercent: this.props.recoverredFormValues.gliPercent ? this.props.recoverredFormValues.gliPercent : null,
             vlInsurancePercent: this.props.recoverredFormValues.vlInsurancePercent ? this.props.recoverredFormValues.vlInsurancePercent : null,
-            fiscalTypeId: this.props.recoverredFormValues.fiscalTypeId ? this.props.recoverredFormValues.fiscalTypeId : 1,
-            professionnalSalary: this.props.recoverredFormValues.professionnalSalary ? this.props.recoverredFormValues.professionnalSalary : '0',
-            annualRent: this.props.recoverredFormValues.annualRent ? this.props.recoverredFormValues.annualRent : '0',
+            previsionalRentCharge: this.props.recoverredFormValues.previsionalRentCharge ? this.props.recoverredFormValues.previsionalRentCharge : '0',
+            chargeCopro: this.props.recoverredFormValues.chargeCopro ? this.props.recoverredFormValues.chargeCopro : '0',
 
-            fiscalTypes: null,
-            selectedFiscalType: null
         }
     }
 
 
-    componentDidMount(): void {
-        this.fiscalTypeService.getFiscalTypes().then(async (types) => {
-            const defaultType = types.find((t) => t.name === MICRO_FONCIER);
-            this.setState({
-                fiscalTypes: types,
-                selectedFiscalType: defaultType
-            });
-        }).catch((error) => {
-            console.error(error);
-        });
-    }
+    componentDidMount(): void {}
 
     render() {
         return (
             <>
                 <ScrollView contentContainerStyle={{paddingBottom: 20}} style={[{flex: 1}]}>
+                    <SectionDivider sectionName={'Les charges'}/>
                     <View style={[styles.flexRowAlignCenter, {justifyContent: 'space-between', alignItems: 'center'}]}>
                         <Toggle style={{marginBottom: 15}} checked={this.state.inHandProject} onChange={() => this.toggleInHand()}>
                             {evaProps => <Text {...evaProps} >{this.state.inHandProject ? 'Projet clef en main' : 'J\'entre moi-même les montants'}</Text>}
@@ -101,33 +88,24 @@ export default class SimulatorFiscalityForm extends Component {
                                     onTextChange={(text) => this.setState({comptableCost: text})}/>
                         <TooltipsHelper showAsAlert={true} messageInfo={`En moyenne, 500€ par bien, cela est très variable d'un comptable à l'autre et selon le régime fiscal choisi.`} />
                     </View>
-                    { this.state.fiscalTypes && this.state.fiscalTypes !== null  && this.state.fiscalTypes.length > 0 &&
                     <View style={styles.flexRowAlignCenter}>
-                        <Select
-                            style={{flex: 1}}
-                            label={evaProps => <Text {...evaProps} style={styles.inputLabelPrimary}>Choisir un régime fiscal</Text>}
-                            value={evaProps => <Text {...evaProps} >{this.state.selectedFiscalType ? this.state.selectedFiscalType.name : ''}</Text>}
-                            onSelect={(index) => this.selectFiscalType(index.row)}>
-                            {this.state.fiscalTypes.map((type) => {
-                                return (<SelectItem key={type.id} title={evaProps => <Text {...evaProps} >{type.name}</Text>}/>)
-                            })}
-                        </Select>
-                        {this.state.selectedFiscalType && <TooltipsHelper showAsAlert={true}  messageInfo={this.state.selectedFiscalType.description}/>}
-                    </View>}
-                    <View style={styles.flexRowAlignCenter}>
-                        <InputField label={'Salaire professionnel annuel (€)'}
+                        <InputField label={'Charges locataires mensuelles (€)'}
                                     type={'numeric'}
                                     style={{marginRight: 15}}
-                                    value={this.state.professionnalSalary}
-                                    onTextChange={(text) => this.setState({professionnalSalary: text})}/>
+                                    value={this.state.previsionalRentCharge}
+                                    onTextChange={(text) => this.setState({previsionalRentCharge: text})}/>
+                        <TooltipsHelper showAsAlert={true} messageInfo={'Le coût moyen des charges pour les locataires en france est de 54€/mois (Insee)'}/>
                     </View>
+
                     <View style={styles.flexRowAlignCenter}>
-                        <InputField label={'Autre revenus (€)'}
+                        <InputField label={'Charges de copropriété mensuelles (€)'}
                                     type={'numeric'}
                                     style={{marginRight: 15}}
-                                    value={this.state.annualRent}
-                                    onTextChange={(text) => this.setState({annualRent: text})}/>
+                                    value={this.state.chargeCopro}
+                                    onTextChange={(text) => this.setState({chargeCopro: text})}/>
+                        <TooltipsHelper showAsAlert={true} messageInfo={'Les charges de copropriété sont les charges communes à tous les copropriétaires (ascenseur, syndic etc...)'}/>
                     </View>
+
                 </ScrollView>
                 <Icon.Button name="save"
                              backgroundColor={appColors.success}
