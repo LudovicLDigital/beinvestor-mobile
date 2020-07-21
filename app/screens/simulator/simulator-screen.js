@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {appColors, styles} from "../../shared/styles/global";
 import {SafeAreaView, View} from 'react-native';
-import {Layout} from '@ui-kitten/components';
+import {Layout, Text} from '@ui-kitten/components';
 import HeaderBar from '../../component/subcomponent/header-bar';
 import SimulatorMenu from "../../component/simulator/simulator-menu";
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -15,6 +15,7 @@ import {showInfoAlert} from "../../shared/util/ui-helpers";
 import { BannerAd, BannerAdSize, TestIds } from '@react-native-firebase/admob';
 import {BANNER_AD} from '../../shared/util/constants';
 import SocketService from "../../shared/services/socket-service";
+import {convertRouteNameToLisible} from "../../shared/util/converter-for-route-name";
 
 
 export default class SimulatorScreen extends Component {
@@ -33,7 +34,8 @@ export default class SimulatorScreen extends Component {
     render() {
         return (
             <SafeAreaView style={{ flex: 1 }}>
-                <HeaderBar overrideBackPress={() => this.backPress()} previousRoute={(this.state.isEditingApart ? this.props.route.name : null)} route={(this.state.isEditingApart ? this.state.partShowed : this.props.route.name)} navigation={this.props.navigation}/>
+                <HeaderBar hideAriane={!this.state.isEditingApart} overrideBackPress={() => this.backPress()} previousRoute={(this.state.isEditingApart ? this.props.route.name : null)} route={(this.state.isEditingApart ? this.state.partShowed : this.props.route.name)} navigation={this.props.navigation}/>
+                {!this.state.isEditingApart && <View style={[styles.flexCenter, {backgroundColor: appColors.white}]}><Text category={"h6"} style={{fontWeight: "bold"}}>{convertRouteNameToLisible(this.props.route.name)}</Text></View>}
                 <Layout style={styles.fullScreen}>
                     {!this.state.isEditingApart && <SimulatorMenu clickedMenu={(menuClicked) => this._showForm(menuClicked)}/>}
                     {this.state.partShowed === ESTATE && this.state.isEditingApart && <SimulatorEstateForm formValuesReturned={(datas) => this.fillDataFor(ESTATE, datas)} recoverredFormValues={this.state.formValues}/>}
