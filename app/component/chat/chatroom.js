@@ -67,9 +67,9 @@ export default class ChatRoom extends Component {
     sendMessage() {
         if (!this.props.disableSendMessage) {
             const messageToSend = {
-                authorName: this.currentUser.userInfo.firstName,
+                authorName: this.currentUser.user.userInfo.firstName ? this.currentUser.user.userInfo.firstName : this.currentUser.user.login,
                 content: this.state.textMessage,
-                userInfoId: this.currentUser.user.id,
+                userInfoId: this.currentUser.user.userInfo.id,
                 groupId: this.props.groupId
             };
             this.textChange(null);
