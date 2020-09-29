@@ -14,8 +14,9 @@ import admob, {MaxAdContentRating} from '@react-native-firebase/admob';
 import SplashScreen from 'react-native-splash-screen';
 import VersionCheck from 'react-native-version-check';
 import {Linking} from 'react-native';
+import codePush from "react-native-code-push";
 
-export default class App extends Component {
+class App extends Component {
 
     componentDidMount(): void {
         SplashScreen.hide();
@@ -53,4 +54,5 @@ export default class App extends Component {
         )
     }
 
-};
+}
+export default codePush(App);
