@@ -10,7 +10,9 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
-    "cleanAndroid": "cd android && gradlew clean && cd .."
+    "cleanAndroid": "cd android && gradlew clean && cd ..",
+    "codePushProd-Android": "code-push release-react beinvestor_android android --deploymentName Production",
+    "codePushStaging-Android": "code-push release-react beinvestor_android android --deploymentName Staging"
   },
   "dependencies": {
     "@eva-design/eva": "^2.0.0",
@@ -58,6 +60,7 @@
     "@react-native-community/eslint-config": "^0.0.5",
     "@ui-kitten/metro-config": "^4.4.1",
     "babel-jest": "^24.9.0",
+    "code-push-cli": "^3.0.0",
     "eslint": "^6.5.1",
     "jest": "^24.9.0",
     "metro-react-native-babel-preset": "^0.56.0",
