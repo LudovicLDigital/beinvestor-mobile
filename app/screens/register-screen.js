@@ -7,7 +7,7 @@ import ViewPager from '@react-native-community/viewpager';
 import UserRegisterStep from "../component/register/user-step";
 import UserInfoRegisterStep from "../component/register/user-info-step";
 import AccountConfirmation from "../component/register/account-confirmation";
-import Loader from "../component/subcomponent/loader";
+import Loader from "../component/subcomponent/ui-tools/loader";
 import CGUComponent from "../component/app-info/cgu-component";
 import * as AuthService from "../shared/services/auth";
 import {showInfoAlert} from "../shared/util/ui-helpers";

@@ -1,8 +1,8 @@
 import React, {Component} from "react";
 import {TouchableWithoutFeedback} from "react-native";
 import {Icon, Tooltip} from '@ui-kitten/components';
-import {appColors} from "../../shared/styles/global";
-import {showInfoAlert} from "../../shared/util/ui-helpers";
+import {appColors} from "../../../shared/styles/global";
+import {showInfoAlert} from "../../../shared/util/ui-helpers";
 
 /**
  * PROPS :

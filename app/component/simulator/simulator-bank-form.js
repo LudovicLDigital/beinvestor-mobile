@@ -3,7 +3,7 @@ import {ScrollView, View} from "react-native";
 import {appColors, styles} from "../../shared/styles/global";
 import {Text, Toggle} from '@ui-kitten/components';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import TooltipsHelper from "../subcomponent/tooltips-helper";
+import TooltipsHelper from "../subcomponent/ui-tools/tooltips-helper";
 import InputField from "../subcomponent/form/input-field";
 import {BANK_FOLDER_COST, BANK_GARANTY_PERCENT, TX_BANK} from "../../shared/util/constants";
 import SectionDivider from "../subcomponent/form/section-divider";

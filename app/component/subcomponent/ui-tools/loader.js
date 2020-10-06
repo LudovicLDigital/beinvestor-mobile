@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {Animated, Easing, Text, View} from "react-native";
-import {styles} from "../../shared/styles/global";
+import {styles} from "../../../shared/styles/global";
 
 /**
  * PROPS :
@@ -93,10 +93,10 @@ export default class Loader extends Component {
                 <View style={[{flex:1}, styles.flexCenter, styles.overlayElement]}>
                     <Text style={[styles.boldedTitle, {textAlign: 'center'}]}>{this.props.loadTitle}</Text>
                     <View style={{flex:1, flexDirection: 'row'}}>
-                        <Animated.Image source={require('../../assets/loader-house0.png')} style={{width: this.state.H0size, height: this.state.H0size, top: this.state.H0Position}}/>
-                        <Animated.Image source={require('../../assets/loader-house1.png')} style={{width: this.state.H1size, height: this.state.H1size, top: this.state.H1Position}}/>
-                        <Animated.Image source={require('../../assets/loader-house2.png')} style={{width: this.state.H2size, height: this.state.H2size, top: this.state.H2Position}}/>
-                        <Animated.Image source={require('../../assets/loader-house3.png')} style={{width: this.state.H3size, height: this.state.H3size, top: this.state.H3Position}}/>
+                        <Animated.Image source={require('../../../assets/loader-house0.png')} style={{width: this.state.H0size, height: this.state.H0size, top: this.state.H0Position}}/>
+                        <Animated.Image source={require('../../../assets/loader-house1.png')} style={{width: this.state.H1size, height: this.state.H1size, top: this.state.H1Position}}/>
+                        <Animated.Image source={require('../../../assets/loader-house2.png')} style={{width: this.state.H2size, height: this.state.H2size, top: this.state.H2Position}}/>
+                        <Animated.Image source={require('../../../assets/loader-house3.png')} style={{width: this.state.H3size, height: this.state.H3size, top: this.state.H3Position}}/>
                     </View>
                 </View>
             )

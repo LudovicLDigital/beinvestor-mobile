@@ -3,10 +3,10 @@ import {View} from "react-native";
 import {appColors, deviceHeigth, deviceWidth, styles} from "../shared/styles/global";
 import {Button, Text} from '@ui-kitten/components';
 import ResetService from "../shared/services/reset-pass-service";
-import {SendIcon} from "../component/subcomponent/basic-icons";
+import {SendIcon} from "../component/subcomponent/ui-tools/basic-icons";
 import InputField from "../component/subcomponent/form/input-field";
 import {showInfoAlert, showToast} from "../shared/util/ui-helpers";
-import Loader from "../component/subcomponent/loader";
+import Loader from "../component/subcomponent/ui-tools/loader";
 
 export default class ResetPassScreen extends Component {
     _mailError;

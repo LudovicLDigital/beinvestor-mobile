@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {Animated, Easing, StyleSheet, View} from "react-native";
 import {Text} from "@ui-kitten/components/ui/index";
 import {appColors, styles} from "../../shared/styles/global";
-import TooltipsHelper from "../../component/subcomponent/tooltips-helper";
+import TooltipsHelper from "../subcomponent/ui-tools/tooltips-helper";
 import Thermometer from "../../component/subcomponent/animation/thermometer";
 import MatIcon from 'react-native-vector-icons/MaterialIcons';
 

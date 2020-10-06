@@ -5,7 +5,7 @@ import {appColors, styles} from "../../../shared/styles/global";
 import SectionDivider from "../../subcomponent/form/section-divider";
 import FillingBar from "../../subcomponent/filling-bar";
 import {VictoryPie} from "victory-native";
-import TooltipsHelper from "../../subcomponent/tooltips-helper";
+import TooltipsHelper from "../../subcomponent/ui-tools/tooltips-helper";
 
 const graphicColor = [appColors.primaryDark, '#3ACCE1', appColors.primary, appColors.secondary];
 

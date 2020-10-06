@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {appColors, deviceHeigth, deviceWidth, styles} from "../../shared/styles/global";
 import InputField from '../subcomponent/form/input-field';
-import {CalendarIcon} from "../subcomponent/basic-icons";
+import {CalendarIcon} from "../subcomponent/ui-tools/basic-icons";
 import {Datepicker, Layout, Text} from '@ui-kitten/components';
 import SectionDivider from '../../component/subcomponent/form/section-divider';
 

@@ -3,8 +3,8 @@ import {View} from "react-native";
 import {Button, Text} from '@ui-kitten/components';
 import {appColors, deviceWidth} from "../../shared/styles/global";
 import {ROUTE_DETAIL_GRP, ROUTE_MAP, ROUTE_SEARCH_GRP} from "../../shared/util/constants";
-import {CloseCircleIcon} from "../subcomponent/basic-icons";
-import FieldWithIcon from '../subcomponent/field-with-icon';
+import {CloseCircleIcon} from "../subcomponent/ui-tools/basic-icons";
+import FieldWithIcon from '../subcomponent/ui-tools/field-with-icon';
 import PopUp from '../subcomponent/animation/pop-up';
 
 /**
