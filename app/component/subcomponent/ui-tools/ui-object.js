@@ -10,15 +10,16 @@ import {Text} from '@ui-kitten/components';
  * @param icon the icon to display (Material icon)
  * @param label the text display right of the icon
  * @param displayRequiredStar if the click is needed (like a form to read, a contract or other things)
+ * @param iconColor add a specific color for the icon
  * @returns {*}
  * @constructor
  */
-export function InteractiveIconLabel({onPressFunction, icon, label, displayRequiredStar }) {
+export function InteractiveIconLabel({onPressFunction, icon, label, displayRequiredStar, iconColor }) {
 
     return (
         <TouchableWithoutFeedback onPress={() => onPressFunction()}>
             <View style={[styles.flexRowAlignCenter, {marginBottom: 20, marginLeft: 20}]}>
-                <Icon size={30} color={appColors.primary} name={icon}/>
+                <Icon size={30} color={iconColor ? iconColor : appColors.primary} name={icon}/>
                 <Text style={{marginLeft: 10}}>{label} {displayRequiredStar ? <Text style={[styles.formStarRequired, {fontSize: 12}]}>  *</Text> : null }</Text>
             </View>
         </TouchableWithoutFeedback>

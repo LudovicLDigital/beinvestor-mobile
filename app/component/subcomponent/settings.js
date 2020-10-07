@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import {Text, Button, Toggle} from '@ui-kitten/components';
+import React, {useEffect, useState} from 'react';
 import {appColors, styles} from "../../shared/styles/global";
+import {Text, Toggle} from '@ui-kitten/components';
 import {InteractiveIconLabel} from "./ui-tools/ui-object";
 import {Alert, Linking} from 'react-native';
-import {ROUTE_LOGIN} from "../../shared/util/constants";
-import AuthService from "../../shared/services/auth";
 import UsersService from "../../shared/services/entities/users-service";
 import {showToast} from "../../shared/util/ui-helpers";
 
@@ -21,7 +19,7 @@ export function ToggleNotifications() {
     }, [isAble]); // check if isAble have change, skip the useEffect if not
 
     return (
-        <Toggle style={{marginBottom: 15}} checked={isAble} onChange={() => setNotifications()}>
+        <Toggle style={{marginBottom: 15}} checked={isAble} onChange={() => setNotifications(!isAble)}>
             {evaProps => <Text {...evaProps} >{isAble? 'Notifications activées' : 'Notification désactivées'}</Text>}
         </Toggle>
     )
@@ -90,6 +88,6 @@ export function DeleteAccountButton({navigation}) {
     }
 
     return (
-        <InteractiveIconLabel onPressFunction={() => askForSure()} icon={"delete"} label={"Supprimer mon compte"}/>
+        <InteractiveIconLabel onPressFunction={() => askForSure()} icon={"delete"} iconColor={appColors.dangerDark}  label={"Supprimer mon compte"}/>
     )
 }

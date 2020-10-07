@@ -19,7 +19,7 @@ export default class SettingsScreen extends Component {
             <SafeAreaView style={{ flex: 1 }}>
                 <HeaderBar route={this.props.route.name} navigation={this.props.navigation}/>
                 <Layout style={styles.fullScreen}>
-                    <ToggleNotifications/>
+                    {/*<ToggleNotifications/> Will be added when push notification system will be added to the app*/}
                     <ContactSupportButton/>
                     <DeleteAccountButton navigation={this.props.navigation}/>
                 </Layout>
