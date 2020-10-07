@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {View} from "react-native";
 
 import {Icon, Text} from '@ui-kitten/components';
-import {deviceWidth, styles} from "../../shared/styles/global";
+import {deviceWidth, styles} from "../../../shared/styles/global";
 
 /**
  * PROPS :

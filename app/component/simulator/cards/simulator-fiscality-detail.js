@@ -3,7 +3,7 @@ import {Text, View} from "react-native";
 import {appColors, styles} from "../../../shared/styles/global";
 import SectionDivider from "../../subcomponent/form/section-divider";
 import FillingBar from "../../subcomponent/filling-bar";
-import TooltipsHelper from "../../subcomponent/tooltips-helper";
+import TooltipsHelper from "../../subcomponent/ui-tools/tooltips-helper";
 
 /**
  * PROPS :

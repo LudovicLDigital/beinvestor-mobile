@@ -5,7 +5,7 @@ import GroupMessageService from '../../shared/services/entities/group-message-se
 import {Alert, SafeAreaView, View} from 'react-native';
 import {Button, Divider, Icon, Layout, Text} from '@ui-kitten/components';
 import HeaderBar from '../../component/subcomponent/header-bar';
-import {AddIcon, MembersIcon, SharedFilesIcon} from "../../component/subcomponent/basic-icons";
+import {AddIcon, MembersIcon, SharedFilesIcon} from "../../component/subcomponent/ui-tools/basic-icons";
 import {showToast} from "../../shared/util/ui-helpers";
 import ChatRoom from "../../component/chat/chatroom";
 import {PAGINATION_SIZE, ROUTE_MEMBERS_LIST} from "../../shared/util/constants";

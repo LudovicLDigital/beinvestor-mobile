@@ -11,7 +11,7 @@ import {
     View
 } from "react-native";
 import {Button, Icon, Layout} from '@ui-kitten/components';
-import Loader from "../component/subcomponent/loader";
+import Loader from "../component/subcomponent/ui-tools/loader";
 import {styles} from "../shared/styles/global";
 import AuthService from "../shared/services/auth";
 import {DismissKeyboard} from "../shared/util/ui-helpers";

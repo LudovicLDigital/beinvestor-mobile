@@ -1,6 +1,6 @@
 import React from 'react';
 import {Icon} from '@ui-kitten/components';
-import {appColors} from "../../shared/styles/global";
+import {appColors} from "../../../shared/styles/global";
 
 export const BackIcon = (props) => (
     <Icon {...props}  name='arrow-back'/>

@@ -19,7 +19,13 @@ export default class BaseService {
                 showToast('Erreur fetchMethod on '+ urlCompletion+ ' error -->' + response.statusText + " code : " + response.status);
                 return null;
             } else {
-                return response.status === 200 ? response.json() : null;
+                if (response.status === 200) {
+                    return response.json();
+                } else if (response.status === 204) {
+                    return response.status;
+                } else {
+                    return null;
+                }
             }
         }).catch((error) => {
             console.error(error);
@@ -122,13 +128,12 @@ export default class BaseService {
     /**
      * Request a delete to api with the corresponding object id in body
      * Use a simple fetch method
-     * @param id the id we want to delete
      * @param urlCompletion : is the precise url, can be null
      * @returns {Promise<void>}
      */
-    async deleteObjectWithIdInBody( urlCompletion, id) {
+    async deleteObjectWithIdInBody( urlCompletion) {
         const options = await HttpHeaderSetter.setDefaultHeader('DELETE');
-        return this.fetchMethod(urlCompletion, options);
+        return this.fetchMethod(options, urlCompletion);
     }
 
     /**

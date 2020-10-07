@@ -25,7 +25,7 @@ export default class GroupMessageService extends BaseService {
         return await this.putMessage(groupMessage);
     }
     async deleteMesssage(groupMessage) {
-        return await this.deleteObjectWithIdInBody(null, groupMessage.groupId);
+        return await this.deleteObject(null, groupMessage.groupId);
     }
     async getCountOfAllUserSMessage(userInfoId) {
         return await this.getOneById('/count/user', userInfoId);

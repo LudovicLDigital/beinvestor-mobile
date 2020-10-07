@@ -3,7 +3,7 @@ import {Image, Text, TouchableWithoutFeedback, View} from 'react-native';
 import {Divider, TopNavigation} from '@ui-kitten/components';
 import {appColors, styles} from "../../shared/styles/global";
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {MenuAction, SimulatorAction} from "./basic-top-action";
+import {MenuAction, SimulatorAction} from "./ui-tools/basic-top-action";
 import {convertRouteNameToLisible} from "../../shared/util/converter-for-route-name";
 import {ROUTE_HOME, ROUTE_MAP, ROUTE_SIMULATOR} from "../../shared/util/constants";
 

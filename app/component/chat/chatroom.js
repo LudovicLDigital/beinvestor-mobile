@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {Input, Text} from '@ui-kitten/components';
 import {FlatList, View} from 'react-native';
 import ChatBubble from "./chat-bubble";
-import {SendIcon} from "../subcomponent/basic-icons";
+import {SendIcon} from "../subcomponent/ui-tools/basic-icons";
 import AuthService from "../../shared/services/auth";
 import {styles} from "../../shared/styles/global";
 import GroupMessageService from '../../shared/services/entities/group-message-service'

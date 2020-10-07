@@ -3,6 +3,8 @@ import {styles} from "../shared/styles/global";
 import {SafeAreaView} from 'react-native';
 import {Layout, Text} from '@ui-kitten/components';
 import HeaderBar from '../component/subcomponent/header-bar';
+import {ToggleNotifications, ContactSupportButton, DeleteAccountButton} from "../component/subcomponent/settings";
+
 
 export default class SettingsScreen extends Component {
     constructor(props) {
@@ -17,7 +19,9 @@ export default class SettingsScreen extends Component {
             <SafeAreaView style={{ flex: 1 }}>
                 <HeaderBar route={this.props.route.name} navigation={this.props.navigation}/>
                 <Layout style={styles.fullScreen}>
-                    <Text>Vous pourrez accèder à vos paramètres depuis cette page prochainement ( suppression de compte, désactiver les notifications, lier un réseau social...)</Text>
+                    {/*<ToggleNotifications/> Will be added when push notification system will be added to the app*/}
+                    <ContactSupportButton/>
+                    <DeleteAccountButton navigation={this.props.navigation}/>
                 </Layout>
             </SafeAreaView>
         );

@@ -5,7 +5,7 @@ import {Button, Datepicker, Icon, Text} from '@ui-kitten/components';
 import HeaderBar from '../../component/subcomponent/header-bar';
 import SectionDivider from '../../component/subcomponent/form/section-divider';
 import InputField from '../../component/subcomponent/form/input-field';
-import {CalendarIcon} from "../../component/subcomponent/basic-icons";
+import {CalendarIcon} from "../../component/subcomponent/ui-tools/basic-icons";
 import {
     BIRTH,
     FIRST_NAME,
@@ -19,7 +19,7 @@ import {
 import AuthService from '../../shared/services/auth';
 import {showInfoAlert, showToast} from "../../shared/util/ui-helpers";
 import UsersService from "../../shared/services/entities/users-service";
-import Loader from "../../component/subcomponent/loader";
+import Loader from "../../component/subcomponent/ui-tools/loader";
 import DeviceStorage from "../../shared/util/device-storage";
 import ProfilPicturePicker from "../../component/subcomponent/form/profil-picture-picker";
 
