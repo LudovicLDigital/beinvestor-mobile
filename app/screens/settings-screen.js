@@ -3,7 +3,7 @@ import {styles} from "../shared/styles/global";
 import {SafeAreaView} from 'react-native';
 import {Layout, Text} from '@ui-kitten/components';
 import HeaderBar from '../component/subcomponent/header-bar';
-import {ToggleNotifications, ContactSupportButton} from "../component/subcomponent/settings";
+import {ToggleNotifications, ContactSupportButton, DeleteAccountButton} from "../component/subcomponent/settings";
 
 
 export default class SettingsScreen extends Component {
@@ -21,6 +21,7 @@ export default class SettingsScreen extends Component {
                 <Layout style={styles.fullScreen}>
                     <ToggleNotifications/>
                     <ContactSupportButton/>
+                    <DeleteAccountButton navigation={this.props.navigation}/>
                 </Layout>
             </SafeAreaView>
         );
