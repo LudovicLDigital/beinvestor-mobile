@@ -10,6 +10,7 @@ import SimulatorFiscalityDetail from "../../component/simulator/cards/simulator-
 import SimulatorCreditDetail from "../../component/simulator/cards/simulator-credit-detail";
 import { BannerAd, BannerAdSize, TestIds } from '@react-native-firebase/admob';
 import {BANNER_AD} from "../../shared/util/constants";
+import SimulatorProjectDetail from "../../component/simulator/cards/simulator-projet-detail";
 
 const ArrowDownIcon = (style) => (
     <Icon {...style}
@@ -106,6 +107,9 @@ export default class SimulatorResultScreen extends Component {
                             <SimulatorCardResult title={'Emprunt'} containerStyle={{marginTop: 20}}>
                                 <SimulatorCreditDetail simulatorDatasReceived={this.state.simulatorReturnObject}/>
                             </SimulatorCardResult>}
+                            <SimulatorCardResult title={'Le projet'} containerStyle={{marginTop: 20}}>
+                                <SimulatorProjectDetail simulatorDatasReceived={this.state.simulatorReturnObject}/>
+                            </SimulatorCardResult>
                         </View>}
                     </ScrollView>)
                 }
