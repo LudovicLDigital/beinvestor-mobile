@@ -4,10 +4,28 @@ export default class GouvAdressService {
     }
     async getAdressesCorresponding(terms) {
         return fetch(`${this.resourceURL}${terms}&type=municipality&limit=10`).then(async (response) => {
-            return await response.json();
+            const results = await response.json();
+            return await this._prepareDataForAutoComplete(results.features);
         }).catch((error) => {
             console.error(error);
             throw error;
         })
+    }
+
+    _prepareDataForAutoComplete(results) {
+        const tempArray = [];
+        results.forEach((data) => {
+            tempArray.push({
+                title: data.properties.label + ', ' + data.properties.postcode,
+                city: data.properties.city,
+                postCode: data.properties.postcode,
+                context: data.properties.context,
+                geoCoords: {
+                    latitude: data.geometry.coordinates[1],
+                    longitude: data.geometry.coordinates[0],
+                }
+            });
+        });
+        return tempArray;
     }
 }

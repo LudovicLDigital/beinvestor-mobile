@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, {Component, useState} from "react";
 import {TouchableWithoutFeedback, View,} from "react-native";
 import {Autocomplete as UIKittenAutocomplete, AutocompleteItem, Icon} from '@ui-kitten/components';
 import MatIcon from 'react-native-vector-icons/MaterialIcons';
@@ -33,49 +33,45 @@ export const Autocomplete = React.forwardRef((props, ref) => {
  * - onChoiceSelect : call back when user click on a choice of the autocomplete
  * - onTxtChange : call back when user enterred new characters
  */
-export default class BeInvestorAutoComplete extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            searchTerm: ''
+export default function BeInvestorAutoComplete ({autocompleteList, placeholder, style, onChoiceSelect, onTxtChange }) {
+    const [searchTerm, setsearchTerm] = useState('');
+    const renderOption = (item, index) => (
+        <AutocompleteItem
+            key={index}
+            title={item.title}
+        />
+    );
+    const rightIcon = (props) => (
+        <MatIcon size={20} name={'search'}/>
+    );
+    const onSelect = (index) => {
+        if (autocompleteList.length > 0) {
+            setsearchTerm(autocompleteList[index].title);
+            onChoiceSelect(autocompleteList[index]);
         }
-    }
-    render() {
-        const renderOption = (item, index) => (
-            <AutocompleteItem
-                key={index}
-                title={item.title}
-            />
-        );
-        const rightIcon = (props) => (
-                <MatIcon size={20} name={'search'}/>
-        );
-        const onSelect = (index) => {
-            this.setState({searchTerm: this.props.autocompleteList[index].title});
-            this.props.onChoiceSelect(this.props.autocompleteList[index]);
-        };
-        const onChangeText = (query) => {
-            this.setState({searchTerm: query});
-            this.props.onTxtChange(query);
-        };
-        const ResetAutocompleteIcon = (props) => (
-            <TouchableWithoutFeedback onPress={() => onChangeText(null)}>
-                <MatIcon size={20} name={'close'}/>
-            </TouchableWithoutFeedback>
-        );
-        return (
-            <View style={this.props.style}>
-                <Autocomplete
-                    placeholder={this.props.placeholder}
-                    value={this.state.searchTerm}
-                    data={this.props.autocompleteList}
-                    accessoryRight={ResetAutocompleteIcon}
-                    accessoryLeft={rightIcon}
-                    onChangeText={onChangeText}
-                    onSelect={onSelect}>
-                    {this.props.autocompleteList.map(renderOption)}
-                </Autocomplete>
-            </View>
-        )
-    }
+    };
+    const onChangeText = (query) => {
+        setsearchTerm(query);
+        onTxtChange(query);
+    };
+    const ResetAutocompleteIcon = (props) => (
+        <TouchableWithoutFeedback onPress={() => onChangeText(null)}>
+            <MatIcon size={20} name={'close'}/>
+        </TouchableWithoutFeedback>
+    );
+    return (
+        <View style={style}>
+            <Autocomplete
+                placeholder={placeholder}
+                value={searchTerm}
+                data={autocompleteList}
+                accessoryRight={ResetAutocompleteIcon}
+                accessoryLeft={rightIcon}
+                onChangeText={onChangeText}
+                onSubmitEditing={() => onSelect(0)}
+                onSelect={onSelect}>
+                {autocompleteList.map(renderOption)}
+            </Autocomplete>
+        </View>
+    )
 }
