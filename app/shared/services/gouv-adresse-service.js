@@ -19,6 +19,7 @@ export default class GouvAdressService {
                 title: data.properties.label + ', ' + data.properties.postcode,
                 city: data.properties.city,
                 postCode: data.properties.postcode,
+                cityCode: data.properties.citycode,
                 context: data.properties.context,
                 geoCoords: {
                     latitude: data.geometry.coordinates[1],
