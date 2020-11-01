@@ -6,9 +6,11 @@ import BeInvestorAutoComplete from "../../subcomponent/autocomplete";
 import {showToast} from "../../../shared/util/ui-helpers";
 import GouvAdressService from "../../../shared/services/gouv-adresse-service";
 import CityService from "../../../shared/services/entities/city-service";
+import DataLoader from "../../subcomponent/animation/loader";
 
 export default function SimulatorProjectDetail({simulatorDatasReceived}) {
     const [pricem2, setPricem2] = useState(0);
+    const [loading, setLoading] = useState(false);
     const [averageCitym2, setAverageCitym2] = useState(0);
     const [city, setCity] = useState(""); // the select city
     const [cities, setCities] = useState([]);
@@ -21,8 +23,10 @@ export default function SimulatorProjectDetail({simulatorDatasReceived}) {
     });
     useEffect(() => {
         // selected city will be send to back to recover m² price
-        cityService.getCityAveragePriceM2(city.cityCode).then((averagePrice) => {
+        setLoading(true);
+        cityService.getCityAveragePriceM2(city.postCode).then((averagePrice) => {
             setAverageCitym2(averagePrice);
+            setLoading(false);
             if (averagePrice >= pricem2) {
                 setPriceIndicatorColor(appColors.success);
             } else {
@@ -30,16 +34,16 @@ export default function SimulatorProjectDetail({simulatorDatasReceived}) {
             }
         }).catch((error) => {
             console.error(error);
-            showToast('Impossible de récuperer le prix au m² de cette ville');
+            showToast('Impossible de récupérer le prix au m² de cette ville');
         })
-    }, [city.cityCode]);
+    }, [city]);
     return (
         <View style={styles.flexCenter}>
             {simulatorDatasReceived.simulatorDatas.userEstate.surface && simulatorDatasReceived.simulatorDatas.userEstate.surface > 0 ?
                 <View  style={styles.flexCenter}>
                     <Text>Coût total de {simulatorDatasReceived.simulatorDatas.totalProjectCost.toString()} € pour un
                         bien de {simulatorDatasReceived.simulatorDatas.userEstate.surface.toString()} m²</Text>
-                    <Text category={'h4'} style={{color: priceIndicatorColor}}>{pricem2.toFixed(2)} € / m²</Text>
+                    <Text category={'h4'} style={{color: priceIndicatorColor}}>{pricem2 ? pricem2.toFixed(2) : '...'} € / m²</Text>
                 </View>
                 :
                 <View>
@@ -51,7 +55,14 @@ export default function SimulatorProjectDetail({simulatorDatasReceived}) {
                 onChoiceSelect={(item) => setCity(item)}
                 onTxtChange={(text) => _onTxtChange(text)}
                 placeholder={'Rechercher une ville'}/>
-            <Text style={{fontSize: 12}}>Prix au m² sur {city ? city.city : '...'} : {averageCitym2 ? averageCitym2 : '...'} € /m²</Text>
+            {
+                loading ?
+                            <DataLoader/>
+                        :
+                    <View style={styles.flexCenter}>
+                        <Text style={{fontSize: 12}}>Prix moyen au m² à {city ? city.city : '...'} : {averageCitym2 ? averageCitym2 : '...'} € /m²</Text>
+                    </View>
+            }
         </View>
     );
 
