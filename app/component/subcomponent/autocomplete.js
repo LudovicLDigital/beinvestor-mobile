@@ -39,10 +39,7 @@ export default function BeInvestorAutoComplete ({autocompleteList, placeholder, 
     const [searchTerm, setsearchTerm] = useState('');
     const [previousTerm, setPreviousTerm] = useState(preFilledField);
     useEffect(() => {
-        console.log('DEBUG ======= searchTerm');
-        console.log(searchTerm);
         if (previousTerm !== null && searchTerm !== '') {
-            console.log('DEBUG ======= IN');
             setPreviousTerm(null)
         }
     }, [searchTerm]);
@@ -71,8 +68,6 @@ export default function BeInvestorAutoComplete ({autocompleteList, placeholder, 
         </TouchableWithoutFeedback>
     );
     function valueSetted() {
-        console.log('DEBUG ======= previousTerm');
-        console.log(previousTerm);
         return (previousTerm !== null && previousTerm) ? previousTerm : searchTerm
     }
     return (
