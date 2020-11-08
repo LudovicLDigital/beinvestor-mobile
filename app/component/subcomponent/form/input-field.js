@@ -19,9 +19,10 @@ import {TouchableWithoutFeedback} from "react-native";
  * - formSubmitted: a boolean to check errors case for value when form is submitted
  * - onSubmitEditing: method same as INPUT Props
  * - onBlur: method same as INPUT Props
+ * - onFocus: method same as Input Props
  * - blurOnSubmit: boolean same as INPUT props
  */
-export default class  extends Component {
+export default class InputField extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -52,6 +53,7 @@ export default class  extends Component {
                        value={this.props.value}
                        disabled={this.props.disabled}
                        blurOnSubmit={this.props.blurOnSubmit}
+                       onFocus={this.props.onFocus}
                        style={[{borderColor: appColors.primary, flex: 1}, this.props.style]}
                        onBlur={() => this.props.onBlur ? this.props.onBlur() : null}
                        status={(this.state.isValidated && (!this.state.receivedErrorByForm || this.state.receivedErrorByForm === null)) ? '' : 'danger'}
@@ -78,6 +80,7 @@ export default class  extends Component {
                        value={this.props.value}
                        blurOnSubmit={this.props.blurOnSubmit}
                        disabled={this.props.disabled}
+                       onFocus={this.props.onFocus}
                        onBlur={() => this.props.onBlur ? this.props.onBlur() : null}
                        ref={(input) =>  this.props.reference ? this.props.reference(input) : null}
                        onSubmitEditing={() => this.props.onSubmitEditing ? this.props.onSubmitEditing() : null}

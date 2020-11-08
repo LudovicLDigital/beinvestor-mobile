@@ -7,6 +7,7 @@ import {Select, SelectItem, Text, Toggle} from '@ui-kitten/components';
 import SectionDivider from "../subcomponent/form/section-divider";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {showInfoAlert} from "../../shared/util/ui-helpers";
+import {BeInvestorCityAutoComplete} from "../subcomponent/autocomplete";
 
 const workArray = [
     {type: 'Rénovation simple (300€/m²)', helper: 'Une rénovation simple consiste a rafraichir le bien (changement de peinture, sol, fenêtre) et dans une moindre mesure l\'électricité, la plomberie... sans toucher au gros oeuvre'},
@@ -40,6 +41,7 @@ export default class SimulatorEstateForm extends Component {
             workCost: this.props.recoverredFormValues.workCost ? this.props.recoverredFormValues.workCost : '0',
             secureSaving: this.props.recoverredFormValues.secureSaving ? this.props.recoverredFormValues.secureSaving : null,
             taxeFonciere: this.props.recoverredFormValues.taxeFonciere ? this.props.recoverredFormValues.taxeFonciere : '0',
+            city: this.props.recoverredFormValues.city ? this.props.recoverredFormValues.city : null,
 
             selectWork: null,
             selectedUnitFA: faUnit[0]
@@ -139,6 +141,7 @@ export default class SimulatorEstateForm extends Component {
                             <SelectItem title={evaProps => <Text {...evaProps} >{faUnit[1]}</Text>}/>
                         </Select>
                     </View>}
+                    <BeInvestorCityAutoComplete onChoiceSelect={(item) => this.setState({city: item})} placement={"top"} preFilledCity={this.state.city}/>
                     <View style={styles.flexRowAlignCenter}>
                         <InputField label={'Surface totale (m²)'}
                                     type={'numeric'}

@@ -26,7 +26,8 @@ export default class SimulatorResultScreen extends Component {
         this.state = {
             simulatorReturnObject: null,
             isLookingForDetails: false,
-            initialized: false
+            initialized: false,
+            cityPassed: null,
         };
     }
 
@@ -57,11 +58,13 @@ export default class SimulatorResultScreen extends Component {
      */
     _setSimulatorObject() {
         const result = this.props.route.params.resultDatas;
+        const city =  this.props.route.params.cityPassed ?  this.props.route.params.cityPassed :  "";
         if (result) {
             if (result && result !== null) {
                 this.setState({
                     simulatorReturnObject: result,
-                    initialized: true
+                    initialized: true,
+                    cityPassed: city
                 });
             }
         }
@@ -108,7 +111,7 @@ export default class SimulatorResultScreen extends Component {
                                 <SimulatorCreditDetail simulatorDatasReceived={this.state.simulatorReturnObject}/>
                             </SimulatorCardResult>}
                             <SimulatorCardResult title={'Le projet'} containerStyle={{marginTop: 20}}>
-                                <SimulatorProjectDetail simulatorDatasReceived={this.state.simulatorReturnObject}/>
+                                <SimulatorProjectDetail simulatorDatasReceived={this.state.simulatorReturnObject} cityPassed={this.state.cityPassed}/>
                             </SimulatorCardResult>
                         </View>}
                     </ScrollView>)
