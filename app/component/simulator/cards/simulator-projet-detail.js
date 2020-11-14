@@ -56,7 +56,7 @@ export default function SimulatorProjectDetail({simulatorDatasReceived, cityPass
                     <Text>Pour connaitre le prix au m² en € de votre bien, ajoutez la surface en m² de ce dernier</Text>
                 </View>
             }
-            <BeInvestorCityAutoComplete onChoiceSelect={(item) => setCity(item)} preFilledCity={city} placement={"top"}/>
+            <BeInvestorCityAutoComplete onChoiceSelect={(item) => setCity(item)} preFilledCity={city} placement={"top"} onlyDistrict={true}/>
             {
                 loading ?
                     <DataLoader/>

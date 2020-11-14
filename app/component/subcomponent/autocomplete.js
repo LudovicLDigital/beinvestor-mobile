@@ -93,13 +93,15 @@ export default function BeInvestorAutoComplete ({autocompleteList, placeholder, 
  * @param style pass a specific style you want to apply
  * @param onChoiceSelect pass a callback for when a city in the autocomplete is selected
  * @param preFilledCity is a city previous setted during another autocomplete filling
+ * @param placement position of the autocomplete combobox
+ * @param onlyDistrict if must hide city containing district (hide the city alone name)
  * @returns {*}
  * @constructor
  */
-export function BeInvestorCityAutoComplete({ style, onChoiceSelect, preFilledCity, placement }) {
+export function BeInvestorCityAutoComplete({ style, onChoiceSelect, preFilledCity, placement, onlyDistrict }) {
     const [cities, setCities] = useState([]);
     const [citySelected, setCitySelected] = useState(preFilledCity ? preFilledCity : null);
-    const gouvAdressService = new GouvAdressService();
+    const gouvAdressService = new GouvAdressService(onlyDistrict);
     useEffect(() => {
         if (onChoiceSelect) {
             onChoiceSelect(citySelected);
