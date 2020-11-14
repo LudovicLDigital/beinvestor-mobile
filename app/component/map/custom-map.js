@@ -263,7 +263,9 @@ export default class CustomMap extends Component {
         this.closePop();
         if (text && text.trim() !== '' && text.trim().length > 2) {
             this.gouvAdressService.getAdressesCorresponding(text).then((results) => {
-                this._prepareDataForAutoComplete(results.features);
+                this.setState({
+                    searchResults: results,
+                });
             }).catch((error) => {
                 showToast('ERROR FROM GOUV API');
                 console.error(error);
@@ -273,24 +275,6 @@ export default class CustomMap extends Component {
                 searchResults: [],
             });
         }
-    }
-    _prepareDataForAutoComplete(results) {
-        const tempArray = [];
-        results.forEach((data) => {
-            tempArray.push({
-                title: data.properties.label + ', ' + data.properties.postcode,
-                city: data.properties.city,
-                postCode: data.properties.postcode,
-                context: data.properties.context,
-                geoCoords: {
-                    latitude: data.geometry.coordinates[1],
-                    longitude: data.geometry.coordinates[0],
-                }
-            });
-        });
-        this.setState({
-            searchResults: tempArray,
-        });
     }
 
     closePop() {

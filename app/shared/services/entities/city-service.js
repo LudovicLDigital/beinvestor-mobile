@@ -30,4 +30,7 @@ export default class CityService extends BaseService {
     async getGeoAdressOfCity(cityId) {
         return await this.getOneById('/geo-adress-of', cityId)
     }
+    async getCityAveragePriceM2(postCode) {
+        return await this.getOneById('/price', postCode)
+    }
 }

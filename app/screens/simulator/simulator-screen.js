@@ -127,6 +127,7 @@ export default class SimulatorScreen extends Component {
         this.state.formValues.workCost = datas.workCost;
         this.state.formValues.secureSaving = datas.secureSaving;
         this.state.formValues.taxeFonciere = datas.taxeFonciere;
+        this.state.formValues.city = datas.city;
     }
 
     /**
@@ -194,7 +195,10 @@ export default class SimulatorScreen extends Component {
         const messageError = this._checkFormValues();
         if (messageError === '') {
             this.simulatorService.calculateProject(this.state.formValues).then((response) => {
-                this.props.navigation.navigate(ROUTE_SIMULATOR_RESULT, {resultDatas: response});
+                this.props.navigation.navigate(ROUTE_SIMULATOR_RESULT, {
+                    resultDatas: response,
+                    cityPassed: this.state.formValues.city
+                });
             }).catch((error) => {
                 console.error('ERROR TO calculateProject : ');
                 console.error(error);

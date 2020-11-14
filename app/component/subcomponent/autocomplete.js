@@ -1,7 +1,9 @@
-import React, {Component} from "react";
+import React, {useEffect, useState} from "react";
 import {TouchableWithoutFeedback, View,} from "react-native";
-import {Autocomplete as UIKittenAutocomplete, AutocompleteItem, Icon} from '@ui-kitten/components';
+import {Autocomplete as UIKittenAutocomplete, AutocompleteItem} from '@ui-kitten/components';
 import MatIcon from 'react-native-vector-icons/MaterialIcons';
+import {showToast} from "../../shared/util/ui-helpers";
+import GouvAdressService from "../../shared/services/gouv-adresse-service";
 
 /**
  * Use to resolve a bug when user enter terms the list isn't showed until the user blur and refocus the autocomplete component
@@ -33,49 +35,99 @@ export const Autocomplete = React.forwardRef((props, ref) => {
  * - onChoiceSelect : call back when user click on a choice of the autocomplete
  * - onTxtChange : call back when user enterred new characters
  */
-export default class BeInvestorAutoComplete extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            searchTerm: ''
+export default function BeInvestorAutoComplete ({autocompleteList, placeholder, style, onChoiceSelect, onTxtChange, preFilledField, placement }) {
+    const [searchTerm, setsearchTerm] = useState('');
+    const [previousTerm, setPreviousTerm] = useState(preFilledField);
+    useEffect(() => {
+        if (previousTerm !== null && searchTerm !== '') {
+            setPreviousTerm(null)
+        }
+    }, [searchTerm]);
+    const renderOption = (item, index) => (
+        <AutocompleteItem
+            key={index}
+            title={item.title}
+        />
+    );
+    const rightIcon = (props) => (
+        <MatIcon size={20} name={'search'}/>
+    );
+    const onSelect = (index) => {
+        if (autocompleteList.length > 0) {
+            setsearchTerm(autocompleteList[index].title);
+            onChoiceSelect(autocompleteList[index]);
+        }
+    };
+    const onChangeText = (query) => {
+        setsearchTerm(query);
+        onTxtChange(query);
+    };
+    const ResetAutocompleteIcon = (props) => (
+        <TouchableWithoutFeedback onPress={() => onChangeText("")}>
+            <MatIcon size={20} name={'close'}/>
+        </TouchableWithoutFeedback>
+    );
+    function valueSetted() {
+        return (previousTerm !== null && previousTerm) ? previousTerm : searchTerm
+    }
+    return (
+        <View style={style}>
+            <Autocomplete
+                placement={placement}
+                placeholder={placeholder}
+                value={valueSetted()}
+                data={autocompleteList}
+                accessoryRight={ResetAutocompleteIcon}
+                accessoryLeft={rightIcon}
+                onChangeText={onChangeText}
+                onSubmitEditing={() => onSelect(0)}
+                onSelect={onSelect}>
+                {autocompleteList.map(renderOption)}
+            </Autocomplete>
+        </View>
+    )
+}
+
+/**
+ * Component to autocomplete city search (FR only)
+ * @param style pass a specific style you want to apply
+ * @param onChoiceSelect pass a callback for when a city in the autocomplete is selected
+ * @param preFilledCity is a city previous setted during another autocomplete filling
+ * @param placement position of the autocomplete combobox
+ * @param onlyDistrict if must hide city containing district (hide the city alone name)
+ * @returns {*}
+ * @constructor
+ */
+export function BeInvestorCityAutoComplete({ style, onChoiceSelect, preFilledCity, placement, onlyDistrict }) {
+    const [cities, setCities] = useState([]);
+    const [citySelected, setCitySelected] = useState(preFilledCity ? preFilledCity : null);
+    const gouvAdressService = new GouvAdressService(onlyDistrict);
+    useEffect(() => {
+        if (onChoiceSelect) {
+            onChoiceSelect(citySelected);
+        }
+    }, [citySelected]);
+    function _onTxtChange(text) {
+        if (text && text.trim() !== '' && text.trim().length > 2) {
+            gouvAdressService.getAdressesCorresponding(text).then((results) => {
+                setCities(results);
+            }).catch((error) => {
+                showToast('ERROR FROM GOUV API');
+                console.error(error);
+            })
+        } else if (text === null) {
+            setCities([])
         }
     }
-    render() {
-        const renderOption = (item, index) => (
-            <AutocompleteItem
-                key={index}
-                title={item.title}
-            />
-        );
-        const rightIcon = (props) => (
-                <MatIcon size={20} name={'search'}/>
-        );
-        const onSelect = (index) => {
-            this.setState({searchTerm: this.props.autocompleteList[index].title});
-            this.props.onChoiceSelect(this.props.autocompleteList[index]);
-        };
-        const onChangeText = (query) => {
-            this.setState({searchTerm: query});
-            this.props.onTxtChange(query);
-        };
-        const ResetAutocompleteIcon = (props) => (
-            <TouchableWithoutFeedback onPress={() => onChangeText(null)}>
-                <MatIcon size={20} name={'close'}/>
-            </TouchableWithoutFeedback>
-        );
-        return (
-            <View style={this.props.style}>
-                <Autocomplete
-                    placeholder={this.props.placeholder}
-                    value={this.state.searchTerm}
-                    data={this.props.autocompleteList}
-                    accessoryRight={ResetAutocompleteIcon}
-                    accessoryLeft={rightIcon}
-                    onChangeText={onChangeText}
-                    onSelect={onSelect}>
-                    {this.props.autocompleteList.map(renderOption)}
-                </Autocomplete>
-            </View>
-        )
-    }
+
+    return (
+        <BeInvestorAutoComplete
+            placement={placement}
+            style={style}
+            preFilledField={(preFilledCity !== null && preFilledCity) ? preFilledCity.title : null}
+            autocompleteList={cities}
+            onChoiceSelect={(item) => setCitySelected(item)}
+            onTxtChange={(text) => _onTxtChange(text)}
+            placeholder={'Rechercher une ville'}/>
+    );
 }
