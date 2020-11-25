@@ -1,4 +1,4 @@
-import React, {Fragment, useEffect} from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import {convertRouteNameToLisible} from "../../../shared/util/converter-for-route-name";
 import {
     ROUTE_FAV_GRP, ROUTE_HOME,
@@ -8,7 +8,7 @@ import {
     ROUTE_SEARCH_GRP,
     ROUTE_SETTING,
     ROUTE_SIMULATOR,
-    ROUTE_USER_PROFIL
+    ROUTE_USER_PROFIL, ROUTE_USER_PROFIL_INVEST
 } from "../../../shared/util/constants";
 import {DrawerContentScrollView,} from '@react-navigation/drawer';
 import AuthService from "../../../shared/services/auth";
@@ -31,6 +31,11 @@ const drawerMenuItems = [
         title: convertRouteNameToLisible(ROUTE_USER_PROFIL),
         icon: 'person-outline',
         route: ROUTE_USER_PROFIL
+    },
+    {
+        title: convertRouteNameToLisible(ROUTE_USER_PROFIL_INVEST),
+        icon: 'briefcase-outline',
+        route: ROUTE_USER_PROFIL_INVEST
     },
     {
         title: convertRouteNameToLisible(ROUTE_SEARCH_GRP),
@@ -79,6 +84,7 @@ function logout(navigation) {
     )
 }
 export const CustomDrawerContent = (props) => { //{ navigation, state }
+    const [focusedIndex, setFocusedIndex] = useState();
     useEffect(() => {
         const backAction = () =>
         {
@@ -104,7 +110,10 @@ export const CustomDrawerContent = (props) => { //{ navigation, state }
         return () => backHandler.remove();
     });
     const LOGOUT = 'logout';
-    const onSelect = (route) => {
+    const onSelect = (route, index) => {
+        if (index) {
+            setFocusedIndex(index)
+        }
         if (route === ROUTE_FAV_GRP) {
             props.navigation.navigate(route, { screen: ROUTE_FAV_GRP, params: {isFavRoute: true}});
         } else if(route === LOGOUT) {
@@ -121,11 +130,11 @@ export const CustomDrawerContent = (props) => { //{ navigation, state }
             {drawerMenuItems.map((item, index) => {
                 return (
                     <Fragment key={index}>
-                        <MenuItem label={item.title} icon={item.icon} isFocused={props.state.index === index} onSelect={() => onSelect(item.route)}/>
+                        <MenuItem label={item.title} icon={item.icon} isFocused={focusedIndex === index} onSelect={() => onSelect(item.route, index)}/>
                     </Fragment>
                 )
             })}
-            <MenuItem label={'Se déconnecter'} icon={'log-out'} onSelect={() => onSelect(LOGOUT)}/>
+            <MenuItem label={'Se déconnecter'} icon={'log-out'} onSelect={() => onSelect(LOGOUT, null)}/>
         </DrawerContentScrollView>
     );
 };
