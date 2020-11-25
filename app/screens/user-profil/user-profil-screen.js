@@ -14,7 +14,7 @@ import {
     NEW_PASS,
     OLD_PASS,
     PHONE,
-    REFRESH_TOKEN_KEY
+    REFRESH_TOKEN_KEY, ROUTE_USER_PROFIL_INVEST
 } from '../../shared/util/constants'
 import AuthService from '../../shared/services/auth';
 import {showInfoAlert, showToast} from "../../shared/util/ui-helpers";
@@ -224,10 +224,11 @@ export default class UserProfilScreen extends Component {
                             </Button>
                         </View>
                     </View>
-                    {/*<SectionDivider sectionName={'Profil investisseur'}/> todo: next when implement save on simulator results*/}
-                    {/*<Button style={{backgroundColor: appColors.primary, borderColor: appColors.primary, marginBottom: deviceHeigth/this.state.marginBottomDivider, marginTop: 15}}>*/}
-                    {/*Editer mon profil investisseur*/}
-                    {/*</Button>*/}
+                    <SectionDivider sectionName={'Profil investisseur'}/>
+                    <Button style={{backgroundColor: appColors.primary, borderColor: appColors.primary, marginBottom: 15, marginTop: 15}}
+                            onPress={() => this._navigatorToInvestorProfil()}>
+                        Editer mon profil investisseur
+                    </Button>
                 </ScrollView>
             </SafeAreaView>
         );
@@ -318,5 +319,9 @@ export default class UserProfilScreen extends Component {
         this.setState({
             passwordChangeViewHeight: height
         })
+    }
+
+    _navigatorToInvestorProfil() {
+        this.props.navigation.navigate(ROUTE_USER_PROFIL_INVEST);
     }
 }
