@@ -19,9 +19,9 @@ import {
 import AuthService from '../../shared/services/auth';
 import {showInfoAlert, showToast} from "../../shared/util/ui-helpers";
 import UsersService from "../../shared/services/entities/users-service";
-import Loader from "../../component/subcomponent/ui-tools/loader";
 import DeviceStorage from "../../shared/util/device-storage";
 import ProfilPicturePicker from "../../component/subcomponent/form/profil-picture-picker";
+import {EstateLoader} from "../../component/subcomponent/animation/loader";
 
 const requiredMessage = ' est un champs requis';
 const SaveIcon = (style) => (
@@ -138,17 +138,17 @@ export default class UserProfilScreen extends Component {
             <SafeAreaView style={{ flex: 1 }}>
                 <HeaderBar route={this.props.route.name} navigation={this.props.navigation}/>
                 { this.state.dataHaveChange &&
-                    <Button
-                        style={[styles.absoluteBottom, {
-                            zIndex: 1000,
-                            backgroundColor: appColors.success,
-                            borderColor: appColors.success
-                        }]}
-                        size={'medium'}
-                        onPress={() => this._updateUserInfo()}
-                        accessoryLeft ={SaveIcon}>
-                        Sauvegarder
-                    </Button>
+                <Button
+                    style={[styles.absoluteBottom, {
+                        zIndex: 1000,
+                        backgroundColor: appColors.success,
+                        borderColor: appColors.success
+                    }]}
+                    size={'medium'}
+                    onPress={() => this._updateUserInfo()}
+                    accessoryLeft ={SaveIcon}>
+                    Sauvegarder
+                </Button>
                 }
                 <ScrollView contentContainerStyle={{paddingBottom: 20}} style={[{ flex:1},styles.fullScreen]}>
                     <ProfilPicturePicker isAbleToEdit={true}/>
@@ -192,7 +192,7 @@ export default class UserProfilScreen extends Component {
                                 disabled={true}
                                 value={this.state.login}/>
                     <View style={{flex: 1, flexDirection: 'row'}} onLayout={(event) => { this.setEndViewForLoader(event.nativeEvent.layout) }}>
-                        <Loader loadTitle={'Changement du mot de passe...'} parentHeight={this.state.passwordChangeViewHeight} isDisplayed={this.state.waitingForChange}/>
+                        <EstateLoader loadTitle={'Changement du mot de passe...'} isDisplayed={this.state.waitingForChange}/>
                         <View style={{flex: 3}}>
                             <InputField label={'Mot de passe'}
                                         type={'password'}
@@ -226,7 +226,7 @@ export default class UserProfilScreen extends Component {
                     </View>
                     {/*<SectionDivider sectionName={'Profil investisseur'}/> todo: next when implement save on simulator results*/}
                     {/*<Button style={{backgroundColor: appColors.primary, borderColor: appColors.primary, marginBottom: deviceHeigth/this.state.marginBottomDivider, marginTop: 15}}>*/}
-                        {/*Editer mon profil investisseur*/}
+                    {/*Editer mon profil investisseur*/}
                     {/*</Button>*/}
                 </ScrollView>
             </SafeAreaView>

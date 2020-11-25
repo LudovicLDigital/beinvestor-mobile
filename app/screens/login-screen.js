@@ -11,12 +11,12 @@ import {
     View
 } from "react-native";
 import {Button, Icon, Layout} from '@ui-kitten/components';
-import Loader from "../component/subcomponent/ui-tools/loader";
 import {styles} from "../shared/styles/global";
 import AuthService from "../shared/services/auth";
 import {DismissKeyboard} from "../shared/util/ui-helpers";
 import {CITATIONS, ROUTE_HOME, ROUTE_REGISTER, ROUTE_RESET_PASSWORD} from "../shared/util/constants";
 import InputField from '../component/subcomponent/form/input-field';
+import {EstateLoader} from "../component/subcomponent/animation/loader";
 
 const LOGIN = "login";
 const PASS = "password";
@@ -140,7 +140,7 @@ export default class LoginScreen extends Component {
                                         onPress={() => this._submitCredentials()}>
                                     CONNEXION
                                 </Button>
-                            <Loader loadTitle={this.state.citationForLoading} parentHeight={this.state.credentialsViewHeight} isDisplayed={this.state.waitingForConnect}/>
+                            <EstateLoader loadTitle={this.state.citationForLoading} isDisplayed={this.state.waitingForConnect}/>
                         </View>
                         <View style={[{flex: 1}, styles.flexColumnBetween]}>
                             <TouchableWithoutFeedback onPress={() => this._resetPassword()}>

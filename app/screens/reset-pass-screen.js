@@ -6,7 +6,7 @@ import ResetService from "../shared/services/reset-pass-service";
 import {SendIcon} from "../component/subcomponent/ui-tools/basic-icons";
 import InputField from "../component/subcomponent/form/input-field";
 import {showInfoAlert, showToast} from "../shared/util/ui-helpers";
-import Loader from "../component/subcomponent/ui-tools/loader";
+import {EstateLoader} from "../component/subcomponent/animation/loader";
 
 export default class ResetPassScreen extends Component {
     _mailError;
@@ -48,7 +48,7 @@ export default class ResetPassScreen extends Component {
     render() {
         return (
             <View style={[{flex: 1, backgroundColor: appColors.white}]} onLayout={(event) => { this._setEndViewForLoader(event.nativeEvent.layout) }}>
-                <Loader isDisplayed={this.state.waitingUpdate} loadTitle={'Modification du mot de passe en cours...'} parentHeight={this.state.loaderHeight}/>
+                <EstateLoader isDisplayed={this.state.waitingUpdate} loadTitle={'Modification du mot de passe en cours...'} />
                 {!this.state.haveClickForSend &&
                 <View style={{padding: 15}}>
                     <Text style={{textAlign: 'center', margin: deviceWidth/25}}>Pour pouvoir réinitialiser votre mot de passe nous avons besoin de votre adresse email </Text>
