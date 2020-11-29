@@ -130,7 +130,6 @@ export default class LoginScreen extends Component {
                                     type={'password'}
                                     value={this.state.password}
                                     messageErrors={[['invalid', 'Mot de passe incorrect']]}
-                                    receivedErrorByForm={this.state.oldPasswordError}
                                     onTextChange={(text) => this.textEnterred(PASS, text)}
                                     reference={(input) => this.setRefPass(input)}
                                     onSubmitEditing={() => this._submitCredentials()}
