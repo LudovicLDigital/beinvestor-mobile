@@ -15,4 +15,7 @@ export default class UserInvestorProfilService extends BaseService {
     async updateCurrentInvestorProfil(userInvestorDatas) {
         return await this.updateObject(userInvestorDatas, '/current')
     }
+    async createCurrentInvestorProfil(userInvestorDatas) {
+        return await this.postObject(userInvestorDatas, '/current')
+    }
 }

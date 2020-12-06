@@ -1,5 +1,6 @@
 import UserInvestorProfilService from "../../shared/services/entities/user-investor-profil-service";
 import React, {useEffect, useState} from "react";
+import { useStoreActions, useStoreState } from 'easy-peasy';
 import UserInvestorProfil from "../../shared/models/user-investor-profil";
 import * as yup from "yup";
 import {Formik} from 'formik';
@@ -8,9 +9,14 @@ import {View} from "react-native";
 import SectionDivider from "../subcomponent/form/section-divider";
 import {FormikField} from "../subcomponent/form/input-field";
 import {styles} from "../../shared/styles/global";
+import {showInfoAlert} from "../../shared/util/ui-helpers";
 
 export default function UserInvestorProfilForm() {
-    const [userInvestorProfil, setUserInvestorProfil] = useState(new UserInvestorProfil(null,0,0,0,1,0));
+    const investorStoredProfil = useStoreState((state) => state.userInvestorProfil);
+    const [userInvestorProfil, setValuesForm] = useState(new UserInvestorProfil(null,0,0,0,1,0));
+    const {setUserInvestorProfil, updateInvestorProfil} = useStoreActions((actions) => ({
+            setUserInvestorProfil: actions.setInvestorProfil,
+            updateInvestorProfil: actions.updateInvestorProfil }));
     const userInvestorProfilService = new UserInvestorProfilService();
     const formik = {
         salary: userInvestorProfil.professionnalSalary,
@@ -20,18 +26,27 @@ export default function UserInvestorProfilForm() {
         actualCreditMensualities: userInvestorProfil.actualCreditMensualities
     };
     const _onSubmit = (values) => {
+        // updateInvestorProfil(values);
+        setUserInvestorProfil(values);
         alert(JSON.stringify(values, null, 2));
     };
     useEffect(() => {
-        if (userInvestorProfil.id === null) {
+        if (!investorStoredProfil) {
             userInvestorProfilService.getCurrentUserInvestorProfil().then((userInvestorProfilRes) => {
                 console.log(userInvestorProfilRes);
-                if (userInvestorProfilRes && userInvestorProfilRes.id !== null) {
-                    setUserInvestorProfil(userInvestorProfilRes)
+                if (userInvestorProfilRes !== null) {
+                    setUserInvestorProfil(userInvestorProfilRes);
+                    setValuesForm(userInvestorProfilRes);
+                } else {
+                    setUserInvestorProfil(new UserInvestorProfil(null,0,0,0,1,0));
+                    setValuesForm(userInvestorProfilRes);
                 }
+            }).catch((error) => {
+                console.error(`ERROR TO getCurrentUserInvestorProfil in UserInvestorProfilForm : ${error}`);
+                showInfoAlert('Une erreur est survenue lors de la récupération du profil investisseur...');
             });
         }
-    }, [userInvestorProfil]);
+    }, []);
     const numberTypeError = 'Ce champs doit être un nombre';
     return (
             <Formik
@@ -66,7 +81,7 @@ export default function UserInvestorProfilForm() {
                             onTextChange={handleChange("salary")}
                             value={values.salary}
                             type={"number-pad"}
-                            label={"Revenus professionnels"}
+                            label={"Salaire professionnel annuel (€)"}
                             yupErrorMessage={errors.salary}
                         />
                         <FormikField

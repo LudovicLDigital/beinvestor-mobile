@@ -15,7 +15,10 @@ import SplashScreen from 'react-native-splash-screen';
 import VersionCheck from 'react-native-version-check';
 import {Linking} from 'react-native';
 import codePush from "react-native-code-push";
+import {StoreProvider} from "easy-peasy";
+import createStore from "./app/shared/util/Store";
 
+const store = createStore();
 class App extends Component {
 
     componentDidMount(): void {
@@ -48,7 +51,9 @@ class App extends Component {
             <React.Fragment>
                 <IconRegistry icons={EvaIconsPack} />
                 <ApplicationProvider {...eva} theme={eva.light}>
-                    <AppNavigator/>
+                    <StoreProvider store={store}>
+                        <AppNavigator/>
+                    </StoreProvider>
                 </ApplicationProvider>
             </React.Fragment>
         )
