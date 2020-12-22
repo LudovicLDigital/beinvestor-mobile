@@ -5,7 +5,7 @@ import UserInvestorProfilService from "../services/entities/user-investor-profil
 
 export default () => {
     return createStore({
-        userInvestorProfil: {},
+        userInvestorProfil: null,
         setInvestorProfil: action((state, payload) => {
             state.userInvestorProfil = payload;
         }),

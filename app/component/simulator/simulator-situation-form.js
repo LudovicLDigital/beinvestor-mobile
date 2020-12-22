@@ -14,32 +14,20 @@ import {Formik} from 'formik';
  * - recoverredFormValues : préinputed values for the form
  */
 export default function SimulatorSituationForm({props, recoverredFormValues, formValuesReturned}) {
-    const investorStoredProfil = useStoreState((state) => state.userInvestorProfil);
-    const [professionnalSalary, setSalary] = useState(recoverredFormValues.professionnalSalary);
-    const [annualRent, setAnnualRent] = useState(recoverredFormValues.professionnalSalary);
-    useEffect(() => {
-        if (!recoverredFormValues) {
-            setSalary(investorStoredProfil.professionnalSalary);
-            setAnnualRent(investorStoredProfil.annualRent);
-        } else {
-            setSalary(recoverredFormValues.professionnalSalary);
-            setAnnualRent(recoverredFormValues.annualRent);
-        }
-    }, []);
-
-    const formik = {
-        professionnalSalary: professionnalSalary ? professionnalSalary : '0',
-        annualRent: annualRent ? annualRent : '0',
-    };
+    const [professionnalSalary, setSalary] = useState(recoverredFormValues.professionnalSalary?.toString());
+    const [annualRent, setAnnualRent] = useState(recoverredFormValues.annualRent?.toString());
     const _onSubmit = (values) => {
         formValuesReturned(values);
-        alert(JSON.stringify(values, null, 2));
     };
     const numberTypeError = 'Ce champs doit être un nombre';
     return (
         <>
             <Formik
-                initialValues={formik}
+                initialValues={{
+                    professionnalSalary: professionnalSalary ? professionnalSalary : '0',
+                    annualRent: annualRent ? annualRent : '0',
+                }}
+                enableReinitialize={true}
                 onSubmit={values => _onSubmit(values)}
                 validationSchema={yup.object().shape({
                     professionnalSalary: yup

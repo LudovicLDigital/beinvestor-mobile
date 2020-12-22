@@ -1,89 +1,109 @@
-import React, {Component} from 'react';
+import React, {useEffect, useState} from 'react';
 import {appColors, styles} from "../../shared/styles/global";
 import {SafeAreaView, View} from 'react-native';
 import {Layout, Text} from '@ui-kitten/components';
 import HeaderBar from '../../component/subcomponent/header-bar';
 import SimulatorMenu from "../../component/simulator/simulator-menu";
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {BANK, ESTATE, FISCALITY, RENT, ROUTE_SIMULATOR_RESULT, SITUATION} from "../../shared/util/constants";
+import {BANK, BANNER_AD, ESTATE, FISCALITY, RENT, ROUTE_SIMULATOR_RESULT, SITUATION} from "../../shared/util/constants";
 import SimulatorEstateForm from "../../component/simulator/simulator-estate-form";
 import SimulatorFiscalityForm from "../../component/simulator/simulator-fiscality-form";
 import SimulatorBankForm from "../../component/simulator/simulator-bank-form";
 import {SimulatorDataSendObject} from "../../shared/util/simulator-objects";
 import SimulatorService from "../../shared/services/simulator-service";
 import {showInfoAlert} from "../../shared/util/ui-helpers";
-import { BannerAd, BannerAdSize, TestIds } from '@react-native-firebase/admob';
-import {BANNER_AD} from '../../shared/util/constants';
+import {BannerAd, BannerAdSize, TestIds} from '@react-native-firebase/admob';
 import SocketService from "../../shared/services/socket-service";
 import {convertRouteNameToLisible} from "../../shared/util/converter-for-route-name";
 import SimulatorRentForm from "../../component/simulator/simulator-rent-form";
 import SimulatorSituationForm from "../../component/simulator/simulator-situation-form";
+import {useStoreState, useStoreActions} from "easy-peasy";
+import UserInvestorProfil from "../../shared/models/user-investor-profil";
+import UserInvestorProfilService from "../../shared/services/entities/user-investor-profil-service";
 
 
-export default class SimulatorScreen extends Component {
-    simulatorService;
-    constructor(props) {
-        super(props);
+export default function SimulatorScreen(props) {
+    const investorStoredProfil = useStoreState((state) => state.userInvestorProfil);
+    const {setUserInvestorProfil, updateInvestorProfil} = useStoreActions((actions) => ({
+        setUserInvestorProfil: actions.setInvestorProfil,
+        updateInvestorProfil: actions.updateInvestorProfil }));
+    const [isEditingApart, setisEditingApart] = useState(false);
+    const [partShowed, setpartShowed] = useState(null);
+    const [formValues, setformValues] = useState(SimulatorDataSendObject);
+    let simulatorService = new SimulatorService();
+    useEffect(() => {
         SocketService.connectToBackEnd();
-        this.simulatorService = new SimulatorService();
-        this.state = {
-            isEditingApart: false,
-            partShowed: null,
-            formValues: SimulatorDataSendObject,
+        const userInvestorProfilService = new UserInvestorProfilService();
+        userInvestorProfilService.getCurrentUserInvestorProfil().then((userInvestorProfilRes) => {
+            setUserInvestorProfil(userInvestorProfilRes);
+            _setFormWithInvestorProfil();
+        }).catch((error) => {
+            console.error(`ERROR TO getCurrentUserInvestorProfil in UserInvestorProfilForm : ${error}`);
+            showInfoAlert('Une erreur est survenue lors de la récupération du profil investisseur...', true);
+        });
+    }, []);
+    useEffect(() => {
+        _setFormWithInvestorProfil();
+    }, [investorStoredProfil]);
+    function _setFormWithInvestorProfil() {
+        if (investorStoredProfil) {
+            formValues.annualRent = investorStoredProfil.annualRent;
+            formValues.professionnalSalary = investorStoredProfil.professionnalSalary;
+            formValues.actualCreditMensualities = investorStoredProfil.actualCreditMensualities;
+            formValues.nbEstate = investorStoredProfil.nbEstate;
+            setformValues(formValues);
         }
     }
-
-    render() {
-        return (
-            <SafeAreaView style={{ flex: 1 }}>
-                <HeaderBar hideAriane={!this.state.isEditingApart} overrideBackPress={() => this.backPress()} previousRoute={(this.state.isEditingApart ? this.props.route.name : null)} route={(this.state.isEditingApart ? this.state.partShowed : this.props.route.name)} navigation={this.props.navigation}/>
-                {!this.state.isEditingApart && <View style={[styles.flexCenter, {backgroundColor: appColors.white}]}>
-                    <Text category={"h6"} style={{fontWeight: "bold"}}>{convertRouteNameToLisible(this.props.route.name)}</Text>
-                    <Text style={{fontWeight: 'bold', color: appColors.dangerDark, fontSize: 11, textAlign: 'center', marginBottom: 10}}>Les champs marqués avec une étoile " * " sont obligatoires</Text>
-                </View>}
-                <Layout style={styles.fullScreen}>
-                    {!this.state.isEditingApart && <SimulatorMenu clickedMenu={(menuClicked) => this._showForm(menuClicked)}/>}
-                    {this.state.partShowed === ESTATE && this.state.isEditingApart && <SimulatorEstateForm formValuesReturned={(datas) => this.fillDataFor(ESTATE, datas)} recoverredFormValues={this.state.formValues}/>}
-                    {this.state.partShowed === BANK && this.state.isEditingApart && <SimulatorBankForm formValuesReturned={(datas) => this.fillDataFor(BANK, datas)} recoverredFormValues={this.state.formValues}/>}
-                    {this.state.partShowed === FISCALITY && this.state.isEditingApart && <SimulatorFiscalityForm formValuesReturned={(datas) => this.fillDataFor(FISCALITY, datas)} recoverredFormValues={this.state.formValues}/>}
-                    {this.state.partShowed === RENT && this.state.isEditingApart && <SimulatorRentForm formValuesReturned={(datas) => this.fillDataFor(RENT, datas)} recoverredFormValues={this.state.formValues}/>}
-                    {this.state.partShowed === SITUATION && this.state.isEditingApart && <SimulatorSituationForm formValuesReturned={(datas) => this.fillDataFor(SITUATION, datas)} recoverredFormValues={this.state.formValues}/>}
-                    {!this.state.isEditingApart && <Icon.Button name="insert-chart"
-                                                                backgroundColor={appColors.success}
-                                                                onPress={() => this.runSimulator()}
-                                                                style={{justifyContent: 'center'}}>
-                        Lancer le simulateur
-                    </Icon.Button>}
-                    {!this.state.isEditingApart &&
-                    <View style={{flex:1, justifyContent: 'flex-end', alignItems: 'center'}}>
-                        <BannerAd
-                            onAdFailedToLoad={(error) => this._bannerFailed(error)}
-                            size={BannerAdSize.LARGE_BANNER}
-                            unitId={BANNER_AD} />
-                    </View>
-                    }
-                </Layout>
-            </SafeAreaView>
-        );
-    }
+    return (
+        <SafeAreaView style={{ flex: 1 }}>
+            <HeaderBar hideAriane={!isEditingApart} overrideBackPress={() => backPress()} previousRoute={(isEditingApart ? props.route.name : null)} route={(isEditingApart ? partShowed : props.route.name)} navigation={props.navigation}/>
+            {!isEditingApart && <View style={[styles.flexCenter, {backgroundColor: appColors.white}]}>
+                <Text category={"h6"} style={{fontWeight: "bold"}}>{convertRouteNameToLisible(props.route.name)}</Text>
+                <Text style={{fontWeight: 'bold', color: appColors.dangerDark, fontSize: 11, textAlign: 'center', marginBottom: 10}}>Les champs marqués avec une étoile " * " sont obligatoires</Text>
+            </View>}
+            <Layout style={styles.fullScreen}>
+                {!isEditingApart && <SimulatorMenu clickedMenu={(menuClicked) => _showForm(menuClicked)}/>}
+                {partShowed === ESTATE && isEditingApart && <SimulatorEstateForm formValuesReturned={(datas) => fillDataFor(ESTATE, datas)} recoverredFormValues={formValues}/>}
+                {partShowed === BANK && isEditingApart && <SimulatorBankForm formValuesReturned={(datas) => fillDataFor(BANK, datas)} recoverredFormValues={formValues}/>}
+                {partShowed === FISCALITY && isEditingApart && <SimulatorFiscalityForm formValuesReturned={(datas) => fillDataFor(FISCALITY, datas)} recoverredFormValues={formValues}/>}
+                {partShowed === RENT && isEditingApart && <SimulatorRentForm formValuesReturned={(datas) => fillDataFor(RENT, datas)} recoverredFormValues={formValues}/>}
+                {partShowed === SITUATION && isEditingApart && <SimulatorSituationForm formValuesReturned={(datas) => fillDataFor(SITUATION, datas)} recoverredFormValues={formValues}/>}
+                {!isEditingApart && <Icon.Button name="insert-chart"
+                                                 backgroundColor={appColors.success}
+                                                 onPress={() => runSimulator()}
+                                                 style={{justifyContent: 'center'}}>
+                    Lancer le simulateur
+                </Icon.Button>}
+                {!isEditingApart &&
+                <View style={{flex:1, justifyContent: 'flex-end', alignItems: 'center'}}>
+                    <BannerAd
+                        onAdFailedToLoad={(error) => _bannerFailed(error)}
+                        size={BannerAdSize.LARGE_BANNER}
+                        unitId={BANNER_AD} />
+                </View>
+                }
+            </Layout>
+        </SafeAreaView>
+    );
 
     /**
      * Display the corresponding sub form with the passed part
      * @param formToShow can be estate, fiscality or bank
      * @private
      */
-    _showForm(formToShow) {
-        this.setState({isEditingApart: true, partShowed: formToShow})
+    function _showForm(formToShow) {
+        setisEditingApart(true);
+        setpartShowed(formToShow)
     }
 
     /**
      * Override the headerbar back press to hide sub forms
      */
-    backPress() {
-        if (this.state.isEditingApart) {
-            this.setState({isEditingApart: false});
+    function backPress() {
+        if (isEditingApart) {
+            setisEditingApart(false);
         } else {
-            this.props.navigation.goBack();
+            props.navigation.goBack();
         }
     }
 
@@ -92,22 +112,22 @@ export default class SimulatorScreen extends Component {
      * @param formChanged the form which have been filled
      * @param datas the datas outputed by sub form
      */
-    fillDataFor(formChanged, datas) {
+    function fillDataFor(formChanged, datas) {
         switch (formChanged) {
             case ESTATE :
-                this._fillEstate(datas);
+                _fillEstate(datas);
                 break;
             case FISCALITY:
-                this._fillFiscality(datas);
+                _fillFiscality(datas);
                 break;
             case BANK:
-                this._fillBank(datas);
+                _fillBank(datas);
                 break;
             case RENT:
-                this._fillRent(datas);
+                _fillRent(datas);
                 break;
             case SITUATION:
-                this._fillSituation(datas);
+                _fillSituation(datas);
                 break;
         }
     }
@@ -117,17 +137,18 @@ export default class SimulatorScreen extends Component {
      * @param datas the new data enterred in form
      * @private
      */
-    _fillEstate(datas) {
-        this.backPress();
-        this.state.formValues.noFai = datas.noFai;
-        this.state.formValues.faiPercent = datas.faiPercent;
-        this.state.formValues.notarialCost = datas.notarialCost;
-        this.state.formValues.buyPrice = datas.buyPrice;
-        this.state.formValues.surface = datas.surface;
-        this.state.formValues.workCost = datas.workCost;
-        this.state.formValues.secureSaving = datas.secureSaving;
-        this.state.formValues.taxeFonciere = datas.taxeFonciere;
-        this.state.formValues.city = datas.city;
+    function _fillEstate(datas) {
+        backPress();
+        formValues.noFai = datas.noFai;
+        formValues.faiPercent = datas.faiPercent;
+        formValues.notarialCost = datas.notarialCost;
+        formValues.buyPrice = datas.buyPrice;
+        formValues.surface = datas.surface;
+        formValues.workCost = datas.workCost;
+        formValues.secureSaving = datas.secureSaving;
+        formValues.taxeFonciere = datas.taxeFonciere;
+        formValues.city = datas.city;
+        setformValues(formValues);
     }
 
     /**
@@ -135,16 +156,17 @@ export default class SimulatorScreen extends Component {
      * @param datas the new data enterred in form
      * @private
      */
-    _fillFiscality(datas) {
-        this.backPress();
-        this.state.formValues.percentRentManagement = datas.percentRentManagement;
-        this.state.formValues.inHandProject = datas.inHandProject;
-        this.state.formValues.comptableCost = datas.comptableCost;
-        this.state.formValues.pnoCost = datas.pnoCost;
-        this.state.formValues.gliPercent = datas.gliPercent;
-        this.state.formValues.vlInsurancePercent = datas.vlInsurancePercent;
-        this.state.formValues.chargeCopro = datas.chargeCopro;
-        this.state.formValues.previsionalRentCharge = datas.previsionalRentCharge;
+    function _fillFiscality(datas) {
+        backPress();
+        formValues.percentRentManagement = datas.percentRentManagement;
+        formValues.inHandProject = datas.inHandProject;
+        formValues.comptableCost = datas.comptableCost;
+        formValues.pnoCost = datas.pnoCost;
+        formValues.gliPercent = datas.gliPercent;
+        formValues.vlInsurancePercent = datas.vlInsurancePercent;
+        formValues.chargeCopro = datas.chargeCopro;
+        formValues.previsionalRentCharge = datas.previsionalRentCharge;
+        setformValues(formValues);
     }
 
     /**
@@ -152,18 +174,19 @@ export default class SimulatorScreen extends Component {
      * @param datas the new data enterred in form
      * @private
      */
-    _fillBank(datas) {
-        this.backPress();
-        this.state.formValues.makeACredit = datas.makeACredit;
-        this.state.formValues.is110 = datas.is110;
-        this.state.formValues.apport = datas.apport;
-        this.state.formValues.furnitureCost = datas.furnitureCost;
-        this.state.formValues.includeFurnitureInCredit = datas.includeFurnitureInCredit;
-        this.state.formValues.creditWarrantyCost = datas.creditWarrantyCost;
-        this.state.formValues.bankCharges = datas.bankCharges;
-        this.state.formValues.creditTime = datas.creditTime;
-        this.state.formValues.bankRate = datas.bankRate;
-        this.state.formValues.actualCreditMensualities = datas.actualCreditMensualities;
+    function _fillBank(datas) {
+        backPress();
+        formValues.makeACredit = datas.makeACredit;
+        formValues.is110 = datas.is110;
+        formValues.apport = datas.apport;
+        formValues.furnitureCost = datas.furnitureCost;
+        formValues.includeFurnitureInCredit = datas.includeFurnitureInCredit;
+        formValues.creditWarrantyCost = datas.creditWarrantyCost;
+        formValues.bankCharges = datas.bankCharges;
+        formValues.creditTime = datas.creditTime;
+        formValues.bankRate = datas.bankRate;
+        formValues.actualCreditMensualities = datas.actualCreditMensualities;
+        setformValues(formValues);
     }
 
     /**
@@ -171,10 +194,11 @@ export default class SimulatorScreen extends Component {
      * @param datas the new data enterred in form
      * @private
      */
-    _fillRent(datas) {
-        this.backPress();
-        this.state.formValues.fiscalTypeId = datas.fiscalTypeId;
-        this.state.formValues.monthlyRent = datas.monthlyRent;
+    function _fillRent(datas) {
+        backPress();
+        formValues.fiscalTypeId = datas.fiscalTypeId;
+        formValues.monthlyRent = datas.monthlyRent;
+        setformValues(formValues);
     }
 
     /**
@@ -182,22 +206,31 @@ export default class SimulatorScreen extends Component {
      * @param datas the new data enterred in form
      * @private
      */
-    _fillSituation(datas) {
-        this.backPress();
-        this.state.formValues.professionnalSalary = datas.professionnalSalary;
-        this.state.formValues.annualRent = datas.annualRent;
+    function _fillSituation(datas) {
+        backPress();
+        formValues.professionnalSalary = datas.professionnalSalary;
+        formValues.annualRent = datas.annualRent;
+        setformValues(formValues);
+    }
+
+    function _createInvestorProfil() {
+        const profilInvest = new UserInvestorProfil(null,formValues.professionnalSalary, formValues.nbEstate,formValues.annualRent, 1,formValues.actualCreditMensualities);
+        updateInvestorProfil(profilInvest);
     }
 
     /**
      * Send request to api to do the simulation with datas
      */
-    runSimulator() {
-        const messageError = this._checkFormValues();
+    function runSimulator() {
+        const messageError = _checkFormValues();
         if (messageError === '') {
-            this.simulatorService.calculateProject(this.state.formValues).then((response) => {
-                this.props.navigation.navigate(ROUTE_SIMULATOR_RESULT, {
+            if (!investorStoredProfil) {
+                _createInvestorProfil()
+            }
+            simulatorService.calculateProject(formValues).then((response) => {
+                props.navigation.navigate(ROUTE_SIMULATOR_RESULT, {
                     resultDatas: response,
-                    cityPassed: this.state.formValues.city
+                    cityPassed: formValues.city
                 });
             }).catch((error) => {
                 console.error('ERROR TO calculateProject : ');
@@ -213,30 +246,30 @@ export default class SimulatorScreen extends Component {
      * @returns {string} will prepare a message error with all the field and the subform concerned
      * @private
      */
-    _checkFormValues() {
+    function _checkFormValues() {
         let messageError = '';
-        if (!this.state.formValues.buyPrice || !this.state.formValues.monthlyRent) {
+        if (!formValues.buyPrice || !formValues.monthlyRent) {
             messageError = 'Partie "Bien à analyser" : \n';
-            if (!this.state.formValues.buyPrice) {
+            if (!formValues.buyPrice) {
                 messageError = messageError + '- Prix requis \n';
             }
-            if (!this.state.formValues.monthlyRent) {
+            if (!formValues.monthlyRent) {
                 messageError = messageError + '- Loyer requis \n';
             }
         }
-        if ((!this.state.formValues.buyPrice || !this.state.formValues.monthlyRent) && this.state.formValues.makeACredit) {
+        if ((!formValues.buyPrice || !formValues.monthlyRent) && formValues.makeACredit) {
             messageError = messageError + 'Partie "Emprunt bancaire : " \n';
-            if (!this.state.formValues.creditTime) {
+            if (!formValues.creditTime) {
                 messageError = messageError + '- Durée du crédit requis \n';
             }
-            if (!this.state.formValues.bankRate) {
+            if (!formValues.bankRate) {
                 messageError = messageError + '- Taux d\'emprunt requis \n';
             }
         }
         return messageError;
     }
 
-    _bannerFailed(error) {
+    function _bannerFailed(error) {
         console.log(error);
     }
 }

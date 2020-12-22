@@ -7,7 +7,7 @@ export default class UserInvestorProfilService extends BaseService {
     }
 
     async getCurrentUserInvestorProfil() {
-        return await this.basicGetQuery('/current')
+        return await this.basicGetQuery('/current');
     }
     async getUserInvestorProfilByPersonalInfoId(userPersonalInfoId) {
         return await this.getOneById(null, userPersonalInfoId)

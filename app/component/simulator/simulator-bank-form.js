@@ -28,7 +28,7 @@ export default class SimulatorBankForm extends Component {
             bankCharges: this.props.recoverredFormValues.bankCharges ? this.props.recoverredFormValues.bankCharges : (BANK_FOLDER_COST).toString(),
             creditTime: this.props.recoverredFormValues.creditTime ? this.props.recoverredFormValues.creditTime : '20',
             bankRate: this.props.recoverredFormValues.bankRate ? this.props.recoverredFormValues.bankRate : TX_BANK,
-            actualCreditMensualities: this.props.recoverredFormValues.actualCreditMensualities ? this.props.recoverredFormValues.actualCreditMensualities : '0',
+            actualCreditMensualities: this.props.recoverredFormValues.actualCreditMensualities ? this.props.recoverredFormValues.actualCreditMensualities.toString() : '0',
             furnitureCost: this.props.recoverredFormValues.furnitureCost ? this.props.recoverredFormValues.furnitureCost : '0',
             includeFurnitureInCredit: (typeof this.props.recoverredFormValues.includeFurnitureInCredit !== 'undefined' && this.props.recoverredFormValues.includeFurnitureInCredit !== null) ? this.props.recoverredFormValues.includeFurnitureInCredit : false,
         }
