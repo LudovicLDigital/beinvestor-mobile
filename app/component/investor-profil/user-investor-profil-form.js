@@ -1,6 +1,5 @@
-import UserInvestorProfilService from "../../shared/services/entities/user-investor-profil-service";
-import React, {useEffect, useState} from "react";
-import { useStoreActions, useStoreState } from 'easy-peasy';
+import React, {useEffect} from "react";
+import {useStoreActions, useStoreState} from 'easy-peasy';
 import UserInvestorProfil from "../../shared/models/user-investor-profil";
 import * as yup from "yup";
 import {Formik} from 'formik';
@@ -8,8 +7,7 @@ import {Button} from "@ui-kitten/components/ui/index";
 import {View} from "react-native";
 import SectionDivider from "../subcomponent/form/section-divider";
 import {FormikField} from "../subcomponent/form/input-field";
-import {styles} from "../../shared/styles/global";
-import {showInfoAlert, showToast} from "../../shared/util/ui-helpers";
+import {showToast} from "../../shared/util/ui-helpers";
 
 export default function UserInvestorProfilForm() {
     let investorStoredProfil = useStoreState((state) => state.userInvestorProfil);

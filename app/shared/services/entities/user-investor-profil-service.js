@@ -13,9 +13,22 @@ export default class UserInvestorProfilService extends BaseService {
         return await this.getOneById(null, userPersonalInfoId)
     }
     async updateCurrentInvestorProfil(userInvestorDatas) {
-        return await this.updateObject(userInvestorDatas, '/current')
+        const reformatedFromGetter = this._recoverPrivateAttributOfModelObject(userInvestorDatas);
+        return await this.updateObject(reformatedFromGetter, '/current')
     }
     async createCurrentInvestorProfil(userInvestorDatas) {
-        return await this.postObject(userInvestorDatas, '/current')
+        const reformatedFromGetter = this._recoverPrivateAttributOfModelObject(userInvestorDatas);
+        return await this.postObject(reformatedFromGetter, '/current')
+    }
+
+    _recoverPrivateAttributOfModelObject(userInvestorDatas) {
+        return {
+            id:  userInvestorDatas.id,
+            actualCreditMensualities: userInvestorDatas.actualCreditMensualities,
+            professionnalSalary: userInvestorDatas.professionnalSalary,
+            annualRent: userInvestorDatas.annualRent,
+            fiscalPart: userInvestorDatas.fiscalPart,
+            nbEstate: userInvestorDatas.nbEstate
+        };
     }
 }

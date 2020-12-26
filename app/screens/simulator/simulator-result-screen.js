@@ -8,7 +8,7 @@ import SimulatorCardResult from "../../component/simulator/cards/simulator-card-
 import SimulatorCashflowChart from "../../component/simulator/cards/simulator-cashflow-chart";
 import SimulatorFiscalityDetail from "../../component/simulator/cards/simulator-fiscality-detail";
 import SimulatorCreditDetail from "../../component/simulator/cards/simulator-credit-detail";
-import { BannerAd, BannerAdSize, TestIds } from '@react-native-firebase/admob';
+import {BannerAd, BannerAdSize, TestIds} from '@react-native-firebase/admob';
 import {BANNER_AD} from "../../shared/util/constants";
 import SimulatorProjectDetail from "../../component/simulator/cards/simulator-projet-detail";
 
@@ -49,7 +49,9 @@ export default class SimulatorResultScreen extends Component {
     }
 
     componentWillUnmount(): void {
-        this._unsubscribe.remove();
+        if (this._unsubscribe) {
+            this._unsubscribe.remove();
+        }
     }
 
     /**

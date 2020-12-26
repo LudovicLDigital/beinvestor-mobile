@@ -16,7 +16,7 @@ const auth = {
                     this.currentUser = await userService.getCurrentUser();
                     resolve(this.currentUser);
                 } catch (error) {
-                    console.log('Error to get current user from api');
+                    console.error('Error to get current user from api');
                     console.error(error);
                 }
             })

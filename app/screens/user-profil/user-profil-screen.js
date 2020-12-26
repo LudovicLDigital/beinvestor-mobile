@@ -87,7 +87,7 @@ export default class UserProfilScreen extends Component {
                     });
                 }).catch((error) => {
                     showToast('Problème lors de la mise à jours de vos données');
-                    console.log(error);
+                    console.error(error);
                 })
             } else {
                 showInfoAlert('Un ou plusieurs champs sont invalides')

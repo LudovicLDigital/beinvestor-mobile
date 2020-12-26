@@ -1,6 +1,4 @@
-import {createStore, action, thunk} from 'easy-peasy';
-
-import UserInvestorProfil from "../models/user-investor-profil";
+import {action, createStore, thunk} from 'easy-peasy';
 import UserInvestorProfilService from "../services/entities/user-investor-profil-service";
 
 export default () => {

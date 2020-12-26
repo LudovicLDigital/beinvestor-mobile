@@ -17,7 +17,7 @@ import SocketService from "../../shared/services/socket-service";
 import {convertRouteNameToLisible} from "../../shared/util/converter-for-route-name";
 import SimulatorRentForm from "../../component/simulator/simulator-rent-form";
 import SimulatorSituationForm from "../../component/simulator/simulator-situation-form";
-import {useStoreState, useStoreActions} from "easy-peasy";
+import {useStoreActions, useStoreState} from "easy-peasy";
 import UserInvestorProfil from "../../shared/models/user-investor-profil";
 import UserInvestorProfilService from "../../shared/services/entities/user-investor-profil-service";
 
@@ -225,7 +225,7 @@ export default function SimulatorScreen(props) {
         const messageError = _checkFormValues();
         if (messageError === '') {
             if (!investorStoredProfil) {
-                _createInvestorProfil()
+                _createInvestorProfil();
             }
             simulatorService.calculateProject(formValues).then((response) => {
                 props.navigation.navigate(ROUTE_SIMULATOR_RESULT, {
