@@ -1,25 +1,18 @@
-import React, {Component} from 'react';
-import {styles} from "../../shared/styles/global";
-import {SafeAreaView} from 'react-native';
-import {Layout, Text} from '@ui-kitten/components';
+import React from 'react';
+import {SafeAreaView, ScrollView} from 'react-native';
 import HeaderBar from '../../component/subcomponent/header-bar';
+import UserInvestorProfilForm from "../../component/investor-profil/user-investor-profil-form";
+import {styles} from "../../shared/styles/global";
+import InvestorProfilEstate from "../../component/investor-profil/investor-profil-estate";
 
-export default class UserProfilInvestorScreen extends Component {
-    constructor(props) {
-        super(props);
-    }
-
-    componentDidMount(): void {
-    }
-
-    render() {
-        return (
-            <SafeAreaView style={{ flex: 1 }}>
-                <HeaderBar route={this.props.route.name} navigation={this.props.navigation}/>
-                <Layout style={styles.fullScreen}>
-                    <Text>USER PROFIL</Text>
-                </Layout>
-            </SafeAreaView>
-        );
-    }
+export default function UserProfilInvestorScreen(props) {
+    return (
+        <SafeAreaView style={{ flex: 1 }}>
+            <HeaderBar route={props.route.name} navigation={props.navigation}/>
+            <ScrollView contentContainerStyle={{paddingBottom: 20}} style={[styles.fullScreen ]}>
+                <UserInvestorProfilForm/>
+                <InvestorProfilEstate/>
+            </ScrollView>
+        </SafeAreaView>
+    );
 }

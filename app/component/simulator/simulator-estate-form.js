@@ -141,7 +141,7 @@ export default class SimulatorEstateForm extends Component {
                             <SelectItem title={evaProps => <Text {...evaProps} >{faUnit[1]}</Text>}/>
                         </Select>
                     </View>}
-                    <BeInvestorCityAutoComplete onChoiceSelect={(item) => this.setState({city: item})} placement={"top"} preFilledCity={this.state.city}/>
+                    <BeInvestorCityAutoComplete onChoiceSelect={(item) => this.setState({city: item})} placement={"top"} preFilledCity={this.state.city} onlyDistrict={true}/>
                     <View style={styles.flexRowAlignCenter}>
                         <InputField label={'Surface totale (m²)'}
                                     type={'numeric'}

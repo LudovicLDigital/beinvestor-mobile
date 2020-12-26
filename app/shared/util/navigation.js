@@ -143,6 +143,13 @@ function HomeDrawerNavigator() {
                 }}
             />
             <HomeDrawer.Screen
+                name={ROUTE_USER_PROFIL_INVEST}
+                component={UserProfilInvestorScreen}
+                options={{
+                    headerShown: false
+                }}
+            />
+            <HomeDrawer.Screen
                 name={ROUTE_SEARCH_GRP}
                 component={GroupSearchStackNavigator}
                 options={{

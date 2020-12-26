@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {Icon, Input, Text} from '@ui-kitten/components';
 import {appColors, styles} from "../../../shared/styles/global";
-import {TouchableWithoutFeedback} from "react-native";
+import {TouchableWithoutFeedback, View} from "react-native";
 
 /**
  * PROPS :
@@ -137,4 +137,21 @@ export default class InputField extends Component {
         }
         return this.state.messageError;
     }
+}
+
+/**
+ *
+ * @param props have all InputField Props plus :
+ *  - yupErrorMessage to display validation schema error message
+ * @returns {*}
+ * @constructor
+ */
+export function FormikField(props) {
+    const {yupErrorMessage, ...other} = props;
+    return (
+        <View style={{flex: 1}}>
+            <InputField {...other}/>
+            {yupErrorMessage && <Text style={[styles.errorFormLabel, {paddingBottom: 10}]}>{yupErrorMessage}</Text>}
+        </View>
+    )
 }

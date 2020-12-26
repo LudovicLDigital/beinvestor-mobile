@@ -1,16 +1,15 @@
 import React, {Component} from "react";
-import {TouchableWithoutFeedback,
-    Modal, View} from "react-native";
-import {Button, CheckBox, Text, Icon} from '@ui-kitten/components';
+import {Modal, TouchableWithoutFeedback, View} from "react-native";
+import {Button, CheckBox, Icon, Text} from '@ui-kitten/components';
 import {appColors, styles} from "../shared/styles/global";
 import ViewPager from '@react-native-community/viewpager';
 import UserRegisterStep from "../component/register/user-step";
 import UserInfoRegisterStep from "../component/register/user-info-step";
 import AccountConfirmation from "../component/register/account-confirmation";
-import Loader from "../component/subcomponent/ui-tools/loader";
 import CGUComponent from "../component/app-info/cgu-component";
 import * as AuthService from "../shared/services/auth";
 import {showInfoAlert} from "../shared/util/ui-helpers";
+import {EstateLoader} from "../component/subcomponent/animation/loader";
 
 export default class RegisterScreen extends Component {
     viewPager;
@@ -60,7 +59,7 @@ export default class RegisterScreen extends Component {
     render() {
         return (
             <View style={{flex: 1, backgroundColor: appColors.white}} onLayout={(event) => { this._setEndViewForLoader(event.nativeEvent.layout) }}>
-                <Loader isDisplayed={this.state.awaitCreate} parentHeight={this.state.loaderHeight} loadTitle={'Création de votre compte...'}/>
+                <EstateLoader isDisplayed={this.state.awaitCreate} loadTitle={'Création de votre compte...'}/>
                 {this.state.showCGU &&
                 <Modal
                     animationType="slide"

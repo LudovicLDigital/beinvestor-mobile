@@ -123,8 +123,8 @@ export const SimulatorDataSendObject = {
 
     fiscalTypeId: 1,
 
-    professionnalSalary: 0,
-    nbEstate : 0,
-    actualCreditMensualities: 0,
-    annualRent: 0
+    professionnalSalary: null,
+    nbEstate : null,
+    actualCreditMensualities: null,
+    annualRent: null
 };

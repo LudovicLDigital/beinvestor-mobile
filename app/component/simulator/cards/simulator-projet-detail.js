@@ -24,7 +24,8 @@ export default function SimulatorProjectDetail({simulatorDatasReceived, cityPass
     useEffect(() => {
         const result = simulatorDatasReceived.simulatorDatas.totalProjectCost / simulatorDatasReceived.simulatorDatas.userEstate.surface;
         setPricem2(result);
-    });
+        _adaptColorPrice();
+    }, []);
     useEffect(() => {
         // selected city will be send to back to recover m² price
         if (city) {
@@ -32,17 +33,20 @@ export default function SimulatorProjectDetail({simulatorDatasReceived, cityPass
             cityService.getCityAveragePriceM2(city.postCode).then((averagePrice) => {
                 setAverageCitym2(averagePrice);
                 setLoading(false);
-                if (averagePrice >= pricem2) {
-                    setPriceIndicatorColor(appColors.success);
-                } else {
-                    setPriceIndicatorColor(appColors.danger);
-                }
+                _adaptColorPrice();
             }).catch((error) => {
                 console.error(error);
                 showToast('Impossible de récupérer le prix au m² de cette ville');
             })
         }
     }, [city]);
+    function _adaptColorPrice(){
+        if (averageCitym2 >= pricem2) {
+            setPriceIndicatorColor(appColors.success);
+        } else {
+            setPriceIndicatorColor(appColors.danger);
+        }
+    }
     return (
         <View style={styles.flexCenter}>
             {simulatorDatasReceived.simulatorDatas.userEstate.surface && simulatorDatasReceived.simulatorDatas.userEstate.surface > 0 ?
@@ -62,7 +66,7 @@ export default function SimulatorProjectDetail({simulatorDatasReceived, cityPass
                     <DataLoader/>
                     :
                     <View style={styles.flexCenter}>
-                        <Text style={{fontSize: 12}}>Prix moyen au m² à {city ? city.city : '...'} : {averageCitym2 ? averageCitym2 : '...'} € /m²</Text>
+                        <Text style={{fontSize: 12}}>Prix médian du m² à {city ? city.city : '...'} : {averageCitym2 ? averageCitym2 : '...'} € /m²</Text>
                     </View>
             }
         </View>

@@ -39,18 +39,18 @@ export default class GouvAdressService {
             if(this.recoverOnlyDistrict) {
                 if ((!contextMap.get(cityKeyAllArrondissements) || contextMap.get(cityKeyAllArrondissements) === null)
                     && cityMapped.title.includes(DISTRICT)) {
-                    contextMap.set(cityKeyAllArrondissements, cityMapped)
+                    contextMap.set(cityKeyAllArrondissements, cityMapped);
                 } else {
                     if (!cityMapped.title.includes(DISTRICT)) {
-                        if (!contextMap.get(cityMapped.city + DISTRICT) && contextMap.get(cityMapped.city + DISTRICT) === null) {
-                            tempArray.push(cityMapped)
+                        if (!contextMap.get(cityMapped.city + DISTRICT) || contextMap.get(cityMapped.city + DISTRICT) === null) {
+                            tempArray.push(cityMapped);
                         }
                     } else {
                         tempArray.push(cityMapped);
                     }
                 }
             } else {
-                tempArray.push(cityMapped)
+                tempArray.push(cityMapped);
             }
         });
         return tempArray;
