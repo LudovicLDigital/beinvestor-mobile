@@ -24,7 +24,7 @@ export default function SimulatorProjectDetail({simulatorDatasReceived, cityPass
     useEffect(() => {
         const result = simulatorDatasReceived.simulatorDatas.totalProjectCost / simulatorDatasReceived.simulatorDatas.userEstate.surface;
         setPricem2(result);
-    });
+    }, []);
     useEffect(() => {
         // selected city will be send to back to recover m² price
         if (city) {
@@ -62,7 +62,7 @@ export default function SimulatorProjectDetail({simulatorDatasReceived, cityPass
                     <DataLoader/>
                     :
                     <View style={styles.flexCenter}>
-                        <Text style={{fontSize: 12}}>Prix moyen au m² à {city ? city.city : '...'} : {averageCitym2 ? averageCitym2 : '...'} € /m²</Text>
+                        <Text style={{fontSize: 12}}>Prix médian du m² à {city ? city.city : '...'} : {averageCitym2 ? averageCitym2 : '...'} € /m²</Text>
                     </View>
             }
         </View>
