@@ -73,7 +73,8 @@ export default class ChatRoom extends Component {
                 groupId: this.props.groupId
             };
             this.textChange(null);
-            BeInvestorOneSignalPushService.sendNotification('HELLO !');
+            const pushMessage = `${messageToSend.authorName} : ${messageToSend.content}`;
+            BeInvestorOneSignalPushService.sendNotification(pushMessage, messageToSend.groupId);
             this.groupMessageService.postAndEmitAmessage(messageToSend).then(() => {
             }, (error) => {
                     showToast('Le message n\'a pas pu être envoyé');

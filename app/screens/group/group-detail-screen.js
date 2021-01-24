@@ -78,8 +78,16 @@ export default class GroupDetailScreen extends Component {
         }
     }
     _listenForMessage() {
+        if (SocketService.socketServer) {
+            this._startSocketListener();
+        } else {
+            SocketService.connectToBackEnd();
+            this._startSocketListener();
+        }
+    }
+    _startSocketListener() {
         const that = this;
-        SocketService.socketServer.on(`receivedMessage-${that.state.groupDisplay.id}`, function(groupMessage) {
+        SocketService.socketServer.on(`receivedMessage-${that.state.groupDisplay.id}`, function (groupMessage) {
             const messages = [];
             that.state.messageList.forEach((message) => {
                 messages.push(message);

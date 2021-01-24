@@ -1,5 +1,6 @@
 import BaseService from "./base-service";
 import {PAGINATION_SIZE} from "../../util/constants";
+import BeInvestorOneSignalPushService from "../one-signal-push-service";
 
 export default class GroupService extends BaseService {
     constructor() {
@@ -52,9 +53,11 @@ export default class GroupService extends BaseService {
         return await this.getOneById('/members/of', groupId)
     }
     async currentUserJoinGroup(groupId) {
+        BeInvestorOneSignalPushService.addAGroupTagOnUser(groupId, true);
         return await this.postObject({}, '/current/' + groupId)
     }
     async currentUserLeftGroup(groupId) {
+        BeInvestorOneSignalPushService.addAGroupTagOnUser(groupId, false);
         return await this.deleteObject('/current', groupId)
     }
     async currentIsMember(groupId) {
