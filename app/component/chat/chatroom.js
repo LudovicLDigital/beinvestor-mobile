@@ -7,7 +7,7 @@ import AuthService from "../../shared/services/auth";
 import {styles} from "../../shared/styles/global";
 import GroupMessageService from '../../shared/services/entities/group-message-service'
 import {showToast} from "../../shared/util/ui-helpers";
-
+import BeInvestorOneSignalPushService from "../../shared/services/one-signal-push-service";
 /**
  * PROPS :
  * - messageList: the list of messages
@@ -73,6 +73,7 @@ export default class ChatRoom extends Component {
                 groupId: this.props.groupId
             };
             this.textChange(null);
+            BeInvestorOneSignalPushService.sendNotification('HELLO !');
             this.groupMessageService.postAndEmitAmessage(messageToSend).then(() => {
             }, (error) => {
                     showToast('Le message n\'a pas pu être envoyé');

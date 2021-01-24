@@ -38,7 +38,7 @@ export default class SearchGroupScreen extends Component {
                 page: this.page,
                 numberItem: 5
             }).then((groups) => {
-                if (groups.results && groups.results.length > 0) {
+                if (groups && groups.results && groups.results.length > 0) {
                     this._fillCityOfGroups(groups.results);
                 }
             }).catch((error) => {
