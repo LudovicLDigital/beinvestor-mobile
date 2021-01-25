@@ -2,7 +2,7 @@ import SocketIoClient from 'socket.io-client';
 import {SOCKET_URL} from "../util/constants";
 import GroupService from "./entities/groups-service"
 
-class SocketService {
+export default class SocketService {
     static socketServer: null;
     static connectToBackEnd() {
         const groupService = new GroupService();
@@ -34,4 +34,3 @@ class SocketService {
         }
     }
 };
-module.exports = SocketService;
