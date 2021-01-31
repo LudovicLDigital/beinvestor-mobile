@@ -53,11 +53,9 @@ export default class GroupService extends BaseService {
         return await this.getOneById('/members/of', groupId)
     }
     async currentUserJoinGroup(groupId) {
-        BeInvestorOneSignalPushService.addAGroupTagOnUser(groupId, true);
         return await this.postObject({}, '/current/' + groupId)
     }
     async currentUserLeftGroup(groupId) {
-        BeInvestorOneSignalPushService.addAGroupTagOnUser(groupId, false);
         return await this.deleteObject('/current', groupId)
     }
     async currentIsMember(groupId) {

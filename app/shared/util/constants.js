@@ -38,6 +38,7 @@ export const PAGINATION_SIZE = 15;
 export const ML = 'Mention légales';
 export const CGU = 'CGU (condition générales d\'utilisation)';
 export const APP_INFO = 'Informations sur BeInvestor';
+export const OS_USER_ID_TAG = 'device_id_tag';
 
 // FIELD LIST
 export const FIRST_NAME = 'first name';

@@ -16,19 +16,34 @@ import {useStoreState} from "easy-peasy";
  * - loadNewDatas: callback for load more datas
  * - disableSendMessage: boolean to disable the text input for message sending
  */
-export default function ChatRoom({props, messageList, groupId, loadNewDatas, disableSendMessage }) {
+export default function ChatRoom({props, messageList, groupId, loadNewDatas, disableSendMessage, members }) {
     const userDeviceId = useStoreState((state) => state.userDeviceId);
     const [currentUser, setCurrentUser] = useState(null);
     const [textMessage, setTextMessage] = useState('');
     const [flatList, setFlatList] = useState(null);
+    const [groupDeviceIds, setGroupDeviceId] = useState([]);
     const groupMessageService = new GroupMessageService();
 
     useEffect(() => {
         AuthService.getCurrentUser().then((currentUserAuth) => {
             setCurrentUser(currentUserAuth);
         });
+        _prepareDeviceIdsListForPushNotification();
     }, []);
-
+    function _prepareDeviceIdsListForPushNotification() {
+       const dIds = [];
+       members.forEach((user) => {
+           // if (user.deviceId.trim() !== userDeviceId.trim()) {
+           if (user.deviceId && user.deviceId.trim() !== '') {
+               dIds.push(user.deviceId);
+           }
+           // }
+       });
+       setGroupDeviceId(dIds);
+    }
+    useEffect(() => {
+        _prepareDeviceIdsListForPushNotification();
+    }, [members]);
     function callBackDatas() {
         if (loadNewDatas) {
             loadNewDatas()
@@ -45,7 +60,7 @@ export default function ChatRoom({props, messageList, groupId, loadNewDatas, dis
             };
             setTextMessage(null);
             const pushMessage = `${messageToSend.authorName} : ${messageToSend.content}`;
-            BeInvestorOneSignalPushService.sendNotification(pushMessage, messageToSend.groupId, userDeviceId);
+            BeInvestorOneSignalPushService.sendNotification(pushMessage, messageToSend.groupId, groupDeviceIds);
             groupMessageService.postAndEmitAmessage(messageToSend).then(() => {
             }, (error) => {
                     showToast('Le message n\'a pas pu être envoyé');
