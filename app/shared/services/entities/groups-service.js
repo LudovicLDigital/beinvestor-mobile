@@ -1,5 +1,6 @@
 import BaseService from "./base-service";
 import {PAGINATION_SIZE} from "../../util/constants";
+import BeInvestorOneSignalPushService from "../one-signal-push-service";
 
 export default class GroupService extends BaseService {
     constructor() {

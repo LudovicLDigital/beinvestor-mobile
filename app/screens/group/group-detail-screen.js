@@ -63,7 +63,7 @@ export default class GroupDetailScreen extends Component {
         this.groupeService.getMembersOfGroup(this.state.groupDisplay.id).then((users) => {
             this.setState({
                 members: users
-            })
+            });
         }).catch((error) => {
             console.error('ERROR TO RECOVER MEMBERS');
             console.error(error);
@@ -78,8 +78,16 @@ export default class GroupDetailScreen extends Component {
         }
     }
     _listenForMessage() {
+        if (SocketService.socketServer) {
+            this._startSocketListener();
+        } else {
+            SocketService.connectToBackEnd();
+            this._startSocketListener();
+        }
+    }
+    _startSocketListener() {
         const that = this;
-        SocketService.socketServer.on(`receivedMessage-${that.state.groupDisplay.id}`, function(groupMessage) {
+        SocketService.socketServer.on(`receivedMessage-${that.state.groupDisplay.id}`, function (groupMessage) {
             const messages = [];
             that.state.messageList.forEach((message) => {
                 messages.push(message);
@@ -153,6 +161,7 @@ export default class GroupDetailScreen extends Component {
                         <ChatRoom groupId={this.state.groupDisplay.id}
                                   disableSendMessage={!this.state.userIsMember}
                                   loadNewDatas={() => this.loadNewDatas()}
+                                  members={this.state.members}
                                   messageList={this.state.messageList}/>
                     </Layout>
                 </Layout>

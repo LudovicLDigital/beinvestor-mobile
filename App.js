@@ -17,10 +17,22 @@ import {Linking} from 'react-native';
 import codePush from "react-native-code-push";
 import {StoreProvider} from "easy-peasy";
 import createStore from "./app/shared/util/Store";
+import BeInvestorOneSignalPushService from "./app/shared/services/one-signal-push-service";
+import SocketService from "./app/shared/services/socket-service";
 
 const store = createStore();
 class App extends Component {
-
+    constructor(properties) {
+        super(properties);
+        this.beInvestorOneSignal = new BeInvestorOneSignalPushService();
+        this.beInvestorOneSignal.initializeOneSignalSystem();
+    }
+    componentWillUnmount() {
+        this.beInvestorOneSignal.setOneSignalListenerOff();
+        if (SocketService.socketServer) {
+            SocketService.socketServer.disconnect();
+        }
+    }
     componentDidMount(): void {
         SplashScreen.hide();
         admob()
@@ -40,7 +52,7 @@ class App extends Component {
             });
         VersionCheck.needUpdate()
             .then(async res => {
-                if (res.isNeeded) {
+                if (res && res.isNeeded) {
                     Linking.openURL(res.storeUrl);  // open store if update is needed.
                 }
             });

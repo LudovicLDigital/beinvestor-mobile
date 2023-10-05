@@ -17,6 +17,7 @@ import {DismissKeyboard} from "../shared/util/ui-helpers";
 import {CITATIONS, ROUTE_HOME, ROUTE_REGISTER, ROUTE_RESET_PASSWORD} from "../shared/util/constants";
 import InputField from '../component/subcomponent/form/input-field';
 import {EstateLoader} from "../component/subcomponent/animation/loader";
+import OneSignal from "react-native-onesignal";
 
 const LOGIN = "login";
 const PASS = "password";
@@ -56,9 +57,12 @@ export default class LoginScreen extends Component {
         return true;
     };
     componentDidMount(): void {
-        this._recoverDeepLink();
-        this._autoConnect();
-        BackHandler.addEventListener("hardwareBackPress", () => this.backAction());
+        OneSignal.getDeviceState().then((device) => {
+            this.device = device;
+            this._recoverDeepLink();
+            this._autoConnect();
+            BackHandler.addEventListener("hardwareBackPress", () => this.backAction());
+        });
     }
     _recoverDeepLink() {
         Linking.addEventListener('url', this.handleOpenURL);
@@ -189,7 +193,7 @@ export default class LoginScreen extends Component {
         this.setState({
             waitingForConnect: true
         });
-        AuthService.autoLogin().then((isAutoLogged) => {
+        AuthService.autoLogin(this.device.userId).then((isAutoLogged) => {
             this.setState({
                 waitingForConnect: false
             });
@@ -202,7 +206,7 @@ export default class LoginScreen extends Component {
         this.setState({
             waitingForConnect: true
         });
-        AuthService.login(this.state.login, this.state.password).then((value) => {
+        AuthService.login(this.state.login, this.state.password, this.device.userId).then((value) => {
             this.setState({
                 waitingForConnect: false
             });

@@ -16,6 +16,10 @@ export default () => {
                 data = await userInvestorProfilService.createCurrentInvestorProfil(payload);
             }
             actions.setInvestorProfil(data);
-        })
+        }),
+        userDeviceId: null,
+        setUserDeviceId: action(((state, payload) => {
+            state.userDeviceId = payload;
+        }))
     });
 };

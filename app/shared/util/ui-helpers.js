@@ -10,7 +10,9 @@ export const DismissKeyboard = ({children}) => (
 export function showToast(message) {
     ToastAndroid.showWithGravity(message, ToastAndroid.LONG, ToastAndroid.BOTTOM);
 }
-
+export function showGroupMessageToast(message) {
+    ToastAndroid.showWithGravity(message, ToastAndroid.SHORT, ToastAndroid.TOP);
+}
 /**
  * Show an alert
  * @param message the message as title (short recommended)

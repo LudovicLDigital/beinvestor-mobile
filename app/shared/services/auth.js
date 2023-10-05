@@ -25,7 +25,7 @@ const auth = {
     currentUserHaveBeenUpdate(user) {
         this.currentUser = user;
     },
-    login(loginReceived, passwordReceived) {
+    login(loginReceived, passwordReceived, deviceId) {
         if (loginReceived && passwordReceived &&
             loginReceived.toString().trim() !== '' && passwordReceived.toString().trim() !== '') {
             const options = {
@@ -36,7 +36,8 @@ const auth = {
                 },
                 body: JSON.stringify({
                     login: loginReceived,
-                    password: passwordReceived
+                    password: passwordReceived,
+                    deviceId: deviceId
                 })
             };
             return fetch(`${API_URL}/login`, options).then((response) => {
@@ -61,7 +62,7 @@ const auth = {
             return Promise.resolve(false);
         }
     },
-    autoLogin() {
+    async autoLogin(deviceId) {
         return DeviceStorage.getKeyValue(REFRESH_TOKEN_KEY).then(async (refreshToken) => {
             if (refreshToken && refreshToken !== null) {
                 const options = {
@@ -71,7 +72,8 @@ const auth = {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        token: refreshToken
+                        token: refreshToken,
+                        deviceId: deviceId
                     })
                 };
                 return fetch(`${API_URL}/token`, options).then((response) => {

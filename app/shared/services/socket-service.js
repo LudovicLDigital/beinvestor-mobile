@@ -1,8 +1,9 @@
 import SocketIoClient from 'socket.io-client';
 import {SOCKET_URL} from "../util/constants";
 import GroupService from "./entities/groups-service"
+import {showGroupMessageToast} from "../util/ui-helpers";
 
-class SocketService {
+export default class SocketService {
     static socketServer: null;
     static connectToBackEnd() {
         const groupService = new GroupService();
@@ -16,7 +17,7 @@ class SocketService {
                     if (SocketService.socketServer) {
                         this.joinAChannel(group.id);
                         SocketService.socketServer.on(`receivedMessage-${group.id}`, function (groupMessage) {
-                            console.log('message received : ' + groupMessage.content) // todo: here put notification system
+                            showGroupMessageToast(groupMessage.content);
                         });
                     }
                 })
@@ -34,4 +35,3 @@ class SocketService {
         }
     }
 };
-module.exports = SocketService;

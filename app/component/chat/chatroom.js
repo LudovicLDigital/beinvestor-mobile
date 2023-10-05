@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, { useEffect, useState} from "react";
 import {Input, Text} from '@ui-kitten/components';
 import {FlatList, View} from 'react-native';
 import ChatBubble from "./chat-bubble";
@@ -7,7 +7,8 @@ import AuthService from "../../shared/services/auth";
 import {styles} from "../../shared/styles/global";
 import GroupMessageService from '../../shared/services/entities/group-message-service'
 import {showToast} from "../../shared/util/ui-helpers";
-
+import BeInvestorOneSignalPushService from "../../shared/services/one-signal-push-service";
+import {useStoreState} from "easy-peasy";
 /**
  * PROPS :
  * - messageList: the list of messages
@@ -15,65 +16,52 @@ import {showToast} from "../../shared/util/ui-helpers";
  * - loadNewDatas: callback for load more datas
  * - disableSendMessage: boolean to disable the text input for message sending
  */
-export default class ChatRoom extends Component {
-    flatList;
-    constructor(props) {
-        super(props);
-        this.state = {
-            textMessage: '',
-        };
-        this.groupMessageService = new GroupMessageService();
-        AuthService.getCurrentUser().then((currentUser) => {
-            this.currentUser = currentUser;
-        });
-    }
+export default function ChatRoom({props, messageList, groupId, loadNewDatas, disableSendMessage, members }) {
+    const userDeviceId = useStoreState((state) => state.userDeviceId);
+    const [currentUser, setCurrentUser] = useState(null);
+    const [textMessage, setTextMessage] = useState('');
+    const [flatList, setFlatList] = useState(null);
+    const [groupDeviceIds, setGroupDeviceId] = useState([]);
+    const groupMessageService = new GroupMessageService();
 
-    callBackDatas() {
-        if (this.props.loadNewDatas) {
-            this.props.loadNewDatas()
+    useEffect(() => {
+        AuthService.getCurrentUser().then((currentUserAuth) => {
+            setCurrentUser(currentUserAuth);
+        });
+        _prepareDeviceIdsListForPushNotification();
+    }, []);
+    function _prepareDeviceIdsListForPushNotification() {
+       const dIds = [];
+       members.forEach((user) => {
+           // if (user.deviceId.trim() !== userDeviceId.trim()) {
+           if (user.deviceId && user.deviceId.trim() !== '') {
+               dIds.push(user.deviceId);
+           }
+           // }
+       });
+       setGroupDeviceId(dIds);
+    }
+    useEffect(() => {
+        _prepareDeviceIdsListForPushNotification();
+    }, [members]);
+    function callBackDatas() {
+        if (loadNewDatas) {
+            loadNewDatas()
         }
     }
 
-    render() {
-        return (
-            <View style={{flex: 1, padding: 15, paddingBottom: 0}}>
-                {this.props.messageList && this.props.messageList.length > 0 ?
-                    <FlatList data={this.props.messageList}
-                              extraDate={this.props.messageList}
-                              ref={(flatList) => this.flatList = flatList}
-                              keyExtractor={(item, index) => index.toString()}
-                              inverted={-1}
-                              onEndReachedThreshold={0.3}
-                              onEndReached={() => this.callBackDatas()}
-                              renderItem={({item, index, separators}) =>
-                                  <ChatBubble
-                                      messageToDisplay={item}
-                                  />}
-                    />
-                    :
-                    <Text category={'h4'} style={[styles.boldedTitle, {flex: 5, textAlign: 'center', marginTop: 35}]}>Aucun message pour le moment</Text>
-                }
-                <Input placeholder={'Dire quelque chose ...'}
-                       accessoryLeft={SendIcon}
-                       disabled={this.props.disableSendMessage}
-                       onIconPress={() => this.sendMessage()}
-                       value={this.state.textMessage}
-                       onSubmitEditing={() => this.sendMessage()}
-                       onChangeText={text => this.textChange(text)}/>
-            </View>
-        )
-    }
-
-    sendMessage() {
-        if (!this.props.disableSendMessage) {
+    function sendMessage() {
+        if (!disableSendMessage) {
             const messageToSend = {
-                authorName: this.currentUser.user.userInfo.firstName ? this.currentUser.user.userInfo.firstName : this.currentUser.user.login,
-                content: this.state.textMessage,
-                userInfoId: this.currentUser.user.userInfo.id,
-                groupId: this.props.groupId
+                authorName: currentUser.user.userInfo.firstName ? currentUser.user.userInfo.firstName : currentUser.user.login,
+                content: textMessage,
+                userInfoId: currentUser.user.userInfo.id,
+                groupId: groupId
             };
-            this.textChange(null);
-            this.groupMessageService.postAndEmitAmessage(messageToSend).then(() => {
+            setTextMessage(null);
+            const pushMessage = `${messageToSend.authorName} : ${messageToSend.content}`;
+            BeInvestorOneSignalPushService.sendNotification(pushMessage, messageToSend.groupId, groupDeviceIds);
+            groupMessageService.postAndEmitAmessage(messageToSend).then(() => {
             }, (error) => {
                     showToast('Le message n\'a pas pu être envoyé');
                     console.error(error)
@@ -81,9 +69,32 @@ export default class ChatRoom extends Component {
         }
     }
 
-    textChange(text) {
-        this.setState({
-            textMessage: text
-        })
-    }
+
+    return (
+        <View style={{flex: 1, padding: 15, paddingBottom: 0}}>
+            {messageList && messageList.length > 0 ?
+                <FlatList data={messageList}
+                          extraDate={messageList}
+                          ref={(flatList) => setFlatList(flatList)}
+                          keyExtractor={(item, index) => index.toString()}
+                          inverted={-1}
+                          onEndReachedThreshold={0.3}
+                          onEndReached={() => callBackDatas()}
+                          renderItem={({item, index, separators}) =>
+                              <ChatBubble
+                                  messageToDisplay={item}
+                              />}
+                />
+                :
+                <Text category={'h4'} style={[styles.boldedTitle, {flex: 5, textAlign: 'center', marginTop: 35}]}>Aucun message pour le moment</Text>
+            }
+            <Input placeholder={'Dire quelque chose ...'}
+                   accessoryLeft={SendIcon}
+                   disabled={disableSendMessage}
+                   onIconPress={() => sendMessage()}
+                   value={textMessage}
+                   onSubmitEditing={() => sendMessage()}
+                   onChangeText={text => setTextMessage(text)}/>
+        </View>
+    );
 }

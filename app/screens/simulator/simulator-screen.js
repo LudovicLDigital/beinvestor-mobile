@@ -5,7 +5,15 @@ import {Layout, Text} from '@ui-kitten/components';
 import HeaderBar from '../../component/subcomponent/header-bar';
 import SimulatorMenu from "../../component/simulator/simulator-menu";
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {BANK, BANNER_AD, ESTATE, FISCALITY, RENT, ROUTE_SIMULATOR_RESULT, SITUATION} from "../../shared/util/constants";
+import {
+    BANK,
+    BANNER_AD,
+    ESTATE,
+    FISCALITY,
+    RENT,
+    ROUTE_SIMULATOR_RESULT,
+    SITUATION
+} from "../../shared/util/constants";
 import SimulatorEstateForm from "../../component/simulator/simulator-estate-form";
 import SimulatorFiscalityForm from "../../component/simulator/simulator-fiscality-form";
 import SimulatorBankForm from "../../component/simulator/simulator-bank-form";
@@ -20,19 +28,21 @@ import SimulatorSituationForm from "../../component/simulator/simulator-situatio
 import {useStoreActions, useStoreState} from "easy-peasy";
 import UserInvestorProfil from "../../shared/models/user-investor-profil";
 import UserInvestorProfilService from "../../shared/services/entities/user-investor-profil-service";
-
+import OneSignal from 'react-native-onesignal';
 
 export default function SimulatorScreen(props) {
     const investorStoredProfil = useStoreState((state) => state.userInvestorProfil);
     const {setUserInvestorProfil, updateInvestorProfil} = useStoreActions((actions) => ({
         setUserInvestorProfil: actions.setInvestorProfil,
         updateInvestorProfil: actions.updateInvestorProfil }));
+    const {setUserDeviceId} = useStoreActions((actions) => ({setUserDeviceId: actions.setUserDeviceId }));
     const [isEditingApart, setisEditingApart] = useState(false);
     const [partShowed, setpartShowed] = useState(null);
     const [formValues, setformValues] = useState(SimulatorDataSendObject);
     let simulatorService = new SimulatorService();
     useEffect(() => {
         SocketService.connectToBackEnd();
+        _setOneSignalDeviceIdentifier();
         const userInvestorProfilService = new UserInvestorProfilService();
         userInvestorProfilService.getCurrentUserInvestorProfil().then((userInvestorProfilRes) => {
             setUserInvestorProfil(userInvestorProfilRes);
@@ -42,6 +52,10 @@ export default function SimulatorScreen(props) {
             showInfoAlert('Une erreur est survenue lors de la récupération du profil investisseur...', true);
         });
     }, []);
+    async function _setOneSignalDeviceIdentifier() {
+        const device = await OneSignal.getDeviceState();
+        setUserDeviceId(device.userId);
+    }
     useEffect(() => {
         _setFormWithInvestorProfil();
     }, [investorStoredProfil]);
